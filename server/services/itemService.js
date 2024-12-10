@@ -1,15 +1,17 @@
 import FoodItem from '../models/foodItem.js';
+import recipes from '../models/recipes.js';
 
 // This layer encapsulates the logic for interacting with the MongoDB database
 
-export const addFoodItem = async ({ itemName, quantity, imagePath, expirationDate }) => {
+export const addFoodItem = async ({ itemName, quantity, imagePath, expirationDate, category }) => {
     try {
         // Create a new instance of the FoodItem model
         const foodItem = new FoodItem({
             itemName,
             quantity,
             imagePath,
-            expirationDate
+            expirationDate,
+            category
         });
 
         // Save the new food item to the database
@@ -70,10 +72,30 @@ export const deleteFoodItem = async (id) => {
     }
 };
 
+export const getExpiringItem = async () => {
+    try {
+        const today = new Date();
+        const threshold = new Date();
+        threshold.setDate(today.getDate() + 8); // Próximos 8 días
+
+        // Buscar alimentos con fecha de vencimiento en el rango
+        const expiringItems = await FoodItem.find({
+            expirationDate: { $lte: threshold }
+        });
+
+        return expiringItems; // Devuelve los elementos encontrados
+    } catch (error) {
+        throw new Error('Error fetching expiring food items: ' + error.message);
+    }
+};
+
+
 export default {
     addFoodItem,
     getAllFoodItems,
     getFoodItemById,
     updateFoodItem,
-    deleteFoodItem
+    deleteFoodItem,
+    getExpiringItem
+
 };

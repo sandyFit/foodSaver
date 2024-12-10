@@ -25,8 +25,14 @@ const foodItemSchema = new mongoose.Schema({
             },
             message: 'Expiration date must be in the future.'
         }
+    }, 
+    category: {
+        type: String,
+        enum: ['Refrigerados', 'Congelados', 'Alacena', 'Frescos'], // Categorías posibles
+        required: true
     }
-});
+
+}, { timestamps: true });
 
 // Creating and exporting the model based on the schema
 export default mongoose.model('FoodItem', foodItemSchema);

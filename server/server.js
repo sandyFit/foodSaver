@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import connectToMongoDB from './config/db.js';
 import swaggerDocs from './docs/swaggerDocs.js';
 import itemRoutes from './routes/itemRoutes.js';
+import recipeRoutes from './routes/recipeRoutes.js'
 import cors from 'cors';
 
 dotenv.config();
@@ -16,6 +17,7 @@ connectToMongoDB();
 
 // Routes
 app.use('/api', itemRoutes);
+app.use('/api', recipeRoutes);
 
 swaggerDocs(app);
 

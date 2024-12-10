@@ -51,28 +51,22 @@ body {
 
 @layer utilities {
     .table-btn {
-        @apply px-2 border-2 border-stone-700 rounded-full text-stone-700 uppercase
-            font-[500] text-[.8rem] 
+        @apply px-2 border-2  rounded-md  uppercase font-[500] text-[.8rem] 
     }
    
     .table-th, 
     .table-td {
-        @apply px-3 border-2 border-stone-500 py-2
+        @apply px-4 border-2 border-stone-500 py-2 text-center
     }
 
-    .table-th-xl, 
-    .table-td-xl {
-        @apply w-[25%] px-3 border-2 border-stone-500 py-2
-    }
 
     .shadow-btn {
-        @apply  font-[600] text-stone-700 border-2 border-stone-700 
-            rounded-full custom-shadow 
+        @apply  font-[600] text-stone-700 border-2 border-stone-700 rounded-lg custom-shadow 
     }
 
     .full-btn {
         @apply px-[3.5rem] py-3 bg-tahiti-700 font-[600] text-[#fff] border-2 border-stone-700 
-            rounded-full 
+            rounded-lg
     }
      
 }

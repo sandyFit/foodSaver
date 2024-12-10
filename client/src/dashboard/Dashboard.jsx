@@ -9,9 +9,9 @@ import { IoMdSearch } from "react-icons/io";
 const Dashboard = () => {
 
     const userItems = [
-        { to: '/dashboard', icon: <GoHome className='text-[1.3rem]'/>, label: 'Home' },
-        { to: '/dashboard/meals', icon: <CiViewList className='text-[1.3rem]'/>, label: 'Meals' },
-        { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recipes' },
+        { to: '/dashboard', icon: <GoHome className='text-[1.3rem]'/>, label: 'Inicio' },
+        { to: '/dashboard/meals', icon: <CiViewList className='text-[1.3rem]'/>, label: 'Productos' },
+        { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recetas' },
 
     ]
 
@@ -33,7 +33,9 @@ const Dashboard = () => {
                     ease-in-out flex flex-col justify-center items-center relative'>
                     <div className="w-full h-10 absolute top-10 bg-stone-900 "></div>
                     <div className="w-20 z-20 mt-1">
-                        <img src="/img/FoodSaver_lignt.png" alt="FoodSaver Logo"/>
+                        <a href="/" className="inline-block">
+                            <img src="/img/FoodSaver_lignt.png" alt="FoodSaver Logo" />
+                        </a>
                     </div>
                     <ul className={`w-full `}>
                         <span className='gap-12 mt-24 flex flex-col justify-center items-center
@@ -50,7 +52,7 @@ const Dashboard = () => {
                     <div className="flex ml-8 relative">
                         <IoMdSearch className='text-2xl absolute top-2 left-2'/>
                         <input type="text"
-                            placeholder="Search here..."
+                            placeholder="Buscar..."
                             className='w-64 pl-10 p-2 border-2 border-stone-700 outline-6 outline-stone-500
                                 rounded-lg'/>
                     </div>
@@ -80,7 +82,7 @@ const Dashboard = () => {
                 </header>
 
                 {/* main content */}
-                <main className='col-span-11 col-start-2 row-span-5 p-8'>
+                <main className='overflow-y-auto max-h-[72vh] col-span-11 col-start-2 row-span-5 py-2 px-20'>
                     <Outlet/>
                 </main>
             </div>

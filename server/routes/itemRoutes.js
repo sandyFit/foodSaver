@@ -4,7 +4,8 @@ import {
     getAllFoodItems,
     getFoodItemById,
     updateFoodItem,
-    deleteFoodItem
+    deleteFoodItem,
+    getExpiringItems
 } from '../controllers/itemController.js';
 
 const router = express.Router();
@@ -47,5 +48,7 @@ router.get('/get-foodItems', getAllFoodItems);
 router.get('/get-foodItem/:id', getFoodItemById);
 router.put('/update-foodItem/:id', updateFoodItem);
 router.delete('/delete-foodItem/:id', deleteFoodItem);
+router.get('/expiring-foodItems', getExpiringItems);
+
 
 export default router;
