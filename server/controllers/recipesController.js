@@ -19,6 +19,7 @@ export const suggestRecipe = async (req, res) => {
     }
 };
 
+
 export const getAllRecipes = async (req, res) => {
     try {
         const recipes = await recipeService.getAllRecipes();

@@ -14,6 +14,6 @@ router.get('/recipes', getAllRecipes);
 router.get('/recipes/:id', getRecipeById);
 
 // Ruta para obtener una receta sugerida (más clara sin "get-" al principio)
-router.get('/recipes/suggest', suggestRecipe);
+router.get('/recipes-suggest', suggestRecipe);
 
 export default router;

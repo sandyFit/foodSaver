@@ -8,6 +8,15 @@ const Recipes = () => {
     const [error, setError] = useState(null);
     const BASE_URL = 'http://localhost:5555/api';
 
+    const bgColors = [
+        'bg-red-100',
+        'bg-yellow-100',
+        'bg-blue-100',
+        'bg-green-100',
+        'bg-purple-100',
+        'bg-pink-100',
+    ];
+
     // Obtener todas las recetas
     const getAllRecipes = async () => {
         setLoading(true);
@@ -48,12 +57,13 @@ const Recipes = () => {
                         Tus Mejores Recetas
                     </h3>
                     <div className="flex flex-wrap gap-4">                       
-                        {recipesList.map((recipe) => (
+                        {recipesList.map((recipe, index) => (
                             <RecipeCard
                                 key={recipe._id}
                                 name={recipe.name}
                                 image_url={recipe.image_url}
                                 description={recipe.description}
+                                bgColor={bgColors[index % bgColors.length]}
                             />
                         ))}
                     </div>

@@ -1,6 +1,7 @@
 import FoodItem from '../models/foodItem.js';
 import Recipe from '../models/recipes.js';
 
+
 export const suggestRecipe = async () => {
     try {
         const today = new Date();
@@ -10,38 +11,56 @@ export const suggestRecipe = async () => {
         // Buscar alimentos que están por vencer
         const ingredients = await FoodItem.find({
             expirationDate: { $lte: threshold }
-        }).select('name quantity'); // Obtener nombre y cantidad
+        }).select('itemName quantity');
 
-        // Si tienes recetas que usan esos ingredientes, puedes buscar coincidencias
-        const recipes = await Recipe.find({
-            'ingredients.name': { $in: ingredients.map(item => item.name) }
+        console.log('Ingredientes:', ingredients);  // Esto debería devolver un arreglo de objetos con los ingredientes
+
+        // Obtener solo los nombres de los ingredientes cercanos a vencer
+        const ingredientNames = ingredients.map(item => item.itemName.toLowerCase().trim());
+        console.log('Ingredientes próximos a vencer:', ingredientNames);  // Esto debería ser un arreglo de nombres de ingredientes
+
+        // Obtener todas las recetas
+        const recipes = await Recipe.find();
+
+        // Filtrar recetas que contengan los ingredientes cercanos a vencer
+        const matchingRecipes = recipes.filter(recipe => {
+            return recipe.ingredients.some(ingredient => {
+                const ingredientName = ingredient.name ? ingredient.name.trim().toLowerCase() : null; // Usar ingredient.name
+
+                if (!ingredientName) {
+                    console.log("Ingrediente sin nombre:", ingredient);
+                    return false;  // Saltar este ingrediente
+                }
+
+                console.log('Comparando ingrediente:', ingredientName);
+                return ingredientNames.some(ingredientNameInList =>
+                    ingredientName.includes(ingredientNameInList) // Comparar con los nombres de ingredientes
+                );
+            });
         });
 
-        if (recipes.length > 0) {
-            // Si existen recetas que usan esos ingredientes cercanos a vencer
-            return {
-                name: `Receta sugerida basada en lo que tienes`,
-                ingredients: ingredients.map(item => ({
-                    name: item.name,
-                    quantity: item.quantity,
-                })),
-                recipes: recipes.map(recipe => recipe.name), // Recetas disponibles que usan estos ingredientes
-            };
+        // Si se encuentran recetas que usan esos ingredientes cercanos a vencer
+        if (matchingRecipes.length > 0) {
+            console.log(`Recetas encontradas: ${matchingRecipes.length}`);
+            return matchingRecipes.map(recipe => ({
+                name: recipe.name,          // Nombre de la receta desde la DB
+                image_url: recipe.image_url, // URL de la imagen de la receta
+                description: recipe.description, // Descripción de la receta
+            }));
         } else {
-            // Si no hay recetas previas, puedes sugerir una receta básica
-            return {
-                name: `Receta sugerida`,
-                ingredients: ingredients.map(item => ({
-                    name: item.name,
-                    quantity: item.quantity,
-                })),
-                message: "No hay recetas disponibles, pero puedes usar estos ingredientes.",
-            };
+            // Si no hay recetas disponibles, devolver receta sugerida
+            return [{
+                name: 'Receta sugerida',
+                image_url: '',  // Sin imagen disponible
+                description: 'No hay recetas disponibles, pero puedes usar estos ingredientes.'
+            }];
         }
     } catch (error) {
         throw new Error('Error al sugerir receta: ' + error.message);
     }
 };
+
+
 
 export const getAllRecipes = async () => {
     try {
