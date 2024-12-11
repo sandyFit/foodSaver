@@ -82,7 +82,7 @@ const Dashboard = () => {
                 </header>
 
                 {/* main content */}
-                <main className='overflow-y-auto max-h-[72vh] col-span-11 col-start-2 row-span-5 py-2 px-20'>
+                <main className='overflow-y-auto max-h-[72vh] col-span-11 col-start-2 row-span-5 px-20'>
                     <Outlet/>
                 </main>
             </div>

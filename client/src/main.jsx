@@ -10,15 +10,19 @@ import Landing from './pages/Landing.jsx';
 import MealsList from './dashboard/MealsList.jsx';
 import Recipes from './dashboard/Recipes.jsx';
 import Dashboard from './dashboard/Dashboard.jsx';
+import RecipeDetail from './dashboard/RecipeDetail.jsx';
+import { Toaster } from 'react-hot-toast';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Router>
+      <Toaster position="top-center" reverseOrder={false} />
       <Routes>
         <Route path="/dashboard" element={<Dashboard />}>
           <Route index element={<Home />} />
           <Route path="meals" element={<MealsList />} />
           <Route path="recipes" element={<Recipes />} />
+          <Route path="recipes/:id" element={<RecipeDetail />} />
         </Route>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />

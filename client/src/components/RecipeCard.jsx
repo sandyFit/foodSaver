@@ -1,7 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const RecipeCard = ({ bgColor, name, image_url, description }) => {
-
+const RecipeCard = ({ bgColor, id, name, image_url, description }) => {
 
     return (
         <article className='w-[24vw]'>
@@ -9,12 +9,15 @@ const RecipeCard = ({ bgColor, name, image_url, description }) => {
                 relative">
                 <h4 className='font-[600] text-center'>{ name}</h4>
                 <img src={image_url} alt={name} width={'320px'} />
-                <p>
+                <p >
                     {description}
                 </p>
-                <button className={`shadow-btn ${bgColor} py-2 mt-3`}>
+                    
+                <Link to={`/dashboard/recipes/${id}`}
+                    className={`shadow-btn ${bgColor} text-center py-2 mt-3`}>
                     Ver Receta
-                </button>
+                </Link>
+                    
             </div>
         </article>
     )

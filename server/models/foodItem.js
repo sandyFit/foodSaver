@@ -12,10 +12,6 @@ const foodItemSchema = new mongoose.Schema({
         required: true,
         min: 1 // Prevents negative or zero quantities
     },
-    imagePath: {
-        type: String,
-        
-    },
     expirationDate: {
         type: Date,
         required: true,

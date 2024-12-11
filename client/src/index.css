@@ -44,8 +44,8 @@ body {
         @apply text-lg font-semibold
     }
 
-    input {
-        @apply p-2.5 border-2 border-stone-700 rounded-full
+    input, select {
+        @apply p-2.5 border-2 border-stone-700 rounded-lg
     }
 }
 

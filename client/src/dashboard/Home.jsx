@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import MealCard from '../components/MealCard';
 import axios from 'axios';
 import RecipeCardHome from '../components/RecipeCardHome';
+import { toast } from 'react-hot-toast';
 
 const Home = () => {
 
     const [expiringMeals, setExpiringMeals] = useState([]);
     const [suggestedRecipes, setSuggestedRecipes] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
     const BASE_URL = 'http://localhost:5555/api';
 
     // Colores predefinidos para los fondos
@@ -23,13 +23,13 @@ const Home = () => {
 
     const getExpiringMeals = async () => {
         setLoading(true);
-        setError(null);
+        
         try {
             const response = await axios.get(`${BASE_URL}/expiring-foodItems`);
             setExpiringMeals(response.data);
-        } catch (err) {
-            console.error('Error al obtener los productos.', err);
-            setError('No se pudieron obtener los productos. Inténtalo nuevamente.');
+        } catch (error) {
+            console.error('Error al obtener los productos.', error);
+            toast.error('No se pudieron obtener los productos. Inténtalo nuevamente.');
         } finally {
             setLoading(false);
         }
@@ -37,14 +37,15 @@ const Home = () => {
 
     const getSuggestedRecipes = async () => {
         setLoading(true);
-        setError(null);
+
         try {
             const response = await axios.get(`${BASE_URL}/recipes-suggest`);
-            console.log(response.data);  // Verifica los datos que recibes
+            console.log(`Response data from axios:`);
+            console.log(response.data)
             setSuggestedRecipes(response.data);
-        } catch (err) {
-            console.error('Error al obtener las recetas.', err);
-            setError('No se pudieron obtener las recetas. Inténtalo nuevamente.');
+        } catch (error) {
+            console.error('Error al obtener las recetas.', error);
+            toast.error('No se pudieron obtener las recetas. Inténtalo nuevamente.');
         } finally {
             setLoading(false);
         }
@@ -55,47 +56,64 @@ const Home = () => {
         getSuggestedRecipes();
     }, []);
 
+    useEffect(() => {
+        console.log(`suggested recipes from useEffect: ${suggestedRecipes}`);  
+    }, [suggestedRecipes]);
+
     return (
-        <section className='mt-5'>
-            <div className="grid grid-cols-2">
+        <section className='p-4'>
+            <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
-                    <h4 className='mb-4'>Productos próximos a caducar</h4>
-                    <ul className='list-none flex flex-col gap-2'>
-                        {expiringMeals.map((meal, index) => (
-                            <li key={meal.id}>
-                                <MealCard
-                                    itemName={meal.itemName}
-                                    expirationDate={meal.expirationDate}
-                                    category={meal.category}
-                                    bgColor={bgColors[index % bgColors.length]}
-                                />
-                            </li>
-                        ))}                
-                    </ul>
+                    <h4 className='mb-2 font-bold text-lg'>Productos próximos a caducar</h4>
+                    {loading ? (
+                        <div className="text-center">
+                            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
+                                <span className="sr-only">Cargando...</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <ul className='list-none flex flex-col gap-2'>
+                            {expiringMeals.map((meal, index) => (
+                                <li key={meal._id}>
+                                    <MealCard
+                                        itemName={meal.itemName}
+                                        expirationDate={meal.expirationDate}
+                                        category={meal.category}
+                                        bgColor={bgColors[index % bgColors.length]}
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
-                <div className="flex flex-col b gap-4">
-                    <h4>Recetas sugeridas</h4>
-                    {/* <ul className="grid grid-cols-1 gap-6">
-                        {suggestedRecipes.map((recipe, index) => {
-                            return (  
-                                <li key={recipe.id}>
+                <div className="flex flex-col gap-2">
+                    <h4 className='mb-2 font-bold text-lg'>Recetas sugeridas</h4>
+                    {loading ? (
+                        <div className="text-center">
+                            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
+                                <span className="sr-only">Cargando...</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <ul className="grid grid-cols-1 gap-4">
+                            {suggestedRecipes.map((recipe, index) => (
+                                <li key={index}>
                                     <RecipeCardHome
+                                        id={recipe.id}
                                         name={recipe.name}
                                         image_url={recipe.image_url}
                                         description={recipe.description}
                                         bgColor={bgColors[index % bgColors.length]}
                                     />
                                 </li>
-                            );
-                        })}
-                    </ul> */}
-
-
+                            ))}
+                        </ul>
+                    )}
                 </div>
             </div>
         </section>
+    );
+};
 
-    )
-}
 
 export default Home;
