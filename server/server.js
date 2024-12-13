@@ -10,7 +10,13 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+// Configuración de CORS
+app.use(cors({
+    origin: 'http://localhost:5173', // URL del frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    credentials: false, // Si se envia cookies o encabezados de autenticación
+}));
 
 // Connect to the database
 connectToMongoDB();
@@ -18,6 +24,7 @@ connectToMongoDB();
 // Routes
 app.use('/api', itemRoutes);
 app.use('/api', recipeRoutes);
+
 
 swaggerDocs(app);
 

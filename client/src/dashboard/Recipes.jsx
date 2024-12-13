@@ -4,6 +4,7 @@ import RecipeCard from '../components/RecipeCard';
 import { toast } from 'react-hot-toast';
 
 const Recipes = () => {
+    
     const [recipesList, setRecipesList] = useState([]);
     const [loading, setLoading] = useState(false);
     const BASE_URL = 'http://localhost:5555/api';

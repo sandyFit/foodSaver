@@ -1,10 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+
 
 const Navbar = () => {
-
-    const navigate = useNavigate();
-
 
     return (
         <nav className='w-full h-24 bg-tahiti-200 absolute'>
@@ -16,11 +13,11 @@ const Navbar = () => {
                 </div>
 
                 <div className="flex gap-10 pt-5">
-                    <a href="/login" className="full-btn text-center block">
+                    <a href="/dahboard" className="full-btn text-center block">
                         Login
                     </a>
-                    <a href="/register" className="shadow-btn bg-yellow-100 px-12 py-3 text-center block">
-                        Register
+                    <a href="/dashboard" className="shadow-btn bg-yellow-100 px-12 py-3 text-center block">
+                        Registro
                     </a>
                 </div>
 

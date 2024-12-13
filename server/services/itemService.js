@@ -49,7 +49,11 @@ export const getFoodItemById = async (id) => {
 
 const updateFoodItem = async (id, updateData) => {
     try {
-        const updatedFoodItem = await FoodItem.findByIdAndUpdate(id, updateData, { new: true }); 
+        const updatedFoodItem = await FoodItem.findByIdAndUpdate(
+            id,
+            { ...updateData },
+            { new: true } // Devuelve el objeto actualizado
+        );
         if (!updatedFoodItem) {
             throw new Error('Food item not found', 404);
         }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { toast } from 'react-hot-toast';
 
 const RecipeDetail = () => {
     
@@ -32,10 +31,12 @@ const RecipeDetail = () => {
             const response = await axios.get(`${BASE_URL}/recipes/${id}`);
             setRecipe(response.data)
         } catch (error) {
-            console.error('Error al obtener la receta:', error.response || error.message || error);
+            console.error('Error al obtener la receta.', error);
             setError('No se pudo obtener la receta. Inténtalo nuevamente.');
         } finally {
+            console.error('Error en la petición');
             setLoading(false);
+            toast.error('Error en la petición:');
         }
     }
 
