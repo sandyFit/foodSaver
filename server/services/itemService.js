@@ -1,5 +1,5 @@
 import FoodItem from '../models/foodItem.js';
-import recipes from '../models/recipes.js';
+
 
 // This layer encapsulates the logic for interacting with the MongoDB database
 

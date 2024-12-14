@@ -1,14 +1,15 @@
 import { createContext, useReducer, useEffect } from "react";
+import axios from "axios";
+import { toast } from 'react-hot-toast';
+
 import {
     reducer,
     SET_LOADING,
     SET_ALL_FOODITEMS,
+    SET_ALL_USERS,
     SET_ERROR,
 } from "../utils/reducer";
 
-
-import axios from "axios";
-import { toast } from 'react-hot-toast';
 
 export const initialState = {
     allFoodItems: [],
@@ -16,6 +17,8 @@ export const initialState = {
     allRecipes: [],
     recipe: {},
     suggestedRecipes: [],
+    allUsers: [],
+    user: {},
     error: null,
     loading: false,
 }
@@ -26,7 +29,7 @@ const BASE_URL = 'http://localhost:5555/api';
 
 export const ContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const { allFoodItems, loading, error } = state;
+    const { allFoodItems, allUsers, loading, error } = state;
 
     // Helper function for API requests
     const apiRequest = async (url, method = 'GET', data = null) => {
@@ -111,10 +114,40 @@ export const ContextProvider = ({ children }) => {
         }
     };
 
+    // === USERS ===
+    const registerUser = async (formData) => {
+
+        console.log('FormData enviado:', formData);
+        dispatch({ type: SET_LOADING, payload: true });
+        try {
+            const data = await apiRequest('register-user', 'POST', formData);
+            if (data.message === 'Cuenta registrada correctamente') {
+                toast.success('Tu cuenta ha sido registrada correctamente. ¡Inicia sesión para comenzar!');
+                navigate('/login');
+                getAllUsers();
+            } else {
+                toast.error(`Error al registrar el usuario: ${data.message}`);
+            }
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
+        }
+    }
+
+    const getAllUsers = async () => {
+        dispatch({ type: SET_LOADING, payload: true });
+        try {
+            const data = await apiRequest('get-users');
+            dispatch({ type: SET_ALL_USERS, payload: data });
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
+        }
+    }
+
 
     // Fetch data on load
     useEffect(() => {
         getAllMeals();
+        // getAllUsers();
     }, []);
 
     // Context value
@@ -124,6 +157,8 @@ export const ContextProvider = ({ children }) => {
         addFoodItem,
         updateMeal,
         deleteMeal,
+        registerUser,
+        getAllUsers,
         loading,
         error,
     };

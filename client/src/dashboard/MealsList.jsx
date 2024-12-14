@@ -50,7 +50,9 @@ const MealsList = () => {
                 {/* Header */}
                 <header className="col-span-12 flex flex-col justify-between border-b-2 border-stone-900">
                     <h4 className="text-lg font-bold mb-2">Agrega tus Productos</h4>
-                    <form className="flex w-full justify-between mb-8" onSubmit={handleSubmit}>
+                    <form
+                        onSubmit={handleSubmit}
+                        className="flex w-full justify-between mb-8" >
                         <input
                             type="text"
                             id="itemName"

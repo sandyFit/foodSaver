@@ -1,6 +1,9 @@
 export const ADD_FOODITEM = 'ADD_FOODITEM';
 export const SET_ALL_FOODITEMS = 'SET_ALL_FOODITEMS';
 export const SET_FOODITEM = 'SET_FOODITEM';
+export const REGISTER_USER = 'REGISTER_USER';
+export const SET_ALL_USERS = 'SET_ALL_USERS';
+export const SET_USER = 'SET_USER';
 export const SET_ALL_RECIPES = 'SET_ALL_RECIPES';
 export const SET_RECIPE = 'SET_RECIPE';
 export const SET_SUGGESTED_RECIPES = 'SET_SUGGESTED_RECIPES';
@@ -18,7 +21,15 @@ export const reducer = (state, action) => {
         case SET_FOODITEM:
             return { ...state, foodItem: action.payload };
         case SET_EXPIRING_MEALS:
+
             return { ...state, expiringMeals: action.payload }; 
+        case REGISTER_USER:
+            return { ...state, allUsers: [...state.allUsers, action.payload] };
+        case SET_ALL_USERS:
+            return { ...state, allUsers: action.payload };
+        case SET_USER:
+            return { ...state, user: action.payload };
+            
         case SET_ALL_RECIPES:
             return { ...state, allRecipes: action.payload };
         case SET_RECIPE:

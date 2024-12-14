@@ -12,7 +12,13 @@ export const addFoodItem = async (req, res) => {
             return res.status(400).json({ error: 'Categoría inválida' });
         }
 
-        const foodItem = await itemService.addFoodItem({ itemName, quantity, imagePath, expirationDate, category });
+        const foodItem = await itemService.addFoodItem({
+            itemName,
+            quantity,
+            imagePath,
+            expirationDate,
+            category
+        });
         res.status(201).json({
             message: 'Alimento agregado exitosamente',
             foodItem

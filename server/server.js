@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 import connectToMongoDB from './config/db.js';
 import swaggerDocs from './docs/swaggerDocs.js';
 import itemRoutes from './routes/itemRoutes.js';
-import recipeRoutes from './routes/recipeRoutes.js'
+import recipeRoutes from './routes/recipeRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import cors from 'cors';
 
 dotenv.config();
@@ -24,6 +25,13 @@ connectToMongoDB();
 // Routes
 app.use('/api', itemRoutes);
 app.use('/api', recipeRoutes);
+app.use('/api', userRoutes);
+
+app._router.stack.forEach((middleware) => {
+    if (middleware.route) {
+        console.log(`Ruta registrada: ${middleware.route.path}`);
+    }
+});
 
 
 swaggerDocs(app);
