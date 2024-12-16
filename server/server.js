@@ -34,7 +34,8 @@ app._router.stack.forEach((middleware) => {
 });
 
 
-swaggerDocs(app);
+// Swagger Docs
+swaggerDocs(app, process.env.PORT || 5555);
 
 // Server setup
 const PORT = process.env.PORT || 5555;

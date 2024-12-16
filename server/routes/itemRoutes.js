@@ -18,7 +18,7 @@ router.get('/expiring-foodItems', getExpiringItems);
 
 /**
  * @swagger
- * /foodItems/add-foodItem:
+ * /add-foodItem:
  *   post:
  *     summary: Add a new food item
  *     description: Adds a new food item to the database.
@@ -42,7 +42,7 @@ router.get('/expiring-foodItems', getExpiringItems);
  *                 format: date-time
  *     responses:
  *       201:
- *         description: Food item added successfully
+ *         description: List of all food items
  *       400:
  *         description: Invalid input
  *       500:
@@ -51,7 +51,7 @@ router.get('/expiring-foodItems', getExpiringItems);
 
 /**
  * @swagger
- * /foodItems/get-foodItems:
+ * /get-foodItems:
  *   get:
  *     summary: Get all food items
  *     description: Retrieves all food items from the database.
@@ -78,13 +78,18 @@ router.get('/expiring-foodItems', getExpiringItems);
  *                   expirationDate:
  *                     type: string
  *                     format: date-time
+ *     responses:
+ *       200:
+ *         description: 
+ *       400:
+ *         description: Invalid input
  *       500:
  *         description: Internal Server Error
  */
 
 /**
  * @swagger
- * /foodItems/get-foodItem/{id}:
+ * /get-foodItem/{id}:
  *   get:
  *     summary: Get a specific food item by ID
  *     description: Retrieves a single food item based on the provided ID.
@@ -124,7 +129,7 @@ router.get('/expiring-foodItems', getExpiringItems);
 
 /**
  * @swagger
- * /foodItems/update-foodItem/{id}:
+ * /update-foodItem/{id}:
  *   put:
  *     summary: Update an existing food item
  *     description: Updates the information of an existing food item in the database.
@@ -166,7 +171,7 @@ router.get('/expiring-foodItems', getExpiringItems);
 
 /**
  * @swagger
- * /foodItems/delete-foodItem/{id}:
+ * /delete-foodItem/{id}:
  *   delete:
  *     summary: Delete a food item
  *     description: Deletes a food item from the database.
@@ -190,7 +195,7 @@ router.get('/expiring-foodItems', getExpiringItems);
 
 /**
  * @swagger
- * /foodItems/expiring-foodItems:
+ * /expiring-foodItems:
  *   get:
  *     summary: Get food items that are expiring soon
  *     description: Retrieves food items that are approaching their expiration date.

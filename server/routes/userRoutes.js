@@ -5,7 +5,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /users/register:
+ * /register-user:
  *   post:
  *     summary: Register a new user
  *     description: Registers a new user by providing their first name, last name, email, and password.
@@ -77,7 +77,7 @@ router.post('/register-user', registerUser);
 
 /**
  * @swagger
- * /users/login:
+ * /login:
  *   post:
  *     summary: User login
  *     description: Allows a user to log in by providing their email and password. If the credentials are valid, the user is authenticated and a success message is returned.
