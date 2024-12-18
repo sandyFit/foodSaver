@@ -42,6 +42,7 @@ const Register = () => {
 
         try {
             await registerUser(formData);
+            console.log('Usuario registrado:', formData);
             setFormData({
                 fullName: '',
                 email: '',

@@ -17,7 +17,7 @@ export const initialState = {
     allRecipes: [],
     recipe: {},
     suggestedRecipes: [],
-    allUsers: [],
+    // allUsers: [],
     user: {},
     error: null,
     loading: false,
@@ -115,33 +115,33 @@ export const ContextProvider = ({ children }) => {
     };
 
     // === USERS ===
+    // globalContext.jsx
     const registerUser = async (formData) => {
-
         console.log('FormData enviado:', formData);
         dispatch({ type: SET_LOADING, payload: true });
         try {
             const data = await apiRequest('register-user', 'POST', formData);
             if (data.message === 'Cuenta registrada correctamente') {
                 toast.success('Tu cuenta ha sido registrada correctamente. ¡Inicia sesión para comenzar!');
-                navigate('/login');
-                getAllUsers();
+                // getAllUsers(); 
             } else {
                 toast.error(`Error al registrar el usuario: ${data.message}`);
             }
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    }
+    };
 
-    const getAllUsers = async () => {
-        dispatch({ type: SET_LOADING, payload: true });
-        try {
-            const data = await apiRequest('get-users');
-            dispatch({ type: SET_ALL_USERS, payload: data });
-        } finally {
-            dispatch({ type: SET_LOADING, payload: false });
-        }
-    }
+
+    // const getAllUsers = async () => {
+    //     dispatch({ type: SET_LOADING, payload: true });
+    //     try {
+    //         const data = await apiRequest('get-users');
+    //         dispatch({ type: SET_ALL_USERS, payload: data });
+    //     } finally {
+    //         dispatch({ type: SET_LOADING, payload: false });
+    //     }
+    // }
 
 
     // Fetch data on load
@@ -158,7 +158,7 @@ export const ContextProvider = ({ children }) => {
         updateMeal,
         deleteMeal,
         registerUser,
-        getAllUsers,
+        // getAllUsers,
         loading,
         error,
     };

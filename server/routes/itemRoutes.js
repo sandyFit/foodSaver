@@ -78,9 +78,6 @@ router.get('/expiring-foodItems', getExpiringItems);
  *                   expirationDate:
  *                     type: string
  *                     format: date-time
- *     responses:
- *       200:
- *         description: 
  *       400:
  *         description: Invalid input
  *       500:

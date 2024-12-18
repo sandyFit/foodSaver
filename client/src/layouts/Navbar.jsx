@@ -13,10 +13,10 @@ const Navbar = () => {
                 </div>
 
                 <div className="flex gap-10 pt-5">
-                    <a href="/dahboard" className="full-btn text-center block">
+                    <a href="/login" className="full-btn text-center block">
                         Login
                     </a>
-                    <a href="/dashboard" className="shadow-btn bg-yellow-100 px-12 py-3 text-center block">
+                    <a href="/register" className="shadow-btn bg-yellow-100 px-12 py-3 text-center block">
                         Registro
                     </a>
                 </div>
