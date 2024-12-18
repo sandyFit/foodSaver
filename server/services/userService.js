@@ -8,7 +8,6 @@ export const registerUser = async ({ fullName, email, password, avatar, role = '
             throw new Error('El correo electrónico ya está registrado');
         }
 
-
         // Crear un nuevo usuario
         const user = await User.create({
             fullName,
@@ -16,9 +15,9 @@ export const registerUser = async ({ fullName, email, password, avatar, role = '
             password,
             avatar: avatar || {
                 public_id: "default_avatar",
-                url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKZwmqodcPdQUDRt6E5cPERZDWaqy6ITohlQ&usqp=CAU"
+                url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKZwmqodcPdQUDRt6E5cPERZDWaqy6ITohlQ&usqp=CAU",
             },
-            role, 
+            role,
         });
 
         // Generar token JWT
@@ -26,14 +25,38 @@ export const registerUser = async ({ fullName, email, password, avatar, role = '
 
         // Retornar el usuario y el token
         return { user, token };
-
     } catch (error) {
-        console.error(error);
-        throw error; // Propagar el error para que sea capturado por el controlador
+        console.error(error.message);
+        throw new Error(error.message); // Propagar el error con mensaje limpio
     }
 };
 
+export const login = async ({ email, password }) => {
+    try {
+        // Buscar usuario por correo
+        const user = await User.findOne({ email }).select("+password");
+        if (!user) {
+            throw new Error("Credenciales incorrectas");
+        }
+
+        // Comparar contraseñas
+        const passwordOK = await user.comparePass(password);
+        if (!passwordOK) {
+            throw new Error("La contraseña no es correcta");
+        }
+
+        // Generar token JWT
+        const token = user.getJwtToken();
+
+        // Retornar usuario y token
+        return { user, token };
+    } catch (error) {
+        console.error(error.message);
+        throw new Error(error.message); // Propagar el error con mensaje limpio
+    }
+};
 
 export default {
-    registerUser
-}
+    registerUser,
+    login,
+};

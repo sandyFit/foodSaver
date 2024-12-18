@@ -1,5 +1,6 @@
 import express from 'express';
-import { registerUser } from '../controllers/userController.js';
+import { registerUser, login } from '../controllers/userController.js';
+import { validateRegisterUser, validateLogin } from '../validators/userValidator.js';
 
 const router = express.Router();
 
@@ -18,19 +19,14 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             required:
- *               - firstName
- *               - lastName
+ *               - fullName
  *               - email
  *               - password
  *             properties:
- *               firstName:
+ *               fullName:
  *                 type: string
- *                 description: User's first name
- *                 example: John
- *               lastName:
- *                 type: string
- *                 description: User's last name
- *                 example: Doe
+ *                 description: User's full name
+ *                 example: John Doe
  *               email:
  *                 type: string
  *                 format: email
@@ -73,7 +69,7 @@ const router = express.Router();
  *                   type: string
  *                   example: "An unexpected error occurred. Please try again later."
  */
-router.post('/register-user', registerUser);
+router.post('/register-user', validateRegisterUser, registerUser);
 
 /**
  * @swagger
@@ -150,7 +146,7 @@ router.post('/register-user', registerUser);
  *                   example: "An unexpected error occurred. Please try again later."
  */
 
-//router.post('/login', usersController.login);
+router.post('/login', validateLogin, login);
 
 
 export default router;

@@ -6,11 +6,14 @@ import itemRoutes from './routes/itemRoutes.js';
 import recipeRoutes from './routes/recipeRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Middleware para datos codificados en URL
+app.use(cookieParser());
 
 // Configuración de CORS
 app.use(cors({
