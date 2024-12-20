@@ -56,7 +56,30 @@ export const login = async ({ email, password }) => {
     }
 };
 
+export const getAllUsers = async () => {
+    try {
+        return await User.find();
+    } catch (error) {
+        throw new Error('Error obteniendo la lista de usuarios: ' + error.message);
+    }
+};
+
+export const getUserById = async (id) => {
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            throw new Error('El usuario no se encuentra en la basse de datos');
+        }
+        return user;
+
+    } catch (error) {
+        throw new Error('Error obteniendo el usuario: ' + error.message);
+    }
+}
+
 export default {
     registerUser,
     login,
+    getAllUsers,
+    getUserById
 };

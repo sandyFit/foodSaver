@@ -17,7 +17,7 @@ export const initialState = {
     allRecipes: [],
     recipe: {},
     suggestedRecipes: [],
-    // allUsers: [],
+    allUsers: [],
     user: {},
     error: null,
     loading: false,
@@ -121,7 +121,7 @@ export const ContextProvider = ({ children }) => {
         // console.log('FormData enviado:', formData);
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const data = await apiRequest('register-user', 'POST', formData);
+            const data = await apiRequest('users-register', 'POST', formData);
             if (data.message === 'Cuenta registrada correctamente') {
                 toast.success('Tu cuenta ha sido registrada correctamente. ¡Inicia sesión para comenzar!');
                 // getAllUsers(); 
@@ -137,7 +137,7 @@ export const ContextProvider = ({ children }) => {
     // console.log('FormData enviado:', formData);
     dispatch({ type: SET_LOADING, payload: true });
     try {
-        const data = await apiRequest('login', 'POST', formData);
+        const data = await apiRequest('users-login', 'POST', formData);
         // console.log('Login response data:', data);  // Log to inspect the data
 
         if (data.message === 'Login Correcto') {
@@ -154,21 +154,21 @@ export const ContextProvider = ({ children }) => {
 
 
 
-    // const getAllUsers = async () => {
-    //     dispatch({ type: SET_LOADING, payload: true });
-    //     try {
-    //         const data = await apiRequest('get-users');
-    //         dispatch({ type: SET_ALL_USERS, payload: data });
-    //     } finally {
-    //         dispatch({ type: SET_LOADING, payload: false });
-    //     }
-    // }
+    const getAllUsers = async () => {
+        dispatch({ type: SET_LOADING, payload: true });
+        try {
+            const data = await apiRequest('users-getAll');
+            dispatch({ type: SET_ALL_USERS, payload: data });
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
+        }
+    }
 
 
     // Fetch data on load
     useEffect(() => {
         getAllMeals();
-        // getAllUsers();
+        getAllUsers();
     }, []);
 
     // Context value
@@ -180,7 +180,7 @@ export const ContextProvider = ({ children }) => {
         deleteMeal,
         registerUser,
         login,
-        // getAllUsers,
+        getAllUsers,
         loading,
         error,
     };

@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser, login } from '../controllers/userController.js';
+import { registerUser, login, getAllUsers } from '../controllers/userController.js';
 import { validateRegisterUser, validateLogin } from '../validators/userValidator.js';
 
 const router = express.Router();
@@ -69,7 +69,7 @@ const router = express.Router();
  *                   type: string
  *                   example: "An unexpected error occurred. Please try again later."
  */
-router.post('/register-user', validateRegisterUser, registerUser);
+router.post('/users-register', validateRegisterUser, registerUser);
 
 /**
  * @swagger
@@ -146,7 +146,9 @@ router.post('/register-user', validateRegisterUser, registerUser);
  *                   example: "An unexpected error occurred. Please try again later."
  */
 
-router.post('/login', validateLogin, login);
+router.post('/users-login', validateLogin, login);
 
+router.get('/users-getAll', getAllUsers);
+router.get('/users/:id');
 
 export default router;

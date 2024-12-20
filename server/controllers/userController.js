@@ -75,7 +75,37 @@ export const login = async (req, res) => {
     }
 };
 
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await userService.getAllUsers();
+        res.status(200).json(users);
+
+    } catch (error) {
+        res.status(400).json({
+            error: 'Error al obtener la lista de usuarios',
+            details: error.message
+        })
+    }
+};
+
+export const getUserById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const user = await userService.getUserById(id);
+        res.status(200).json(user);
+
+    } catch (error) {
+        res.status(400).json({
+            error: 'Error al obtener el usuario',
+            details: error.message
+        })
+    }
+}
+
+
 export default {
     registerUser,
     login,
+    getAllUsers,
+    getUserById
 };
