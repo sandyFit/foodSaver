@@ -42,7 +42,7 @@ const Register = () => {
 
         try {
             await registerUser(formData);
-            console.log('Usuario registrado:', formData);
+            // console.log('Usuario registrado:', formData);
             setFormData({
                 fullName: '',
                 email: '',
@@ -52,7 +52,7 @@ const Register = () => {
             });
             navigate('/login');
         } catch (error) {
-            console.error('Error registrando el usuario:', error);
+            // console.error('Error registrando el usuario:', error);
             toast.error('Error registrando el usuario. Por favor, intenta nuevamente.');
         }
     };

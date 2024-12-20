@@ -40,19 +40,20 @@ export const ContextProvider = ({ children }) => {
                 headers: { 'Content-Type': 'application/json' },
             };
 
-            // Solo incluye `data` si no es null
             if (data !== null) {
                 config.data = data;
             }
 
             const response = await axios(config);
-            return response.data;
+            // console.log('API Response:', response);  // Log the full response to debug
+            return response.data;  // Make sure this is the expected structure
         } catch (error) {
             dispatch({ type: SET_ERROR, payload: error.message });
             toast.error(error.message || 'An error occurred.');
             throw error;
         }
     };
+
 
     // Fetch all meals
     const getAllMeals = async () => {
@@ -67,7 +68,7 @@ export const ContextProvider = ({ children }) => {
 
     // Add a food item
     const addFoodItem = async (formData) => {
-        console.log('FormData enviado:', formData);
+        // console.log('FormData enviado:', formData);
         dispatch({ type: SET_LOADING, payload: true });
         try {
             const data = await apiRequest('add-foodItem', 'POST', formData);
@@ -117,7 +118,7 @@ export const ContextProvider = ({ children }) => {
     // === USERS ===
     // globalContext.jsx
     const registerUser = async (formData) => {
-        console.log('FormData enviado:', formData);
+        // console.log('FormData enviado:', formData);
         dispatch({ type: SET_LOADING, payload: true });
         try {
             const data = await apiRequest('register-user', 'POST', formData);
@@ -131,6 +132,26 @@ export const ContextProvider = ({ children }) => {
             dispatch({ type: SET_LOADING, payload: false });
         }
     };
+
+    const login = async (formData) => {
+    // console.log('FormData enviado:', formData);
+    dispatch({ type: SET_LOADING, payload: true });
+    try {
+        const data = await apiRequest('login', 'POST', formData);
+        // console.log('Login response data:', data);  // Log to inspect the data
+
+        if (data.message === 'Login Correcto') {
+            toast.success('Bienvenido al dashboard. Haz iniciado sesión');
+            return data;  // Return the entire response object with message, token, user, etc.
+        } else {
+            toast.error('Error al iniciar sesión:', data.message);
+            return null;  // Return null if login fails
+        }
+    } finally {
+        dispatch({ type: SET_LOADING, payload: false });
+    }
+};
+
 
 
     // const getAllUsers = async () => {
@@ -158,6 +179,7 @@ export const ContextProvider = ({ children }) => {
         updateMeal,
         deleteMeal,
         registerUser,
+        login,
         // getAllUsers,
         loading,
         error,

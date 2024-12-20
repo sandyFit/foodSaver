@@ -26,7 +26,7 @@ export const registerUser = async ({ fullName, email, password, avatar, role = '
         // Retornar el usuario y el token
         return { user, token };
     } catch (error) {
-        console.error(error.message);
+        // console.error(error.message);
         throw new Error(error.message); // Propagar el error con mensaje limpio
     }
 };
@@ -51,7 +51,7 @@ export const login = async ({ email, password }) => {
         // Retornar usuario y token
         return { user, token };
     } catch (error) {
-        console.error(error.message);
+        // console.error(error.message);
         throw new Error(error.message); // Propagar el error con mensaje limpio
     }
 };

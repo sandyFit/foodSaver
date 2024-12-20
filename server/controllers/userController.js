@@ -25,7 +25,7 @@ export const registerUser = async (req, res) => {
             token,
         });
     } catch (error) {
-        console.error(error);
+        // console.error(error);
 
         if (error.message === 'El correo electrónico ya está registrado' || error.code === 11000) {
             return res.status(400).json({ message: 'El correo electrónico ya está registrado' });
@@ -43,7 +43,7 @@ export const login = async (req, res) => {
     try {
        const { email, password } = req.body;
 
-        console.log("Datos recibidos en login:", req.body);
+        // console.log("Datos recibidos en login:", req.body);
 
         // Servicio se encarga de manejar validaciones y lógica
         const { user, token } = await userService.login({ email, password });
@@ -60,7 +60,7 @@ export const login = async (req, res) => {
             token,
         });
     } catch (error) {
-        console.error(error);
+        // console.error(error);
 
         if (error.message === 'Credenciales incorrectas') {
             return res.status(401).json({
