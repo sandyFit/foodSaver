@@ -5,7 +5,7 @@ import { formatDate } from '../utils/functions';
 
 
 const MealsTable = ({ meals, onDeleteMeal }) => {
-    const { allFoodItems, updateMeal } = useContext(ContextGlobal); // Usar el updateMeal desde el contexto
+    const { allFoodItems, updateMeal } = useContext(ContextGlobal); 
     const mealsToDisplay = meals || allFoodItems;
     const [editingMeal, setEditingMeal] = useState(null);
     const [updatedData, setUpdatedData] = useState({

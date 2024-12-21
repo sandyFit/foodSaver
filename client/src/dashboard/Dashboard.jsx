@@ -5,6 +5,7 @@ import { PiNotebookLight } from "react-icons/pi";
 import { CiViewList } from "react-icons/ci";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
+import { TbUsers } from "react-icons/tb";
 
 const Dashboard = () => {
 
@@ -12,6 +13,7 @@ const Dashboard = () => {
         { to: '/dashboard', icon: <GoHome className='text-[1.3rem]'/>, label: 'Inicio' },
         { to: '/dashboard/meals', icon: <CiViewList className='text-[1.3rem]'/>, label: 'Productos' },
         { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recetas' },
+        { to: '/dashboard/users', icon: <TbUsers className='text-[1.3rem]' />, label: 'Usuarios' },
 
     ]
 
@@ -90,4 +92,5 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard
+export default Dashboard;
+

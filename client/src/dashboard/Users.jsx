@@ -1,8 +1,11 @@
 import React from 'react'
+import UsersTable from '../components/UsersTable';
 
 const Users = () => {
     return (
-        <div>Users</div>
+        <div>
+            <UsersTable/>
+        </div>
     )
 }
 

@@ -13,6 +13,7 @@ import Dashboard from './dashboard/Dashboard.jsx';
 import RecipeDetail from './dashboard/RecipeDetail.jsx';
 import { Toaster } from 'react-hot-toast';
 import { ContextProvider } from './utils/globalContext.jsx'; 
+import Users from './dashboard/Users.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="meals" element={<MealsList />} />
             <Route path="recipes" element={<Recipes />} />
             <Route path="recipes/:id" element={<RecipeDetail />} />
+            <Route path="users" element={<Users />} />
           </Route>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />

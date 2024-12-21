@@ -180,6 +180,7 @@ export const ContextProvider = ({ children }) => {
         deleteMeal,
         registerUser,
         login,
+        allUsers,
         getAllUsers,
         loading,
         error,
