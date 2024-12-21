@@ -134,31 +134,46 @@ export const ContextProvider = ({ children }) => {
     };
 
     const login = async (formData) => {
-    // console.log('FormData enviado:', formData);
-    dispatch({ type: SET_LOADING, payload: true });
-    try {
-        const data = await apiRequest('users-login', 'POST', formData);
-        // console.log('Login response data:', data);  // Log to inspect the data
+        // console.log('FormData enviado:', formData);
+        dispatch({ type: SET_LOADING, payload: true });
+        try {
+            const data = await apiRequest('users-login', 'POST', formData);
+            // console.log('Login response data:', data);  // Log to inspect the data
 
-        if (data.message === 'Login Correcto') {
-            toast.success('Bienvenido al dashboard. Haz iniciado sesión');
-            return data;  // Return the entire response object with message, token, user, etc.
-        } else {
-            toast.error('Error al iniciar sesión:', data.message);
-            return null;  // Return null if login fails
+            if (data.message === 'Login Correcto') {
+                toast.success('Bienvenido al dashboard. Haz iniciado sesión');
+                return data;  // Return the entire response object with message, token, user, etc.
+            } else {
+                toast.error('Error al iniciar sesión:', data.message);
+                return null;  // Return null if login fails
+            }
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
         }
-    } finally {
-        dispatch({ type: SET_LOADING, payload: false });
-    }
-};
-
-
+    };
 
     const getAllUsers = async () => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             const data = await apiRequest('users-getAll');
             dispatch({ type: SET_ALL_USERS, payload: data });
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
+        }
+    };
+
+    const updateUser = async () => {
+        dispatch({ type: SET_LOADING, payload: true });
+        try {
+            const updatedUser = await apiRequest(`update-foodItem/${id}`, 'PUT', updatedData);
+            dispatch({
+                type: SET_ALL_FOODITEMS,
+                payload: allFoodItems.map((user) =>
+                    user._id === id ? { ...user, ...updatedUser } : user
+                ),
+            });
+
+            toast.success('Producto actualizado correctamente.');
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }

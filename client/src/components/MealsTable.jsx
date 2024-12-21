@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import UpdateForm from './UpdateForm';
 import { ContextGlobal } from '../utils/globalContext';
 import { formatDate } from '../utils/functions';
-
+import toast from 'react-hot-toast';
 
 const MealsTable = ({ meals, onDeleteMeal }) => {
     const { allFoodItems, updateMeal } = useContext(ContextGlobal); 
@@ -38,7 +38,7 @@ const MealsTable = ({ meals, onDeleteMeal }) => {
     const handleSubmitUpdate = (e) => {
         e.preventDefault();
         if (!updatedData.itemName || !updatedData.category) {
-            alert('Por favor, complete todos los campos');
+            toast.error('Por favor, complete todos los campos');
             return;
         }
         if (editingMeal) {

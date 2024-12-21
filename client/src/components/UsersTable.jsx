@@ -1,12 +1,45 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { ContextGlobal } from '../utils/globalContext';
+import toast from 'react-hot-toast';
 
 const UsersTable = ({ users, onDeleteUser }) => {
 
     const { allUsers } = useContext(ContextGlobal);
     const usersToDisplay = users || allUsers;
+    const [editingUser, setEditingUser] = useState(null);
+    const [updatedData, setUpdatedData] = useState({
+        fullName: '',
+        email: '',
+        role: ''
+    });
 
+    const handleEditingClick = (user) => {
+        setEditingUser(user);
+        setUpdatedData({
+            fullName: user.fullName,
+            email: user.email,
+            role: user.role
+        });
+    };
 
+    const handleUpdateChange = (e) => {
+        const { name, value } = e.target;
+        setUpdatedData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
+
+    const handleSubmitUpdate = (e) => {
+        e.preventDefault();
+        if (updatedData.fullName || updatedData.email || updatedData.role) {
+            toast.error('Por favor, complete todos los campos');
+            return;
+        }
+        if (editingUser) {
+            
+        }
+    }
 
     return (
         <article className="w-full flex flex-col justify-center items-center">

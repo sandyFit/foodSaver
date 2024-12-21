@@ -149,6 +149,6 @@ router.post('/users-register', validateRegisterUser, registerUser);
 router.post('/users-login', validateLogin, login);
 
 router.get('/users-getAll', getAllUsers);
-router.get('/users/:id');
+router.get('/users/:id', getUserById);
 
 export default router;
