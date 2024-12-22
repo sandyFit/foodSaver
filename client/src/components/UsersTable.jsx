@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { ContextGlobal } from '../utils/globalContext';
 import toast from 'react-hot-toast';
+import UpdateUsersForm from './UpdateUsersForm';
 
 const UsersTable = ({ users, onDeleteUser }) => {
 
-    const { allUsers } = useContext(ContextGlobal);
+    const { allUsers, updateUser } = useContext(ContextGlobal);
     const usersToDisplay = users || allUsers;
     const [editingUser, setEditingUser] = useState(null);
     const [updatedData, setUpdatedData] = useState({
@@ -13,7 +14,7 @@ const UsersTable = ({ users, onDeleteUser }) => {
         role: ''
     });
 
-    const handleEditingClick = (user) => {
+    const handleEditClick = (user) => {
         setEditingUser(user);
         setUpdatedData({
             fullName: user.fullName,
@@ -32,14 +33,16 @@ const UsersTable = ({ users, onDeleteUser }) => {
 
     const handleSubmitUpdate = (e) => {
         e.preventDefault();
-        if (updatedData.fullName || updatedData.email || updatedData.role) {
+        if (!updatedData.fullName || !updatedData.email || !updatedData.role) {
             toast.error('Por favor, complete todos los campos');
             return;
         }
+
         if (editingUser) {
-            
+            updateUser(editingUser._id, updatedData); // Usar el updateUser del ContextGlobal
+            setEditingUser(null); // Cierra el formulario de edición
         }
-    }
+    };
 
     return (
         <article className="w-full flex flex-col justify-center items-center">
@@ -55,21 +58,21 @@ const UsersTable = ({ users, onDeleteUser }) => {
                 <tbody>
                     {usersToDisplay.length > 0 ? (
                         usersToDisplay.map((user) => (
-                            <tr >
+                            <tr key={user._id || user.id}>
                                 <td className="table-td">{user.fullName}</td>
                                 <td className="table-td">{ user.email}</td>
                                 <td className="table-td">{user.role}</td>
                                 <td className="table-td space-x-2">
                                     <button
                                         aria-label
-                                        // onClick={() => handleEditClick(meal)}
+                                        onClick={() => handleEditClick(user)}
                                         className="table-btn bg-yellow-100 hover:bg-yellow-200 border-yellow-600 text-yellow-600"
                                     >
                                         Editar
                                     </button>
                                     <button
-                                        // aria-label={`Delete ${meal.itemName}`}
-                                        // onClick={() => onDeleteMeal(meal._id || meal.id || meal._idFallback)}
+                                        aria-label={`Delete ${user.itemName}`}
+                                        onClick={() => onDeleteUser(user._id || user.id || user._idFallback)}
                                         className="table-btn bg-red-100 hover:bg-red-200 border-red-600 text-red-600"
                                     >
                                         Eliminar
@@ -88,13 +91,13 @@ const UsersTable = ({ users, onDeleteUser }) => {
             </table>
 
             {/* Formulario de edición */}
-            {/* {editingMeal && (
-                <UpdateForm
+            {editingUser && (
+                <UpdateUsersForm
                     updatedData={updatedData}
                     onHandleUpdateChange={handleUpdateChange}
                     onHandleSubmitUpdate={handleSubmitUpdate}
                 />
-            )} */}
+            )}
         </article>
     )
 }

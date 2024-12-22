@@ -162,10 +162,10 @@ export const ContextProvider = ({ children }) => {
         }
     };
 
-    const updateUser = async () => {
+    const updateUser = async (id, updatedData) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const updatedUser = await apiRequest(`update-foodItem/${id}`, 'PUT', updatedData);
+            const updatedUser = await apiRequest(`users-update/${id}`, 'PUT', updatedData);
             dispatch({
                 type: SET_ALL_FOODITEMS,
                 payload: allFoodItems.map((user) =>
@@ -197,6 +197,7 @@ export const ContextProvider = ({ children }) => {
         login,
         allUsers,
         getAllUsers,
+        updateUser,
         loading,
         error,
     };

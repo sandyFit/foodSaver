@@ -2,7 +2,7 @@ import React from 'react'
 
 const UpdateUsersForm = ({ updatedData, onHandleUpdateChange, onHandleSubmitUpdate }) => {
     return (
-        <section className="col-span-12 flex flex-col justify-between border-t-2 border-stone-900 mt-6">
+        <section className="w-[80%] col-span-12 flex flex-col justify-between border-t-2 border-stone-900 mt-6">
             <h4 className="text-lg font-bold my-2">Edita tu Producto</h4>
             <form onSubmit={onHandleSubmitUpdate} className="flex w-full justify-between mb-6" >
                 <input
@@ -19,8 +19,8 @@ const UpdateUsersForm = ({ updatedData, onHandleUpdateChange, onHandleSubmitUpda
                     onChange={onHandleUpdateChange}
                     required
                 />
-                <div className="w-[14vw] flex justify-between">
-                    <div className="flex gap-2">
+                <div className="w-[12vw] flex justify-between">
+                    <div className="flex justify-center items-center gap-2">
                         <label htmlFor='userRole'>Usuario</label>
                         <input
                             type='radio'
@@ -28,10 +28,10 @@ const UpdateUsersForm = ({ updatedData, onHandleUpdateChange, onHandleSubmitUpda
                             name='role'
                             value="user"
                             checked={updatedData.role === 'user'}
-                            onChange={handleInputChange}
+                            onChange={onHandleUpdateChange}
                         />
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex justify-center items-center gap-2">
                         <label htmlFor='adminRole'>Admin</label>
                         <input
                             type='radio'
@@ -39,7 +39,7 @@ const UpdateUsersForm = ({ updatedData, onHandleUpdateChange, onHandleSubmitUpda
                             name='role'
                             value="admin"
                             checked={updatedData.role === 'admin'}
-                            onChange={handleInputChange}
+                            onChange={onHandleUpdateChange}
                         />
                     </div>
                 </div>
