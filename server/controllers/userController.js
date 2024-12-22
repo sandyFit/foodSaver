@@ -106,10 +106,15 @@ export const updateUser = async (req, res) => {
     const { id } = req.params; // Get the ID from the URL
     const updateData = req.body; // Get the data to update from the body
 
+    // Debug log to verify the route is being hit and the ID is received
+    // console.log('PUT /users-update/:id called with ID:', id);
+
+
     try {
-        console.log("Attempting to update user with ID:", id); // Log the ID to verify it's correct
+        // console.log("Attempting to update user with ID:", id); // Log the ID to verify it's correct
 
         const updatedUser = await userService.updateUser(id, updateData);
+        // console.log(updatedUser);
         res.status(200).json({
             message: 'Usuario actualizado exitosamente',
             updatedUser

@@ -85,6 +85,7 @@ export const updateUser = async (id, updateData) => {
             { ...updateData },
             { new: true }
         );
+        console.log(updatedUser);
         if (!updatedUser) {
             throw new Error('Usuario no encontrado');
         }
