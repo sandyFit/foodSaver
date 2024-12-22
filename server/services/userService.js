@@ -77,9 +77,28 @@ export const getUserById = async (id) => {
     }
 }
 
+export const updateUser = async (id, updateData) => {
+    try {
+        console.log("Attempting to update user with ID:", id); // Log the ID being used
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { ...updateData },
+            { new: true }
+        );
+        if (!updatedUser) {
+            throw new Error('Usuario no encontrado');
+        }
+        return updatedUser;
+    } catch (error) {
+        throw new Error('Error al actualizar el usuario: ' + error.message);
+    }
+};
+
+
 export default {
     registerUser,
     login,
     getAllUsers,
-    getUserById
+    getUserById,
+    updateUser
 };

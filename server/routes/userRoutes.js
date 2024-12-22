@@ -1,5 +1,11 @@
 import express from 'express';
-import { registerUser, login, getAllUsers } from '../controllers/userController.js';
+import {
+    registerUser,
+    login,
+    getAllUsers,
+    getUserById,
+    updateUser
+} from '../controllers/userController.js';
 import { validateRegisterUser, validateLogin } from '../validators/userValidator.js';
 
 const router = express.Router();
@@ -150,5 +156,7 @@ router.post('/users-login', validateLogin, login);
 
 router.get('/users-getAll', getAllUsers);
 router.get('/users/:id', getUserById);
+router.put('/users-update/:id', updateUser);
+
 
 export default router;

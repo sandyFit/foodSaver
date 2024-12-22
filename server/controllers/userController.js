@@ -98,14 +98,35 @@ export const getUserById = async (req, res) => {
         res.status(400).json({
             error: 'Error al obtener el usuario',
             details: error.message
-        })
+        });
+    };
+};
+
+export const updateUser = async (req, res) => {
+    const { id } = req.params; // Get the ID from the URL
+    const updateData = req.body; // Get the data to update from the body
+
+    try {
+        console.log("Attempting to update user with ID:", id); // Log the ID to verify it's correct
+
+        const updatedUser = await userService.updateUser(id, updateData);
+        res.status(200).json({
+            message: 'Usuario actualizado exitosamente',
+            updatedUser
+        });
+    } catch (error) {
+        res.status(400).json({
+            error: 'Error al actualizar el usuario',
+            details: error.message
+        });
     }
-}
+};
 
 
 export default {
     registerUser,
     login,
     getAllUsers,
-    getUserById
+    getUserById,
+    updateUser
 };

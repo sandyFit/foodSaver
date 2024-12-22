@@ -55,11 +55,11 @@ const updateFoodItem = async (id, updateData) => {
             { new: true } // Devuelve el objeto actualizado
         );
         if (!updatedFoodItem) {
-            throw new Error('Food item not found', 404);
+            throw new Error('Producto no encontrado', 404);
         }
         return updatedFoodItem;
     } catch (error) {
-        throw new Error('Error updating food item: ' + error.message);
+        throw new Error('Error al actualizar el producto: ' + error.message);
     }
 };
 
