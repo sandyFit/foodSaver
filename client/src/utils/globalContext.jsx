@@ -95,6 +95,7 @@ export const ContextProvider = ({ children }) => {
                 ),
             });
 
+            getAllMeals();
             toast.success('Producto actualizado correctamente.');
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
@@ -167,13 +168,14 @@ export const ContextProvider = ({ children }) => {
         try {
             const updatedUser = await apiRequest(`users-update/${id}`, 'PUT', updatedData);
             dispatch({
-                type: SET_ALL_FOODITEMS,
-                payload: allFoodItems.map((user) =>
+                type: SET_ALL_USERS,
+                payload: allUsers.map((user) =>
                     user._id === id ? { ...user, ...updatedUser } : user
                 ),
             });
 
-            toast.success('Producto actualizado correctamente.');
+            getAllUsers();
+            toast.success('Usuario actualizado correctamente.');
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }

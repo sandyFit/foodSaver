@@ -154,8 +154,182 @@ router.post('/users-register', validateRegisterUser, registerUser);
 
 router.post('/users-login', validateLogin, login);
 
+/**
+ * @swagger
+ * /users-getAll:
+ *   get:
+ *     summary: Retrieve all users
+ *     description: Fetches a list of all registered users in the system.
+ *     tags:
+ *       - users
+ *     responses:
+ *       200:
+ *         description: A list of users is returned successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     description: Unique identifier for the user.
+ *                     example: "61d2f8f5f4d4b1e0c3a5a789"
+ *                   fullName:
+ *                     type: string
+ *                     description: Full name of the user.
+ *                     example: John Doe
+ *                   email:
+ *                     type: string
+ *                     description: Email address of the user.
+ *                     example: john@doe.com
+ *       500:
+ *         description: Internal Server Error. This response is returned if something goes wrong on the server side.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "An unexpected error occurred. Please try again later."
+ */
 router.get('/users-getAll', getAllUsers);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: Retrieve a user by ID
+ *     description: Fetches the details of a specific user by their unique ID.
+ *     tags:
+ *       - users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique identifier of the user to retrieve.
+ *         example: "61d2f8f5f4d4b1e0c3a5a789"
+ *     responses:
+ *       200:
+ *         description: User details retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   description: Unique identifier for the user.
+ *                   example: "61d2f8f5f4d4b1e0c3a5a789"
+ *                 fullName:
+ *                   type: string
+ *                   description: Full name of the user.
+ *                   example: John Doe
+ *                 email:
+ *                   type: string
+ *                   description: Email address of the user.
+ *                   example: john@doe.com
+ *       404:
+ *         description: User not found. This response is returned if the user ID does not exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User not found."
+ *       500:
+ *         description: Internal Server Error. This response is returned if something goes wrong on the server side.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "An unexpected error occurred. Please try again later."
+ */
 router.get('/users/:id', getUserById);
+
+/**
+ * @swagger
+ * /users-update/{id}:
+ *   put:
+ *     summary: Update user details
+ *     description: Updates the details of an existing user by their unique ID.
+ *     tags:
+ *       - users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique identifier of the user to update.
+ *         example: "61d2f8f5f4d4b1e0c3a5a789"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fullName:
+ *                 type: string
+ *                 description: Updated full name of the user.
+ *                 example: John Smith
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: Updated email address of the user.
+ *                 example: john.smith@doe.com
+ *     responses:
+ *       200:
+ *         description: User updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User updated successfully."
+ *       400:
+ *         description: Bad Request. This may occur if the input validation fails.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid input format."
+ *       404:
+ *         description: User not found. This response is returned if the user ID does not exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User not found."
+ *       500:
+ *         description: Internal Server Error. This response is returned if something goes wrong on the server side.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "An unexpected error occurred. Please try again later."
+ */
 router.put('/users-update/:id', updateUser);
 
 
