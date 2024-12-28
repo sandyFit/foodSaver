@@ -333,7 +333,46 @@ router.get('/users/:id', getUserById);
  */
 router.put('/users-update/:id', updateUser);
 
+/**
+ * @swagger
+ * /users-delete/{id}:
+ *   delete:
+ *     summary: Delete a user by ID
+ *     description: Deletes a user from the system by their unique ID.
+ *     tags:
+ *       - users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique identifier of the user to delete.
+ *         example: "61d2f8f5f4d4b1e0c3a5a789"
+ *     responses:
+ *       204:
+ *         description: User deleted successfully. No content is returned.
+ *       404:
+ *         description: User not found. This response is returned if the user ID does not exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User not found."
+ *       500:
+ *         description: Internal Server Error. This response is returned if something goes wrong on the server side.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "An unexpected error occurred. Please try again later."
+ */
 router.delete('/users-delete/:id', deleteUser);
-
 
 export default router;
