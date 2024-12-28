@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { ContextGlobal } from '../utils/globalContext';
 
 const UpdateUsersForm = ({ updatedData, onHandleUpdateChange, onHandleSubmitUpdate }) => {
+
+    const {allUsers} = useContext(ContextGlobal)
+
     return (
         <section className="w-[80%] col-span-12 flex flex-col justify-between border-t-2 border-stone-900 mt-6">
             <h4 className="text-lg font-bold my-2">Edita tu Producto</h4>

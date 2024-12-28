@@ -125,7 +125,7 @@ export const ContextProvider = ({ children }) => {
             const data = await apiRequest('users-register', 'POST', formData);
             if (data.message === 'Cuenta registrada correctamente') {
                 toast.success('Tu cuenta ha sido registrada correctamente. ¡Inicia sesión para comenzar!');
-                // getAllUsers(); 
+                await getAllUsers(); 
             } else {
                 toast.error(`Error al registrar el usuario: ${data.message}`);
             }
@@ -143,11 +143,13 @@ export const ContextProvider = ({ children }) => {
 
             if (data.message === 'Login Correcto') {
                 toast.success('Bienvenido al dashboard. Haz iniciado sesión');
+                await getAllUsers();
                 return data;  // Return the entire response object with message, token, user, etc.
             } else {
                 toast.error('Error al iniciar sesión:', data.message);
                 return null;  // Return null if login fails
             }
+            
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
@@ -179,6 +181,20 @@ export const ContextProvider = ({ children }) => {
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
+    };
+
+    const deleteUser = async (id) => {
+        dispatch({ type: SET_LOADING, payload: true });
+        try {
+            await apiRequest(`users-delete/${id}`, 'DELETE');
+            const filteredUser = allUsers.filter((user) => user._id !== id);
+            dispatch({ type: SET_ALL_FOODITEMS, payload: filteredUser });
+            toast.success('Usuaio eliminado.');
+            getAllUsers();
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
+            
+        }
     }
 
 
@@ -200,6 +216,7 @@ export const ContextProvider = ({ children }) => {
         allUsers,
         getAllUsers,
         updateUser,
+        deleteUser,
         loading,
         error,
     };

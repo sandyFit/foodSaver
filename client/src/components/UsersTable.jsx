@@ -1,17 +1,16 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ContextGlobal } from '../utils/globalContext';
 import toast from 'react-hot-toast';
 import UpdateUsersForm from './UpdateUsersForm';
 
-const UsersTable = ({ users, onDeleteUser }) => {
+const UsersTable = () => {
 
-    const { allUsers, updateUser } = useContext(ContextGlobal);
-    const usersToDisplay = users || allUsers;
+    const { allUsers, updateUser, deleteUser } = useContext(ContextGlobal);
     const [editingUser, setEditingUser] = useState(null);
     const [updatedData, setUpdatedData] = useState({
         fullName: '',
         email: '',
-        role: ''
+        role: '',
     });
 
     const handleEditClick = (user) => {
@@ -19,7 +18,7 @@ const UsersTable = ({ users, onDeleteUser }) => {
         setUpdatedData({
             fullName: user.fullName,
             email: user.email,
-            role: user.role
+            role: user.role,
         });
     };
 
@@ -44,6 +43,13 @@ const UsersTable = ({ users, onDeleteUser }) => {
         }
     };
 
+    const handleDeleteUser = (userId) => {
+        if (window.confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
+            deleteUser(userId);
+        }
+    };
+
+
     return (
         <article className="w-full flex flex-col justify-center items-center">
             <table border="1">
@@ -56,8 +62,8 @@ const UsersTable = ({ users, onDeleteUser }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {usersToDisplay.length > 0 ? (
-                        usersToDisplay.map((user) => (
+                    {allUsers.length > 0 ? (
+                        allUsers.map((user) => (
                             <tr key={user._id || user.id}>
                                 <td className="table-td">{user.fullName}</td>
                                 <td className="table-td">{ user.email}</td>
@@ -72,7 +78,7 @@ const UsersTable = ({ users, onDeleteUser }) => {
                                     </button>
                                     <button
                                         aria-label={`Delete ${user.itemName}`}
-                                        onClick={() => onDeleteUser(user._id || user.id || user._idFallback)}
+                                        onClick={() => handleDeleteUser(user._id)}
                                         className="table-btn bg-red-100 hover:bg-red-200 border-red-600 text-red-600"
                                     >
                                         Eliminar
