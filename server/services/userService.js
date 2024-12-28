@@ -95,11 +95,25 @@ export const updateUser = async (id, updateData) => {
     }
 };
 
+export const deleteUser = async (id) => {
+    try {
+        const user = await User.findByIdAndDelete(id);
+        if (!user) {
+            throw new Error('Usuario no encontrado');
+        }
+        return user;
+    } catch (error) {
+        throw new Error('Error eliminando el usuario' + error.message);
+    }
+    
+}
+
 
 export default {
     registerUser,
     login,
     getAllUsers,
     getUserById,
-    updateUser
+    updateUser,
+    deleteUser
 };

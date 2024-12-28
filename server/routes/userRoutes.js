@@ -4,7 +4,8 @@ import {
     login,
     getAllUsers,
     getUserById,
-    updateUser
+    updateUser,
+    deleteUser
 } from '../controllers/userController.js';
 import { validateRegisterUser, validateLogin } from '../validators/userValidator.js';
 
@@ -331,6 +332,8 @@ router.get('/users/:id', getUserById);
  *                   example: "An unexpected error occurred. Please try again later."
  */
 router.put('/users-update/:id', updateUser);
+
+router.delete('/users-delete/:id', deleteUser);
 
 
 export default router;
