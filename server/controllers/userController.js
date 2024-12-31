@@ -88,10 +88,10 @@ export const getAllUsers = async (req, res) => {
     }
 };
 
-export const getUserById = async (req, res) => {
+export const getUserInfo = async (req, res) => {
     const { id } = req.params;
     try {
-        const user = await userService.getUserById(id);
+        const user = await userService.getUserInfo(id);
         res.status(200).json(user);
 
     } catch (error) {
@@ -152,7 +152,7 @@ export default {
     registerUser,
     login,
     getAllUsers,
-    getUserById,
+    getUserInfo,
     updateUser,
     deleteUser
 };

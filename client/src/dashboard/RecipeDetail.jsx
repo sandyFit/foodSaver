@@ -20,7 +20,7 @@ const RecipeDetail = () => {
 
     const [loading, setLoading] = useState('')
     const { id } = useParams();
-    console.log('ID recibido:', id);
+    // console.log('ID recibido:', id);
 
     const BASE_URL = 'http://localhost:5555/api';
 
@@ -31,10 +31,10 @@ const RecipeDetail = () => {
             const response = await axios.get(`${BASE_URL}/recipes/${id}`);
             setRecipe(response.data)
         } catch (error) {
-            console.error('Error al obtener la receta.', error);
+            // console.error('Error al obtener la receta.', error);
             setError('No se pudo obtener la receta. Inténtalo nuevamente.');
         } finally {
-            console.error('Error en la petición');
+            // console.error('Error en la petición');
             setLoading(false);
             toast.error('Error en la petición:');
         }

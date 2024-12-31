@@ -24,10 +24,10 @@ const Recipes = () => {
 
         try {
             const response = await axios.get(`${BASE_URL}/recipes`);
-            console.log("Response Data:", response.data); 
+            // console.log("Response Data:", response.data); 
             setRecipesList(response.data);
         } catch (error) {
-            console.error('Error al obtener las recetas.', error);
+            // console.error('Error al obtener las recetas.', error);
             toast.error('No se pudieron obtener las recetas. Inténtalo nuevamente.');
         } finally {
             setLoading(false);

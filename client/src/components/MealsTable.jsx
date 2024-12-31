@@ -4,9 +4,8 @@ import { ContextGlobal } from '../utils/globalContext';
 import { formatDate } from '../utils/functions';
 import toast from 'react-hot-toast';
 
-const MealsTable = ({ meals, onDeleteMeal }) => {
-    const { allFoodItems, updateMeal } = useContext(ContextGlobal); 
-    const mealsToDisplay = meals || allFoodItems;
+const MealsTable = () => {
+    const { allFoodItems, updateMeal, deleteMeal } = useContext(ContextGlobal); 
     const [editingMeal, setEditingMeal] = useState(null);
     const [updatedData, setUpdatedData] = useState({
         itemName: '',
@@ -47,6 +46,14 @@ const MealsTable = ({ meals, onDeleteMeal }) => {
         }
     };
 
+    const handleDeleteMeal = (mealId) => {
+        if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+            deleteMeal(mealId);
+        }
+    }
+
+
+
     // Verifica si el estado de allFoodItems cambia, y vuelve a renderizar la tabla
     useEffect(() => {
         console.log('Tabla actualizada:', allFoodItems); // Verifica si el estado cambia
@@ -65,8 +72,8 @@ const MealsTable = ({ meals, onDeleteMeal }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {mealsToDisplay.length > 0 ? (
-                        mealsToDisplay.map((meal) => (
+                    {allFoodItems.length > 0 ? (
+                        allFoodItems.map((meal) => (
                             <tr key={meal._id || meal.id}>
                                 <td className="table-td">{meal.itemName}</td>
                                 <td className="table-td">{formatDate(meal.expirationDate)}</td>
@@ -82,7 +89,7 @@ const MealsTable = ({ meals, onDeleteMeal }) => {
                                     </button>
                                     <button
                                         aria-label={`Delete ${meal.itemName}`}
-                                        onClick={() => onDeleteMeal(meal._id || meal.id || meal._idFallback)}
+                                        onClick={() => handleDeleteMeal(meal._id)}
                                         className="table-btn bg-red-100 hover:bg-red-200 border-red-600 text-red-600"
                                     >
                                         Eliminar

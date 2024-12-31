@@ -28,7 +28,7 @@ const Home = () => {
             const response = await axios.get(`${BASE_URL}/expiring-foodItems`);
             setExpiringMeals(response.data);
         } catch (error) {
-            console.error('Error al obtener los productos.', error);
+            // console.error('Error al obtener los productos.', error);
             toast.error('No se pudieron obtener los productos. Inténtalo nuevamente.');
         } finally {
             setLoading(false);
@@ -40,11 +40,11 @@ const Home = () => {
 
         try {
             const response = await axios.get(`${BASE_URL}/recipes-suggest`);
-            console.log(`Response data from axios:`);
-            console.log(response.data)
+            // console.log(`Response data from axios:`);
+            // console.log(response.data)
             setSuggestedRecipes(response.data);
         } catch (error) {
-            console.error('Error al obtener las recetas.', error);
+            // console.error('Error al obtener las recetas.', error);
             toast.error('No se pudieron obtener las recetas. Inténtalo nuevamente.');
         } finally {
             setLoading(false);

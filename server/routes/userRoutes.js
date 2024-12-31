@@ -3,11 +3,12 @@ import {
     registerUser,
     login,
     getAllUsers,
-    getUserById,
+    getUserInfo,
     updateUser,
     deleteUser
 } from '../controllers/userController.js';
 import { validateRegisterUser, validateLogin } from '../validators/userValidator.js';
+import { authenticateUser } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -255,7 +256,7 @@ router.get('/users-getAll', getAllUsers);
  *                   type: string
  *                   example: "An unexpected error occurred. Please try again later."
  */
-router.get('/users/:id', getUserById);
+router.post('/users-getUserInfo/:id', authenticateUser, getUserInfo);
 
 /**
  * @swagger

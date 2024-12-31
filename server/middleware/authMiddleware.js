@@ -21,7 +21,7 @@ export const authenticateUser = async (req, res, next) => {
 
         if (!user) {
             return res.status(401).json({
-                message: 'Usuario no encontrado, por favor inicie sesión nuevamente',
+                message: 'Usuario no encontrado, por favor inicie sesión nuevamente'
             });
         }
 
@@ -42,12 +42,21 @@ export const authenticateUser = async (req, res, next) => {
 export const authorizeRoles = (...roles) => {
     return (req, res, next) => {
         try {
+            // Ensure the role is available
+            if (!req.user || !req.user.role) {
+                return res.status(403).json({
+                    message: 'Acceso no autorizado: rol no asignado',
+                });
+            }
+
+            // Check if the user's role is authorized
             if (!roles.includes(req.user.role)) {
                 return res.status(403).json({
                     message: 'Acceso no autorizado',
                 });
             }
-            next();
+
+            next(); // Pass to the next middleware or controller
         } catch (error) {
             console.error('Error al autorizar roles:', error.message);
             return res.status(500).json({
@@ -56,3 +65,4 @@ export const authorizeRoles = (...roles) => {
         }
     };
 };
+

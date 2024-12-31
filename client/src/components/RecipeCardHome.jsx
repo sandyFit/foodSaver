@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const RecipeCardHome = ({ bgColor, id, name, image_url, description }) => {
-    console.log('ID de la receta desde RecipeCardHome:', id);
+    // console.log('ID de la receta desde RecipeCardHome:', id);
 
     return (
         <article className='w-[40vw] py-2'>

@@ -64,7 +64,7 @@ export const getAllUsers = async () => {
     }
 };
 
-export const getUserById = async (id) => {
+export const getUserInfo = async (id) => {
     try {
         const user = await User.findById(id);
         if (!user) {
@@ -113,7 +113,7 @@ export default {
     registerUser,
     login,
     getAllUsers,
-    getUserById,
+    getUserInfo,
     updateUser,
     deleteUser
 };

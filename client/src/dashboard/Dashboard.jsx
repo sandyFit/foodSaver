@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { GoHome } from "react-icons/go";
 import { PiNotebookLight } from "react-icons/pi";
@@ -6,8 +6,19 @@ import { CiViewList } from "react-icons/ci";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
 import { TbUsers } from "react-icons/tb";
+import { ContextGlobal } from '../utils/globalContext';
 
 const Dashboard = () => {
+
+    const { user, loading } = useContext(ContextGlobal);
+
+    useEffect(() => {
+        console.log("User in Dashboard useEffect:", user);
+    }, [user]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     const userItems = [
         { to: '/dashboard', icon: <GoHome className='text-[1.3rem]'/>, label: 'Inicio' },
@@ -60,7 +71,7 @@ const Dashboard = () => {
                     </div>
 
                     <div className="flex">
-                        <h4>Welcome User!</h4>
+                        <h4>Welcome {user?.fullName}</h4>
                     </div>
                     <div className="flex justify-center items-center gap-6 relative pr-8">
                         {/* Notifications */}
@@ -77,7 +88,7 @@ const Dashboard = () => {
                         <div className="flex gap-2 items-center">
                             <div className="w-12 h-12 border-2 border-stone-700 rounded-full"></div>
                             <div className="flex flex-col">
-                                <h3 className="text-[.9rem]">User</h3>                               
+                                <h3 className="text-[.9rem]">{user?.fullName}</h3>                               
                             </div>
                         </div>
                     </div>

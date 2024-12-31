@@ -6,9 +6,6 @@ import toast from 'react-hot-toast';
 const MealsList = () => {
     const {
         addFoodItem,
-        allFoodItems,
-        updateMeal,
-        deleteMeal,
         loading,
         error,
     } = useContext(ContextGlobal);
@@ -109,11 +106,7 @@ const MealsList = () => {
                     <h4 className="text-lg font-bold mb-2">Tu Lista de Productos</h4>
                     <div className="col-span-12 max-w-full">
                         <div className="rounded-md">
-                            <MealsTable
-                                meals={allFoodItems}
-                                onUpdateMeal={updateMeal}
-                                onDeleteMeal={deleteMeal}
-                            />
+                            <MealsTable />                                                  
                         </div>
                     </div>
                 </div>

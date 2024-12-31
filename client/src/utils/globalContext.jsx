@@ -7,6 +7,7 @@ import {
     SET_LOADING,
     SET_ALL_FOODITEMS,
     SET_ALL_USERS,
+    SET_USER,
     SET_ERROR,
 } from "../utils/reducer";
 
@@ -18,7 +19,7 @@ export const initialState = {
     recipe: {},
     suggestedRecipes: [],
     allUsers: [],
-    user: {},
+    user: null,
     error: null,
     loading: false,
 }
@@ -135,31 +136,54 @@ export const ContextProvider = ({ children }) => {
     };
 
     const login = async (formData) => {
-        // console.log('FormData enviado:', formData);
         dispatch({ type: SET_LOADING, payload: true });
         try {
             const data = await apiRequest('users-login', 'POST', formData);
-            // console.log('Login response data:', data);  // Log to inspect the data
-
             if (data.message === 'Login Correcto') {
                 toast.success('Bienvenido al dashboard. Haz iniciado sesión');
-                await getAllUsers();
-                return data;  // Return the entire response object with message, token, user, etc.
+                console.log("User data:", data.user); // Ensure this is not undefined
+
+                localStorage.setItem('token', data.data.token);  // Store token in localStorage
+                await getAllUsers(); // Fetch all users if necessary
+                return data;
             } else {
                 toast.error('Error al iniciar sesión:', data.message);
-                return null;  // Return null if login fails
+                return null;
             }
-            
+        } catch (error) {
+            toast.error('Login failed: ' + error.message);
+            return null;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
     };
+
+
 
     const getAllUsers = async () => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             const data = await apiRequest('users-getAll');
             dispatch({ type: SET_ALL_USERS, payload: data });
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
+        }
+    };
+
+    const getUserInfo = async (id) => {
+        dispatch({ type: SET_LOADING, payload: true });
+        try {
+            const data = await apiRequest(`users-getUserInfo/${id}`,
+                'POST',
+                { token: localStorage.getItem('token') }, {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            });
+            if (data.message.success) {
+                dispatch({ type: SET_USER, payload: data });
+            }
+            else {
+                toast.error('Error al obtener el usuario');
+            }
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
@@ -189,7 +213,7 @@ export const ContextProvider = ({ children }) => {
             await apiRequest(`users-delete/${id}`, 'DELETE');
             const filteredUser = allUsers.filter((user) => user._id !== id);
             dispatch({ type: SET_ALL_FOODITEMS, payload: filteredUser });
-            toast.success('Usuaio eliminado.');
+            toast.success('Usuario eliminado.');
             getAllUsers();
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
@@ -197,12 +221,21 @@ export const ContextProvider = ({ children }) => {
         }
     }
 
-
     // Fetch data on load
     useEffect(() => {
         getAllMeals();
         getAllUsers();
     }, []);
+
+    // Fetch the user from localStorage on component mount
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        console.log('Stored user:', storedUser);
+        if (storedUser) {
+            dispatch({ type: SET_USER, payload: JSON.parse(storedUser) });
+        }
+    }, []);
+
 
     // Context value
     const contextValue = {
@@ -215,6 +248,7 @@ export const ContextProvider = ({ children }) => {
         login,
         allUsers,
         getAllUsers,
+        getUserInfo,
         updateUser,
         deleteUser,
         loading,
