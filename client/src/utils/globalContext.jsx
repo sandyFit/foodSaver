@@ -1,5 +1,5 @@
 import { createContext, useReducer, useEffect } from "react";
-import axios from "axios";
+import axios from "./axios.config";
 import { toast } from 'react-hot-toast';
 
 import {
@@ -138,27 +138,33 @@ export const ContextProvider = ({ children }) => {
     const login = async (formData) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const data = await apiRequest('users-login', 'POST', formData);
-            if (data.message === 'Login Correcto') {
-                toast.success('Bienvenido al dashboard. Haz iniciado sesión');
-                console.log("User data:", data.user); // Ensure this is not undefined
+            const data = await apiRequest('users-login',
+                'POST',
+                formData,
+                { withCredentials: true }
+            );
+            console.log("Datos de la respuesta:", data); 
 
-                localStorage.setItem('token', data.data.token);  // Store token in localStorage
-                await getAllUsers(); // Fetch all users if necessary
+            if (data.message === 'Login Correcto' && data.token) {  // Ensure data and token exist before proceeding
+                toast.success('Bienvenido al dashboard. Haz iniciado sesión');
+                console.log("User data:", data); // Log user data for debugging
+
+                dispatch({ type: 'SET_USER', payload: data.user });
+
                 return data;
+
             } else {
-                toast.error('Error al iniciar sesión:', data.message);
+                toast.error('Error al iniciar sesión: ' + data.message );
                 return null;
             }
         } catch (error) {
-            toast.error('Login failed: ' + error.message);
+            console.error('Login failed:', error);  // This logs the error to the console
+            toast.error('Login failed: ' + error.message);  // This shows an error message using toast
             return null;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
     };
-
-
 
     const getAllUsers = async () => {
         dispatch({ type: SET_LOADING, payload: true });
@@ -173,11 +179,15 @@ export const ContextProvider = ({ children }) => {
     const getUserInfo = async (id) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
+            const token = localStorage.getItem('token');
+            console.log('Token antes de hacer la solicitud:', token);
+
             const data = await apiRequest(`users-getUserInfo/${id}`,
                 'POST',
-                { token: localStorage.getItem('token') }, {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                null, {
+                'Authorization': `Bearer ${localStorage.getItem(token)}`
             });
+            
             if (data.message.success) {
                 dispatch({ type: SET_USER, payload: data });
             }

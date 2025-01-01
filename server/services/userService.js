@@ -35,15 +35,10 @@ export const login = async ({ email, password }) => {
     try {
         // Buscar usuario por correo
         const user = await User.findOne({ email }).select("+password");
-        if (!user) {
+        if (!user || !(await user.comparePass(password))) {
             throw new Error("Credenciales incorrectas");
         }
 
-        // Comparar contraseñas
-        const passwordOK = await user.comparePass(password);
-        if (!passwordOK) {
-            throw new Error("La contraseña no es correcta");
-        }
 
         // Generar token JWT
         const token = user.getJwtToken();

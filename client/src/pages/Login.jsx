@@ -35,14 +35,16 @@ const Login = () => {
                     password: ''
                 });
 
-                localStorage.setItem('token', data.token);  // Store token in localStorage
+                localStorage.setItem('token', data.token);
+                console.log("Token guardado:", localStorage.getItem('token'));  // Verifica que el token esté guardado
+
                 navigate('/dashboard');  // Navigate to the dashboard
             } else {
                 toast.error('Error: no se pudo obtener el token.');
             }
 
         } catch (error) {
-            // console.error('Error al iniciar sesión:', error);
+            console.error('Error al iniciar sesión:', error);
             toast.error('Error al iniciar sesión. Por favor, intenta nuevamente.');
         }
     };

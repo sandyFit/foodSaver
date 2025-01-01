@@ -42,23 +42,25 @@ export const registerUser = async (req, res) => {
 export const login = async (req, res) => {
     try {
        const { email, password } = req.body;
-
         // console.log("Datos recibidos en login:", req.body);
 
         // Servicio se encarga de manejar validaciones y lógica
         const { user, token } = await userService.login({ email, password });
 
-        res.status(200).json({
-            message: 'Login Correcto',
-            user: {
-                id: user._id,
-                fullName: user.fullName,
-                email: user.email,
-                avatar: user.avatar,
-                role: user.role,
-            },
-            token,
+        // Configurar la cookiee con el token
+        res.cookie("token", token, {
+            httpOnly: true, // Solo accesible por el servidor
+            secure: process.env.NODE_ENV === "production", // HTTPS en producción
+            sameSite: "strict", // Refuerza seguridad en navegadores modernos
         });
+
+        // En el backend (Node.js)
+        res.json({
+            message: 'Login Correcto',
+            user: user,
+            token: token
+        });
+
     } catch (error) {
         // console.error(error);
 

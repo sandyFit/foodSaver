@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:5173', // URL del frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-    credentials: false, // Si se envia cookies o encabezados de autenticación
+    credentials: true // Permitir cookies
 }));
 
 // Connect to the database

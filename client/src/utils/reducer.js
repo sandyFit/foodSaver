@@ -29,7 +29,7 @@ export const reducer = (state, action) => {
             return { ...state, allUsers: action.payload };
         case SET_USER:
             console.log("SET_USER action payload:", action.payload); 
-            return { ...state, user: action.payload };
+            return { ...state, user: action.payload.user };
             
         case SET_ALL_RECIPES:
             return { ...state, allRecipes: action.payload };
