@@ -126,9 +126,25 @@ const Dashboard = () => {
 
                         {/* User Info */}
                         <div className="flex gap-2 items-center">
-                            <div className="w-12 h-12 border-2 border-stone-700 rounded-full"></div>
+                            <div className="w-12 h-12 border-2 border-stone-700 rounded-full">
+                                {user?.avatar?.url ? (
+                                    <img
+                                        src={user.avatar.url}
+                                        alt="User avatar"
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <img
+                                        src="/avatar.png"
+                                        alt="Default avatar"
+                                        className="w-full h-full object-cover"
+                                    />
+                                )}
+                                
+                            </div>
                             <div className="flex flex-col">
                                 <h3 className="text-[.9rem]">{user?.fullName}</h3>
+                                <p className='text-[.65rem] uppercase -mt-2'>{ user?.role }</p>
                             </div>
                         </div>
                     </div>

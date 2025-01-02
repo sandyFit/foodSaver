@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
             },
             url: {
                 type: String,
-                default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKZwmqodcPdQUDRt6E5cPERZDWaqy6ITohlQ&usqp=CAU",
+                default: "/avatar.png",
             },
         },
 

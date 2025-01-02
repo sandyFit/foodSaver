@@ -15,7 +15,7 @@ export const registerUser = async ({ fullName, email, password, avatar, role = '
             password,
             avatar: avatar || {
                 public_id: "default_avatar",
-                url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKZwmqodcPdQUDRt6E5cPERZDWaqy6ITohlQ&usqp=CAU",
+                url: "/avatar.png",
             },
             role,
         });

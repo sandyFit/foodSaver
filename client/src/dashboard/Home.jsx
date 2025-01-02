@@ -86,7 +86,7 @@ const Home = () => {
                         </ul>
                     )}
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col">
                     <h4 className='mb-2 font-bold text-lg'>Recetas sugeridas</h4>
                     {loading ? (
                         <div className="text-center">
@@ -95,7 +95,7 @@ const Home = () => {
                             </div>
                         </div>
                     ) : (
-                        <ul className="grid grid-cols-1 gap-4">
+                        <ul className="grid grid-cols-1">
                             {suggestedRecipes.map((recipe, index) => (
                                 <li key={index}>
                                     <RecipeCardHome
