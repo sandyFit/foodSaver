@@ -22,7 +22,7 @@ body {
   padding: 8px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: #312e81;
+  background: #0f766e;
   --_m: 
     conic-gradient(#0000 10%,#000),
     linear-gradient(#000 0 0) content-box;
@@ -84,6 +84,10 @@ body {
     .full-btn {
         @apply px-[3.5rem] py-3 bg-tahiti-700 font-[600] text-[#fff] border-2 border-stone-700 
             rounded-lg
+    }
+
+    .sidebar-text {
+        @apply text-teal-50 text-[.68rem] hover:text-teal-300 uppercase
     }
      
 }

@@ -6,9 +6,10 @@ import { ContextGlobal } from '../utils/globalContext';
 import { GoHome } from "react-icons/go";
 import { PiNotebookLight } from "react-icons/pi";
 import { CiViewList } from "react-icons/ci";
-import { IoNotificationsOutline } from "react-icons/io5";
+import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
 import { TbUsers } from "react-icons/tb";
+import { AiOutlineHome, AiOutlineCalendar, AiOutlineUser, AiOutlineLogout, AiOutlineClose } from "react-icons/ai";
 
 const Dashboard = () => {
 
@@ -33,18 +34,33 @@ const Dashboard = () => {
         return <div>Please log in to access dashboard</div>;
     }
 
+    const handleLogout = () => { 
+        localStorage.removeItem('user');
+        navigate('/login');
+    }
+
 
     const userItems = [
         { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: 'Inicio' },
         { to: '/dashboard/meals', icon: <CiViewList className='text-[1.3rem]' />, label: 'Productos' },
         { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recetas' },
-        { to: '/dashboard/users', icon: <TbUsers className='text-[1.3rem]' />, label: 'Usuarios' },
+        { to: '/dashboard/config', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: 'Configuración' },
 
     ]
+    const adminItems = [
+        { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: 'Inicio' },
+        { to: '/dashboard/meals', icon: <CiViewList className='text-[1.3rem]' />, label: 'Productos' },
+        { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recetas' },
+        { to: '/dashboard/config', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: 'Configuración' },
+        { to: '/dashboard/users', icon: <TbUsers className='text-[1.3rem]' />, label: 'Usuarios' },
+
+    ];
+
+    const menuToBeRendered = user?.user_type === 'admin' ? adminItems : userItems;
 
     const renderMenuItem = ({ to, icon, label }) => (
         <Link to={to} key={label}
-            className='flex flex-col items-center text-teal-50 hover:text-teal-300 '>
+            className='flex flex-col items-center gap-1 sidebar-text'>
             <span>{icon}</span>
             <span >{label}</span>
         </Link>
@@ -56,20 +72,30 @@ const Dashboard = () => {
                 border-2 border-stone-700 ">
                 {/* Sidebar */}
                 <aside className='col-span-1 col-start-1 bg-tahiti-700 row-span-6 row-start-1 
-                    rounded-s-2xl border-r-2 border-stone-700 pb-56 transition-all duration-300
-                    ease-in-out flex flex-col justify-center items-center relative'>
-                    <div className="w-full h-10 absolute top-10 bg-stone-900 "></div>
-                    <div className="w-20 z-20 mt-1">
-                        <a href="/" className="inline-block">
-                            <img src="/img/FoodSaver_lignt.png" alt="FoodSaver Logo" />
-                        </a>
+                    rounded-s-2xl border-r-2 border-stone-700 transition-all duration-300
+                    ease-in-out flex flex-col justify-between items-center relative w-full'>
+                    <div className="flex flex-col items-center w-full">
+                        <div className="w-full h-10 absolute top-10 bg-stone-900"></div>
+                        <div className="w-20 absolute top-11 left-5 z-20 mt-1">
+                            <a href="/" className="inline-block">
+                                <img src="/img/FoodSaver_lignt.png"
+                                    alt="FoodSaver Logo"
+                                    className=''
+                                />
+                            </a>
+                        </div>
+                        <ul className={`w-full`}>
+                            <span className='gap-8 mt-36 flex flex-col justify-center items-center text-center'>
+                                {menuToBeRendered.map(renderMenuItem)}
+                            </span>
+                        </ul>
                     </div>
-                    <ul className={`w-full `}>
-                        <span className='gap-12 mt-24 flex flex-col justify-center items-center
-                        text-center'>
-                            {userItems.map(renderMenuItem)}
-                        </span>
-                    </ul>
+                    {/* Logout */}
+                    <div className="flex flex-col items-center gap-1 mb-8 cursor-pointer"
+                        onClick={handleLogout}>
+                        <AiOutlineLogout className='text-[1.3rem] text-teal-50 hover:text-teal-300' />
+                        <span className='sidebar-text'>Cerrar Sesión</span>
+                    </div>
                 </aside>
 
                 {/* header */}
