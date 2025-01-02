@@ -9,7 +9,7 @@ import Register from './pages/Register.jsx';
 import Landing from './pages/Landing.jsx';
 import MealsList from './dashboard/MealsList.jsx';
 import Recipes from './dashboard/Recipes.jsx';
-import Dashboard from './dashboard/Dashboard.jsx';
+import Dashboard from './dashboard/Layout.jsx';
 import RecipeDetail from './dashboard/RecipeDetail.jsx';
 import { Toaster } from 'react-hot-toast';
 import { ContextProvider } from './utils/globalContext.jsx'; 
@@ -17,8 +17,8 @@ import Users from './dashboard/Users.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ContextProvider>
-      <Router>
+    <Router>
+      <ContextProvider>
         <Toaster position="top-center" reverseOrder={false} />
         <Routes>
           <Route path="/dashboard" element={<Dashboard />}>
@@ -32,7 +32,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
-      </Router>
-    </ContextProvider>
+      </ContextProvider>
+    </Router>
   </StrictMode>
 );

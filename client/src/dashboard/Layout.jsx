@@ -1,28 +1,42 @@
 import React, { useContext, useEffect } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, useNavigate, Outlet } from 'react-router-dom';
+import { ContextGlobal } from '../utils/globalContext';
+
+// Icons
 import { GoHome } from "react-icons/go";
 import { PiNotebookLight } from "react-icons/pi";
 import { CiViewList } from "react-icons/ci";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
 import { TbUsers } from "react-icons/tb";
-import { ContextGlobal } from '../utils/globalContext';
 
 const Dashboard = () => {
 
-    const { user, loading } = useContext(ContextGlobal);
+    const navigate = useNavigate();
+    const { user, loading } = useContext(ContextGlobal) || {};
 
     useEffect(() => {
-        console.log("User in Dashboard useEffect:", user);
-    }, [user]);
+        if (!user) {
+            const storedUser = localStorage.getItem('user');
+            console.log('Stored user:', storedUser);
+            if (!storedUser) {
+                navigate('/login');
+            }
+        }
+    }, [user, navigate]);
 
     if (loading) {
         return <div>Loading...</div>;
     }
 
+    if (!user) {
+        return <div>Please log in to access dashboard</div>;
+    }
+
+
     const userItems = [
-        { to: '/dashboard', icon: <GoHome className='text-[1.3rem]'/>, label: 'Inicio' },
-        { to: '/dashboard/meals', icon: <CiViewList className='text-[1.3rem]'/>, label: 'Productos' },
+        { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: 'Inicio' },
+        { to: '/dashboard/meals', icon: <CiViewList className='text-[1.3rem]' />, label: 'Productos' },
         { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recetas' },
         { to: '/dashboard/users', icon: <TbUsers className='text-[1.3rem]' />, label: 'Usuarios' },
 
@@ -40,7 +54,7 @@ const Dashboard = () => {
         <section className="w-full h-screen flex justify-center items-center p-8 bg-stone-200">
             <div className="w-full h-full grid grid-cols-12 grid-rows-6 rounded-2xl bg-stone-50 
                 border-2 border-stone-700 ">
-                    {/* Sidebar */}
+                {/* Sidebar */}
                 <aside className='col-span-1 col-start-1 bg-tahiti-700 row-span-6 row-start-1 
                     rounded-s-2xl border-r-2 border-stone-700 pb-56 transition-all duration-300
                     ease-in-out flex flex-col justify-center items-center relative'>
@@ -58,12 +72,12 @@ const Dashboard = () => {
                     </ul>
                 </aside>
 
-                    {/* header */}
+                {/* header */}
                 <header className='w-full h-20 flex justify-between bg-tahiti-200 items-center col-span-11 col-start-2 
                     border-b-2 border-stone-700 rounded-tr-2xl'>
                     {/* Search Bar */}
                     <div className="flex ml-8 relative">
-                        <IoMdSearch className='text-2xl absolute top-2 left-2'/>
+                        <IoMdSearch className='text-2xl absolute top-2 left-2' />
                         <input type="text"
                             placeholder="Buscar..."
                             className='w-64 pl-10 p-2 border-2 border-stone-700 outline-6 outline-stone-500
@@ -88,7 +102,7 @@ const Dashboard = () => {
                         <div className="flex gap-2 items-center">
                             <div className="w-12 h-12 border-2 border-stone-700 rounded-full"></div>
                             <div className="flex flex-col">
-                                <h3 className="text-[.9rem]">{user?.fullName}</h3>                               
+                                <h3 className="text-[.9rem]">{user?.fullName}</h3>
                             </div>
                         </div>
                     </div>
@@ -96,7 +110,7 @@ const Dashboard = () => {
 
                 {/* main content */}
                 <main className='overflow-y-auto max-h-[72vh] col-span-11 col-start-2 row-span-5 px-20'>
-                    <Outlet/>
+                    <Outlet />
                 </main>
             </div>
         </section>
@@ -104,4 +118,3 @@ const Dashboard = () => {
 }
 
 export default Dashboard;
-

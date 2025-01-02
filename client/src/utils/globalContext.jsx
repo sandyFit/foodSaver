@@ -149,6 +149,7 @@ export const ContextProvider = ({ children }) => {
                 toast.success('Bienvenido al dashboard. Haz iniciado sesión');
                 console.log("User data:", data); // Log user data for debugging
 
+                localStorage.setItem('user', JSON.stringify(data.user)); // Store user data in localStorage
                 dispatch({ type: 'SET_USER', payload: data.user });
 
                 return data;
@@ -249,6 +250,7 @@ export const ContextProvider = ({ children }) => {
 
     // Context value
     const contextValue = {
+        ...state,
         allFoodItems,
         getAllMeals,
         addFoodItem,
@@ -263,6 +265,7 @@ export const ContextProvider = ({ children }) => {
         deleteUser,
         loading,
         error,
+        dispatch
     };
 
     return (
