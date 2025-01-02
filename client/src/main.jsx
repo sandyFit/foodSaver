@@ -14,12 +14,14 @@ import RecipeDetail from './dashboard/RecipeDetail.jsx';
 import { Toaster } from 'react-hot-toast';
 import { ContextProvider } from './utils/globalContext.jsx'; 
 import Users from './dashboard/Users.jsx';
+import Loader from './components/Loader.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Router>
       <ContextProvider>
         <Toaster position="top-center" reverseOrder={false} />
+        <Loader/>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />}>
             <Route index element={<Home />} />
