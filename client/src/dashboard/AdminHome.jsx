@@ -2,49 +2,59 @@ import React from 'react';
 import { useContext } from 'react';
 import { ContextGlobal } from '../utils/globalContext';
 import { FaUsers, FaAppleAlt, FaReceipt } from 'react-icons/fa';
+import HomeCard from '../components/HomeCard';
 
 const AdminHome = () => {
     const { allUsers, allFoodItems, allRecipes } = useContext(ContextGlobal);
+
+    const bgColors = [
+        'bg-red-100',
+        'bg-yellow-100',
+        'bg-blue-100',
+        'bg-green-100',
+        'bg-purple-100',
+        'bg-pink-100',
+    ];
 
     const stats = [
         {
             title: "Usuarios Registrados",
             count: allUsers?.length || 0,
-            icon: <FaUsers className="text-2xl text-tahiti-700" />,
+            icon: <FaUsers />,
         },
         {
             title: "Productos Disponibles",
             count: allFoodItems?.length || 0,
-            icon: <FaAppleAlt className="text-2xl text-tahiti-700" />,
+            icon: <FaAppleAlt />,
         },
         {
             title: "Recetas Creadas",
             count: allRecipes?.length || 0,
-            icon: <FaReceipt className="text-2xl text-tahiti-700" />,
+            icon: <FaReceipt />,
         },
     ];
 
     return (
         <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Dashboard de Administración</h1>
+            <h1 className="text-2xl font-bold mb-6">Panel de Administración</h1>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                {stats.map((stat) => (
-                    <div key={stat.title} className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <p className="text-sm text-gray-600">{stat.title}</p>
-                                <p className="text-2xl font-bold">{stat.count}</p>
-                            </div>
-                            {stat.icon}
-                        </div>
-                    </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 list-none">
+                {stats.map((stat, index) => (
+                    <li key={index}>
+                        <HomeCard
+                            bgColor={bgColors[index % bgColors.length]}
+                            icon={stat.icon}
+                            title={stat.title}
+                            count={stat.count}
+                        />
+                    </li>
+
                 ))}
             </div>
 
             {/* Recent Activity */}
-            <div className="bg-white p-6 rounded-lg shadow-sm">
+            <div className="w-full p-6 border-2 border-stone-900 rounded-lg">
                 <h2 className="text-xl font-semibold mb-4">Última Actividad</h2>
                 <p className="text-gray-600 text-sm">Mantente al tanto de las acciones recientes en tu sistema.</p>
                 <div className="space-y-4 mt-4">
