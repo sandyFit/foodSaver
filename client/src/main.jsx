@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
 import App from './App.jsx';
-import Home from './dashboard/Home.jsx';
+import ProtectedHome from './dashboard/ProtectedHome.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Landing from './pages/Landing.jsx';
@@ -24,10 +24,10 @@ createRoot(document.getElementById('root')).render(
         <Loader/>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />}>
-            <Route index element={<Home />} />
-            <Route path="meals" element={<MealsList />} />
-            <Route path="recipes" element={<Recipes />} />
-            <Route path="recipes/:id" element={<RecipeDetail />} />
+            <Route index element={<ProtectedHome />} />
+            <Route path="meals-users" element={<MealsList />} />
+            <Route path="allRecipes" element={<Recipes />} />
+            <Route path="allRecipes/:id" element={<RecipeDetail />} />
             <Route path="users" element={<Users />} />
           </Route>
           <Route path="/" element={<Landing />} />

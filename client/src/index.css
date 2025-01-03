@@ -36,8 +36,7 @@ body {
 
 /* Personalizar la posición de las alertas */
 .toast-container-custom {
-  top: 46px !important; /* Cambia a la posición que desees */
-
+  top: 46px !important; 
 }
 
 

@@ -14,9 +14,7 @@ import { AiOutlineLogout } from "react-icons/ai";
 const Dashboard = () => {
 
     const navigate = useNavigate();
-    const context = useContext(ContextGlobal);
-    const user = context?.user || null;
-    const loading = context?.loading || false;
+    const { user, loading } = useContext(ContextGlobal);
 
     useEffect(() => {
         if (!user) {
@@ -41,25 +39,22 @@ const Dashboard = () => {
         navigate('/login');
     }
 
-
-
-    const userItems = [
+    const userItems = user.role === 'user' ? [
         { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: 'Inicio' },
-        { to: '/dashboard/meals', icon: <CiViewList className='text-[1.3rem]' />, label: 'Productos' },
-        { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recetas' },
-        { to: '/dashboard/config', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: 'Configuración' },
+        { to: '/dashboard/meals-users', icon: <CiViewList className='text-[1.3rem]' />, label: 'Productos' },
+        { to: '/dashboard/allRecipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recetas' },
+        { to: '/dashboard/config-users', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: 'Configuración' },
 
-    ]
-    const adminItems = [
+    ] : [
         { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: 'Inicio' },
-        { to: '/dashboard/meals', icon: <CiViewList className='text-[1.3rem]' />, label: 'Productos' },
+        // { to: '/dashboard/meals', icon: <CiViewList className='text-[1.3rem]' />, label: 'Productos' },
         { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recetas' },
-        { to: '/dashboard/config', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: 'Configuración' },
         { to: '/dashboard/users', icon: <TbUsers className='text-[1.3rem]' />, label: 'Usuarios' },
+        { to: '/dashboard/config-admin', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: 'Configuración' },
 
     ];
 
-    const menuToBeRendered = user?.user_type === 'admin' ? adminItems : userItems;
+    // const menuToBeRendered = user?.user.role === 'admin' ? adminItems : userItems;
 
     const renderMenuItem = ({ to, icon, label }) => (
         <Link to={to} key={label}
@@ -89,7 +84,7 @@ const Dashboard = () => {
                         </div>
                         <ul className={`w-full`}>
                             <span className='gap-8 mt-36 flex flex-col justify-center items-center text-center'>
-                                {menuToBeRendered.map(renderMenuItem)}
+                                {userItems.map(renderMenuItem)}
                             </span>
                         </ul>
                     </div>
