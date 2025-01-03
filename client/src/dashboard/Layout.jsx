@@ -42,12 +42,12 @@ const Dashboard = () => {
     const userItems = user.role === 'user' ? [
         { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: 'Inicio' },
         { to: '/dashboard/meals-users', icon: <CiViewList className='text-[1.3rem]' />, label: 'Productos' },
-        { to: '/dashboard/allRecipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recetas' },
+        { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recetas' },
         { to: '/dashboard/config-users', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: 'Configuración' },
-
+        
     ] : [
         { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: 'Inicio' },
-        // { to: '/dashboard/meals', icon: <CiViewList className='text-[1.3rem]' />, label: 'Productos' },
+        { to: '/dashboard/meals-users', icon: <CiViewList className='text-[1.3rem]' />, label: 'Productos' },
         { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recetas' },
         { to: '/dashboard/users', icon: <TbUsers className='text-[1.3rem]' />, label: 'Usuarios' },
         { to: '/dashboard/config-admin', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: 'Configuración' },
@@ -104,8 +104,7 @@ const Dashboard = () => {
                         <IoMdSearch className='text-2xl absolute top-2 left-2' />
                         <input type="text"
                             placeholder="Buscar..."
-                            className='w-64 pl-10 p-2 border-2 border-stone-700 outline-6 outline-stone-500
-                                rounded-lg'/>
+                            className='w-64 pl-10 shadow-none'/>
                     </div>
                     
                     <div className="flex justify-center items-center gap-6 relative pr-8">

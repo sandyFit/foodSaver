@@ -1,8 +1,10 @@
 import React from 'react';
 import { useContext } from 'react';
 import { ContextGlobal } from '../utils/globalContext';
-import { FaUsers, FaAppleAlt, FaReceipt } from 'react-icons/fa';
 import HomeCard from '../components/HomeCard';
+import { PiNotebookLight } from 'react-icons/pi';
+import { CiViewList } from 'react-icons/ci';
+import { TbUsers } from 'react-icons/tb';
 
 const AdminHome = () => {
     const { allUsers, allFoodItems, allRecipes } = useContext(ContextGlobal);
@@ -20,17 +22,17 @@ const AdminHome = () => {
         {
             title: "Usuarios Registrados",
             count: allUsers?.length || 0,
-            icon: <FaUsers />,
+            icon: <TbUsers />,
         },
         {
             title: "Productos Disponibles",
             count: allFoodItems?.length || 0,
-            icon: <FaAppleAlt />,
+            icon: <CiViewList />,
         },
         {
             title: "Recetas Creadas",
             count: allRecipes?.length || 0,
-            icon: <FaReceipt />,
+            icon: <PiNotebookLight />,
         },
     ];
 
@@ -54,7 +56,7 @@ const AdminHome = () => {
             </div>
 
             {/* Recent Activity */}
-            <div className="w-full p-6 border-2 border-stone-900 rounded-lg">
+            <div className="w-full p-6 border-2 border-stone-900 rounded-lg custom-shadow">
                 <h2 className="text-xl font-semibold mb-4">Última Actividad</h2>
                 <p className="text-gray-600 text-sm">Mantente al tanto de las acciones recientes en tu sistema.</p>
                 <div className="space-y-4 mt-4">

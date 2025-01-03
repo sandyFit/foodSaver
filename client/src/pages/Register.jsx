@@ -14,7 +14,7 @@ const Register = () => {
         role: 'user'
     });
 
-    const { registerUser } = useContext(ContextGlobal);
+    const { registerUser, loading } = useContext(ContextGlobal);
     const navigate = useNavigate();
 
     const handleInputChange = (e) => {
@@ -60,72 +60,71 @@ const Register = () => {
     return (
         <section>
             <Navbar />
-            <main className="flex flex-col pt-44 justify-center items-center gap-12">
+            <main className="flex flex-col pt-48 justify-center items-center gap-12">
                 <h2 className='text-tahiti-700'>
-                    Join Us Today and Reduce Food Waste Effortlessly!
+                    ¡Únete y Aprende a Ahorrar Mientras Cuidas el Planeta!
                 </h2>
-                <form onSubmit={handleSubmit} className="w-[42%] flex flex-col gap-6">
-                    <label htmlFor='fullName' className="flex flex-col">
-                        Full Name
-                        <input
-                            type="text"
-                            name='fullName'
-                            id='fullName'
-                            autoComplete="fullName"
-                            value={formData.fullName}
-                            onChange={handleInputChange}
-                            required
-                        />
-                    </label>
-                    <label htmlFor='email' className="flex flex-col">
-                        Email
-                        <input
-                            type="email"
-                            name='email'
-                            id='email'
-                            autoComplete="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            required
-                        />
-                    </label>
+                <form onSubmit={handleSubmit} className="w-[42%] flex flex-col gap-6">                  
+                    <input
+                        type="text"
+                        name='fullName'
+                        id='fullName'
+                        placeholder='Tu nombre completo'
+                        autoComplete="fullName"
+                        className='shadow-none'
+                        value={formData.fullName}
+                        onChange={handleInputChange}
+                        required
+                    />
+
+                    <input
+                        type="email"
+                        name='email'
+                        id='email'
+                        placeholder='Tu correo electrónico'
+                        autoComplete="email"
+                        className='shadow-none'
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                    />
+
                     <div className="flex w-full justify-between">
-                        <label htmlFor='password' className="flex flex-col">
-                            Password
-                            <input
-                                type="password"
-                                name='password'
-                                id='password'
-                                className='w-[20vw]'
-                                autoComplete="new-password"
-                                value={formData.password}
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </label>
-                        <label htmlFor='confirmPassword' className="flex flex-col">
-                            Confirm Password
-                            <input
-                                type="password"
-                                name='confirmPass'
-                                id='confirmPassword'
-                                className='w-[20vw]'
-                                autoComplete="new-password"
-                                value={formData.confirmPass}
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </label>
+
+                        <input
+                            type="password"
+                            name='password'
+                            id='password'
+                            placeholder='Tu contraseña'
+                            className='w-[20vw] shadow-none'
+                            autoComplete="new-password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            required
+                        />
+
+                        <input
+                            type="password"
+                            name='confirmPass'
+                            id='confirmPassword'
+                            placeholder='Confirma tu contraseña'
+                            className='w-[20vw] shadow-none'
+                            autoComplete="new-password"
+                            value={formData.confirmPass}
+                            onChange={handleInputChange}
+                            required
+                        />
                     </div>
 
                     <div className="w-full flex justify-between">
                         <div className="w-[14vw] flex justify-between">
                             <div className="flex gap-2">
-                                <label htmlFor='userRole'>User</label>
+                                <label htmlFor='userRole'>Usuario</label>
                                 <input
                                     type='radio'
                                     id='userRole'
                                     name='role'
+                                    className='shadow-none'
                                     value="user"
                                     checked={formData.role === 'user'}
                                     onChange={handleInputChange}
@@ -137,6 +136,7 @@ const Register = () => {
                                     type='radio'
                                     id='adminRole'
                                     name='role'
+                                    className='shadow-none'
                                     value="admin"
                                     checked={formData.role === 'admin'}
                                     onChange={handleInputChange}
@@ -144,15 +144,26 @@ const Register = () => {
                             </div>
                         </div>
                         <p className='w-full text-right text-tahiti-700'>
-                            Have an account?
+                            Ya tienes una cuenta?
                             <a href="/login" className='underline underline-offset-4 ml-2'>
-                                Login here
+                                Accede aquí
                             </a>
                         </p>
                     </div>
 
-                    <button type="submit" className='shadow-btn bg-rose-100 py-2.5'>
-                        Register
+                    <button
+                        type="submit"
+                        className='shadow-btn bg-red-100 py-2.5'
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <div className="flex items-center justify-center">
+                                <div className="w-5 h-5 border-t-2 border-tahiti-700 rounded-full animate-spin"></div>
+                                <span className="ml-2">Registrando...</span>
+                            </div>
+                        ) : (
+                            'Crea tu Cuenta'
+                        )}
                     </button>
                 </form>
             </main>

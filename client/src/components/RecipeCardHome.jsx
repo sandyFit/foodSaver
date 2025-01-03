@@ -5,7 +5,7 @@ const RecipeCardHome = ({ bgColor, id, name, image_url, description }) => {
     // console.log('ID de la receta desde RecipeCardHome:', id);
 
     return (
-        <article className='w-[40vw] py-2'>
+        <article className='w-[40vw] py-2 '>
             <div className="flex flex-col p-6 border-2 border-stone-700 text-sm rounded-lg
                 relative">
                     <h4 className='font-[600] text-center'>{name}</h4>

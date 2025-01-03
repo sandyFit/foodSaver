@@ -30,7 +30,8 @@ const MealCard = ({ itemName, expirationDate, category, bgColor }) => {
     };
 
     return (
-        <article className={`w-full max-w-lg py-2 px-4 border-2 border-stone-900 rounded-lg ${bgColor} bg-opacity-60`}>
+        <article className={`w-full max-w-lg py-2 px-4 border-2 border-stone-900 rounded-lg ${bgColor} 
+            bg-opacity-60`}>
             <div className="w-full flex justify-between items-center py-1">
                 <div className="flex flex-col min-w-0 ms-4">
                     <p className="text-sm font-medium text-gray-900 truncate ">

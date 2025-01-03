@@ -5,6 +5,8 @@ import { ContextGlobal } from '../utils/globalContext';
 const Loader = () => {
   const { loading } = useContext(ContextGlobal) || {};
 
+  if (!loading) return null;
+
   return (
     loading && (
       <div className="flex justify-center items-center h-screen w-screen fixed top-0 left-0 

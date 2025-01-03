@@ -146,7 +146,7 @@ export const ContextProvider = ({ children }) => {
             console.log("Datos de la respuesta:", data); 
 
             if (data.message === 'Login Correcto' && data.token) {  // Ensure data and token exist before proceeding
-                toast.success(`Bienvenido, ${data.user.fullName}!`,  // Show a success message using toast
+                toast.success(`Bienvenid@, ${data.user.fullName}!`,  // Show a success message using toast
                     { duration: 4000 }
                 );
                 console.log("User data:", data); // Log user data for debugging

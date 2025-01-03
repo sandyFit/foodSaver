@@ -10,7 +10,7 @@ const HomeCard = ({bgColor, icon, title, count}) => {
                     <p className="text-sm text-gray-600">{title}</p>
                     <p className="text-2xl font-bold">{count}</p>
                 </div>
-                <span className='text-2xl text-gray-500 truncate'>{icon}</span>
+                <span className='text-3xl font-extrabold text-gray-500 truncate'>{icon}</span>
                 </div>
             
         </article>

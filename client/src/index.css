@@ -68,8 +68,10 @@ body {
     }
 
     input, select {
-        @apply p-2.5 border-2 border-stone-700 rounded-lg
+        @apply p-2.5 border-2 border-stone-700 rounded-lg custom-shadow
     }
+
+
 }
 
 @layer utilities {
