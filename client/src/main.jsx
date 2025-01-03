@@ -20,7 +20,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Router>
       <ContextProvider>
-        <Toaster position="top-center" reverseOrder={false} />
+        <Toaster containerClassName='toast-container-custom' position="top-center" reverseOrder={false} />
         <Loader/>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />}>

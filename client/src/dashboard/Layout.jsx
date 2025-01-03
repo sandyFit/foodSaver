@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate, Outlet } from 'react-router-dom';
 import { ContextGlobal } from '../utils/globalContext';
 
@@ -9,12 +9,14 @@ import { CiViewList } from "react-icons/ci";
 import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
 import { TbUsers } from "react-icons/tb";
-import { AiOutlineHome, AiOutlineCalendar, AiOutlineUser, AiOutlineLogout, AiOutlineClose } from "react-icons/ai";
+import { AiOutlineLogout } from "react-icons/ai";
 
 const Dashboard = () => {
 
     const navigate = useNavigate();
-    const { user, loading } = useContext(ContextGlobal) || {};
+    const context = useContext(ContextGlobal);
+    const user = context?.user || null;
+    const loading = context?.loading || false;
 
     useEffect(() => {
         if (!user) {
@@ -38,6 +40,7 @@ const Dashboard = () => {
         localStorage.removeItem('user');
         navigate('/login');
     }
+
 
 
     const userItems = [
@@ -109,10 +112,7 @@ const Dashboard = () => {
                             className='w-64 pl-10 p-2 border-2 border-stone-700 outline-6 outline-stone-500
                                 rounded-lg'/>
                     </div>
-
-                    <div className="flex">
-                        <h4>Welcome {user?.fullName}</h4>
-                    </div>
+                    
                     <div className="flex justify-center items-center gap-6 relative pr-8">
                         {/* Notifications */}
                         <div className="frame relative bg-stone-50 w-12 h-12 flex justify-center items-center
