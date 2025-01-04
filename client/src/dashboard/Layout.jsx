@@ -110,7 +110,7 @@ const Dashboard = () => {
                     <div className="flex justify-center items-center gap-6 relative pr-8">
                         {/* Notifications */}
                         <div className="frame relative bg-stone-50 w-12 h-12 flex justify-center items-center
-                            rounded-full border-2 border-stone-700">
+                            rounded-full border-2 border-stone-700 custom-shadow">
                             <div className="absolute bottom-7 left-7 h-6 w-6 bg-red-500 rounded-full flex 
                                 justify-center items-center text-zinc-100">
                                 3

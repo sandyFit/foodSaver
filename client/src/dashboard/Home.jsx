@@ -61,7 +61,7 @@ const Home = () => {
     }, [suggestedRecipes]);
 
     return (
-        <section className='p-4'>
+        <section className=''>
             <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
                     <h4 className='mb-2 font-bold text-lg'>Productos próximos a caducar</h4>

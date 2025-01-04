@@ -10,36 +10,30 @@ const Landing = () => {
     return (
         <section>
             <Navbar />
-            <main className='w-full h-screen bg-tahiti-200 flex flex-col'>
-                <div className="flex flex-col justify-center items-center gap-8">
-                    <h1 className='text-tahiti-700 mt-40'>
-                        Dile Adiós al Desperdicio de Comida En Casa
-                    </h1>
-                    <p className="w-[60%] text-2xl text-center">
+            <main className='w-full h-screen bg-tahiti-700 flex px-44'>
+                <div className="w-full flex flex-col justify-center items-center gap-6">
+                    <div className="flex flex-col">
+                        <h1 className='text-pink-200 text-[8rem] font-extrabold mt-10 uppercase 
+                            tracking-tight leading-[120px] text-center'>
+                            Dile Adiós al Desperdicio de Comida En Casa
+                        </h1>
+                    </div>
+                    <p className="w-2/3 text-xl text-[#fff] text-center">
                         FoodSaver es la herramienta definitiva para gestionar el inventario de alimentos
                         de tu hogar, reducir el desperdicio y ahorrar dinero.
                     </p>
+
+                    <div className="w-full flex justify-center gap-5">
+                        <a href="/register" n className='shadow-btn bg-blue-100 px-16 py-3 text-center block'>
+                            ÚNETE y Empieza a Ahorrar
+                        </a>
+                        <a href="/login" className='shadow-btn bg-yellow-100 px-32 py-3 text-center block'>
+                            Accede AQUÍ
+                        </a>
+                    </div>
                 </div>
-                <div className="flex px-32 gap-8 mt-12">
-                    <HeroCard
-                        imgSrc={'./img/monitoring.jpg'}
-                        title={'Seguimiento a lo que tienes'}
-                        description={'Administra tus alimentos y manténte al tanto de las fechas de vencimiento.'}
-                        bgColor="bg-emerald-100"
-                    />
-                    <HeroCard
-                        imgSrc={'./img/organize.jpg'}
-                        title={'Optimiza Ingredientes'}
-                        description={"Utiliza primero lo que esté a punto de caducar con sugerencias de recetas adaptadas a tu despensa."}
-                        bgColor="bg-yellow-100"
-                    />
-                    <HeroCard
-                        imgSrc={'./img/recipes.jpg'}
-                        title={'Ahorra Dinero'}
-                        description={'Deja de tirar comida y dinero: convierte las sobras en comidas deliciosas.'}
-                        bgColor="bg-orange-100"
-                    />
-                </div>
+               
+                
             </main>
         </section>
     )

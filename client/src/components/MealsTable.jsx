@@ -1,66 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import UpdateForm from './UpdateForm';
 import { ContextGlobal } from '../utils/globalContext';
 import { formatDate } from '../utils/functions';
-import toast from 'react-hot-toast';
 
-const MealsTable = () => {
-    const { allFoodItems, updateMeal, deleteMeal } = useContext(ContextGlobal); 
-    const [editingMeal, setEditingMeal] = useState(null);
-    const [updatedData, setUpdatedData] = useState({
-        itemName: '',
-        category: '',
-        expirationDate: '',
-        quantity: 1,
-    });
-
-    const handleEditClick = (meal) => {
-        setEditingMeal(meal);
-        setUpdatedData({
-            itemName: meal.itemName,
-            category: meal.category,
-            expirationDate: meal.expirationDate
-                ? formatDate(new Date(meal.expirationDate), 'yyyy-MM-dd')
-                : '',
-            quantity: meal.quantity,
-        });
-    };
-
-    const handleUpdateChange = (e) => {
-        const { name, value } = e.target;
-        setUpdatedData((prevData) => ({
-            ...prevData,
-            [name]: name === 'quantity' ? parseInt(value, 10) : value,
-        }));
-    };
-
-    const handleSubmitUpdate = (e) => {
-        e.preventDefault();
-        if (!updatedData.itemName || !updatedData.category) {
-            toast.error('Por favor, complete todos los campos');
-            return;
-        }
-        if (editingMeal) {
-            updateMeal(editingMeal._id, updatedData); // Usar el updateMeal del ContextGlobal
-            setEditingMeal(null); // Cierra el formulario de edición
-        }
-    };
-
-    const handleDeleteMeal = (mealId) => {
-        if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-            deleteMeal(mealId);
-        }
-    }
-
-
-
-    // Verifica si el estado de allFoodItems cambia, y vuelve a renderizar la tabla
-    useEffect(() => {
-        console.log('Tabla actualizada:', allFoodItems); // Verifica si el estado cambia
-    }, [allFoodItems]); // Vuelve a renderizar cuando allFoodItems cambia
+const MealsTable = ({ onHandleEditClick, onHandleDeleteMeal }) => {
+    const { allFoodItems, loading } = useContext(ContextGlobal);     
+    
 
     return (
-        <article className="w-full flex flex-col justify-center items-center">
+        <article className="min-w-full flex flex-col justify-center items-center">
             <table border="1">
                 <thead className="bg-blue-100">
                     <tr>
@@ -82,17 +29,19 @@ const MealsTable = () => {
                                 <td className="table-td space-x-2">
                                     <button
                                         aria-label={`Edit ${meal.itemName}`}
-                                        onClick={() => handleEditClick(meal)}
-                                        className="table-btn bg-yellow-100 hover:bg-yellow-200 border-yellow-600 text-yellow-600"
+                                        onClick={() => onHandleEditClick(meal)}
+                                        className={`table-btn bg-yellow-100 hover:bg-yellow-200 border-yellow-600 
+                                            text-yellow-600 ${loading ? 'opacity-40' : ''}`}
                                     >
-                                        Editar
+                                        {loading ? 'Cargando...' : 'Editar'}
                                     </button>
                                     <button
                                         aria-label={`Delete ${meal.itemName}`}
-                                        onClick={() => handleDeleteMeal(meal._id)}
-                                        className="table-btn bg-red-100 hover:bg-red-200 border-red-600 text-red-600"
+                                        onClick={() => onHandleDeleteMeal(meal._id)}
+                                        className={`table-btn bg-red-100 hover:bg-red-200 border-red-600 
+                                            text-red-600 ${loading ? 'opacity-40' : ''}`}
                                     >
-                                        Eliminar
+                                        { loading ? 'Eliminando...' : 'Eliminar' }
                                     </button>
                                 </td>
                             </tr>
@@ -106,15 +55,7 @@ const MealsTable = () => {
                     )}
                 </tbody>
             </table>
-
-            {/* Formulario de edición */}
-            {editingMeal && (
-                <UpdateForm
-                    updatedData={updatedData}
-                    onHandleUpdateChange={handleUpdateChange}
-                    onHandleSubmitUpdate={handleSubmitUpdate}
-                />
-            )}
+            
         </article>
     );
 };
