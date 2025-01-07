@@ -58,10 +58,10 @@ const Register = () => {
     };
 
     return (
-        <section>
+        <section className='w-full min-h-screen bg-tahiti-700'>
             <Navbar />
             <main className="flex flex-col pt-48 justify-center items-center gap-12">
-                <h2 className='text-tahiti-700'>
+                <h2 className='text-blue-200'>
                     ¡Únete y Aprende a Ahorrar Mientras Cuidas el Planeta!
                 </h2>
                 <form onSubmit={handleSubmit} className="w-[42%] flex flex-col gap-6">                  
@@ -119,31 +119,41 @@ const Register = () => {
                     <div className="w-full flex justify-between">
                         <div className="w-[14vw] flex justify-between">
                             <div className="flex gap-2">
-                                <label htmlFor='userRole'>Usuario</label>
+                                <label
+                                    htmlFor='userRole'
+                                    className='text-white'
+                                >
+                                    Usuario
+                                </label>
                                 <input
                                     type='radio'
                                     id='userRole'
                                     name='role'
-                                    className='shadow-none'
+                                    className='shadow-none bg-blue-200'
                                     value="user"
                                     checked={formData.role === 'user'}
                                     onChange={handleInputChange}
                                 />
                             </div>
                             <div className="flex gap-2">
-                                <label htmlFor='adminRole'>Admin</label>
+                                <label
+                                    htmlFor='adminRole'
+                                    className='text-white'
+                                >
+                                    Admin
+                                </label>
                                 <input
                                     type='radio'
                                     id='adminRole'
                                     name='role'
-                                    className='shadow-none'
+                                    className='shadow-none bg-blue-200'
                                     value="admin"
                                     checked={formData.role === 'admin'}
                                     onChange={handleInputChange}
                                 />
                             </div>
                         </div>
-                        <p className='w-full text-right text-tahiti-700'>
+                        <p className='w-full text-right text-white'>
                             Ya tienes una cuenta?
                             <a href="/login" className='underline underline-offset-4 ml-2'>
                                 Accede aquí
@@ -153,7 +163,7 @@ const Register = () => {
 
                     <button
                         type="submit"
-                        className='shadow-btn bg-red-100 py-2.5'
+                        className='shadow-btn bg-red-200 py-2.5'
                         disabled={loading}
                     >
                         {loading ? (
@@ -162,7 +172,7 @@ const Register = () => {
                                 <span className="ml-2">Registrando...</span>
                             </div>
                         ) : (
-                            'Crea tu Cuenta'
+                            'CREA tu Cuenta'
                         )}
                     </button>
                 </form>

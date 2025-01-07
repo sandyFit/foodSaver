@@ -13,7 +13,7 @@ const Landing = () => {
             <main className='w-full h-screen bg-tahiti-700 flex px-44'>
                 <div className="w-full flex flex-col justify-center items-center gap-6">
                     <div className="flex flex-col">
-                        <h1 className='text-pink-200 text-[8rem] font-extrabold mt-10 uppercase 
+                        <h1 className='text-[#fcb8b8] text-[8rem] font-extrabold mt-10 uppercase 
                             tracking-tight leading-[120px] text-center'>
                             Dile Adiós al Desperdicio de Comida En Casa
                         </h1>
@@ -23,12 +23,12 @@ const Landing = () => {
                         de tu hogar, reducir el desperdicio y ahorrar dinero.
                     </p>
 
-                    <div className="w-full flex justify-center gap-5">
-                        <a href="/register" n className='shadow-btn bg-blue-100 px-16 py-3 text-center block'>
+                    <div className="w-2/3 flex justify-center gap-5">
+                        <a href="/register" n className='w-1/2 shadow-btn bg-blue-100 py-3 text-center block'>
                             ÚNETE y Empieza a Ahorrar
                         </a>
-                        <a href="/login" className='shadow-btn bg-yellow-100 px-32 py-3 text-center block'>
-                            Accede AQUÍ
+                        <a href="/login" className='w-1/2 shadow-btn bg-yellow-100 py-3 text-center block'>
+                            Conoce Más AQUÍ
                         </a>
                     </div>
                 </div>

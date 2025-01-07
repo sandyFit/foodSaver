@@ -90,8 +90,8 @@ body {
     }
 
     .full-btn {
-        @apply px-[3.5rem] py-3 bg-tahiti-700 font-[600] text-[#fff] border-2 border-stone-700 
-            rounded-lg
+        @apply px-6 py-2.5 font-[600] text-white hover:text-black border-2 border-white 
+            hover:border-black rounded-lg
     }
 
     .sidebar-text {

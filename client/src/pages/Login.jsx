@@ -51,11 +51,11 @@ const Login = () => {
 
 
     return (
-        <section>
+        <section className='w-full min-h-screen bg-tahiti-700'>
             <Navbar />
 
-            <main className="flex flex-col pt-48 justify-center items-center gap-12">
-                <h2 className='text-tahiti-700'>
+            <main className="flex flex-col pt-48 justify-center items-center gap-12 ">
+                <h2 className='text-[#fcb8b8]'>
                     Accede Ahora y Gestiona tu Despensa de Manera Inteligente
                 </h2>
                 <form onSubmit={handleSubmit}
@@ -85,7 +85,7 @@ const Login = () => {
                         required
                     />
 
-                    <p className='text-right text-tahiti-700'>
+                    <p className='text-right text-white'>
                         No tienes cuenta?
                         <a href="/register" className='underline underline-offset-4 ml-2'>
                             Registrate aquí
@@ -94,7 +94,7 @@ const Login = () => {
 
                     <button
                         type="submit"
-                        className='shadow-btn bg-blue-100 py-2.5'
+                        className='shadow-btn bg-blue-200 py-2.5'
                         disabled={loading}
                     >
                         {loading ? (
@@ -103,7 +103,7 @@ const Login = () => {
                                 <span className="ml-2">Accediendo...</span>
                             </div>
                         ) : (
-                            'Gestiona tu Despensa'
+                            'GESTIONA tu Despensa'
                         )}
                     </button>
                 </form>
