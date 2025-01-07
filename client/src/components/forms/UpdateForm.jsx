@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ContextGlobal } from '../utils/globalContext';
+import { ContextGlobal } from '../../utils/globalContext';
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 const UpdateForm = ({ updatedData, onHandleUpdateChange, onHandleSubmitUpdate, onClose }) => {

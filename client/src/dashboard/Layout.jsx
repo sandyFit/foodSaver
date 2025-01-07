@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate, Outlet } from 'react-router-dom';
 import { ContextGlobal } from '../utils/globalContext';
+import LogoutHandler from '../components/ui/LogoutHandler';
 
 // Icons
 import { GoHome } from "react-icons/go";
@@ -9,7 +10,6 @@ import { CiViewList } from "react-icons/ci";
 import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
 import { TbUsers } from "react-icons/tb";
-import { AiOutlineLogout } from "react-icons/ai";
 
 const Dashboard = () => {
 
@@ -34,10 +34,6 @@ const Dashboard = () => {
         return <div>Please log in to access dashboard</div>;
     }
 
-    const handleLogout = () => { 
-        localStorage.removeItem('user');
-        navigate('/login');
-    }
 
     const userItems = user.role === 'user' ? [
         { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: 'Inicio' },
@@ -58,7 +54,7 @@ const Dashboard = () => {
 
     const renderMenuItem = ({ to, icon, label }) => (
         <Link to={to} key={label}
-            className='flex flex-col items-center gap-1 sidebar-text'>
+            className='flex flex-col items-center gap-1 sidebar-text text-teal-50'>
             <span>{icon}</span>
             <span >{label}</span>
         </Link>
@@ -89,16 +85,14 @@ const Dashboard = () => {
                         </ul>
                     </div>
                     {/* Logout */}
-                    <div className="flex flex-col items-center gap-1 mb-8 cursor-pointer"
-                        onClick={handleLogout}>
-                        <AiOutlineLogout className='text-[1.3rem] text-teal-50 hover:text-teal-300' />
-                        <span className='sidebar-text'>Cerrar Sesión</span>
+                    <div className="mb-8">
+                        <LogoutHandler />
                     </div>
                 </aside>
 
                 {/* header */}
-                <header className='w-full h-20 flex justify-between bg-tahiti-200 items-center col-span-11 col-start-2 
-                    border-b-2 border-stone-700 rounded-tr-2xl'>
+                <header className='w-full h-20 flex justify-between bg-tahiti-200 items-center col-span-11 
+                    col-start-2 border-b-2 border-stone-700 rounded-tr-2xl'>
                     {/* Search Bar */}
                     <div className="flex ml-8 relative">
                         <IoMdSearch className='text-2xl absolute top-2 left-2' />

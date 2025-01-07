@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from '../layouts/Navbar';
-import HeroCard from '../components/HeroCard';
+import HeroCard from '../components/cards/HeroCard';
 
 
 const Landing = () => {

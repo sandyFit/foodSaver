@@ -14,7 +14,7 @@ import RecipeDetail from './dashboard/RecipeDetail.jsx';
 import { Toaster } from 'react-hot-toast';
 import { ContextProvider } from './utils/globalContext.jsx'; 
 import Users from './dashboard/Users.jsx';
-import Loader from './components/Loader.jsx';
+import Loader from './components/ui/Loader.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

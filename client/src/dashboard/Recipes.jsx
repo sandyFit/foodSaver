@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import RecipeCard from '../components/RecipeCard';
+import RecipeCard from '../components/cards/RecipeCard';
 import { toast } from 'react-hot-toast';
 
 const Recipes = () => {

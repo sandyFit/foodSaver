@@ -147,7 +147,31 @@ export const deleteUser = async (req, res) => {
             details: error.message
         })
     }
-}
+};
+
+export const updateInventory = async (req, res) => {
+    try {
+        const updatedUser = await userService.updateInventory(req.params.id, req.body);
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        res.status(400).json({
+            message: error.message
+        });
+    }
+};
+
+export const triggerNotifications = async (req, res) => {
+    try {
+        const notifications = await userService.triggerNotifications(req.params.id);
+        res.status(200).json({ notifications });
+    } catch (error) {
+        res.status(400).json({
+            message: error.message
+        });
+    }
+};
+
+
 
 
 export default {
@@ -156,5 +180,7 @@ export default {
     getAllUsers,
     getUserInfo,
     updateUser,
-    deleteUser
+    deleteUser,
+    updateInventory,
+    triggerNotifications
 };

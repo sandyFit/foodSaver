@@ -5,7 +5,9 @@ import {
     getAllUsers,
     getUserInfo,
     updateUser,
-    deleteUser
+    deleteUser,
+    updateInventory,
+    triggerNotifications
 } from '../controllers/userController.js';
 import { validateRegisterUser, validateLogin } from '../validators/userValidator.js';
 import { authenticateUser } from '../middleware/authMiddleware.js';
@@ -375,5 +377,9 @@ router.put('/users-update/:id', updateUser);
  *                   example: "An unexpected error occurred. Please try again later."
  */
 router.delete('/users-delete/:id', deleteUser);
+
+router.post('/api/users/:id/inventory', updateInventory);
+
+router.get('/api/users/:id/notifications', triggerNotifications);
 
 export default router;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import MealCard from '../components/MealCard';
+import MealCard from '../components/cards/MealCard';
 import axios from 'axios';
-import RecipeCardHome from '../components/RecipeCardHome';
+import RecipeCardHome from '../components/cards/RecipeCardHome';
 import { toast } from 'react-hot-toast';
 
 const Home = () => {

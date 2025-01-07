@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { ContextGlobal } from '../utils/globalContext';
-import { formatDate } from '../utils/functions';
+import React, { useState, useContext } from 'react';
+import { ContextGlobal } from '../../utils/globalContext';
+import { formatDate } from '../../utils/functions';
 
 const MealsTable = ({ onHandleEditClick, onHandleDeleteMeal }) => {
     const { allFoodItems, loading } = useContext(ContextGlobal);     
-    
 
     return (
         <article className="min-w-full flex flex-col justify-center items-center">

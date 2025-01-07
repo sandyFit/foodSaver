@@ -95,7 +95,7 @@ body {
     }
 
     .sidebar-text {
-        @apply text-teal-50 text-[.68rem] hover:text-teal-300 uppercase
+        @apply text-[.68rem] hover:text-teal-300 uppercase
     }
      
 }

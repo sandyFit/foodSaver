@@ -1,7 +1,7 @@
 import React from 'react';
 import { useContext } from 'react';
 import { ContextGlobal } from '../utils/globalContext';
-import HomeCard from '../components/HomeCard';
+import HomeCard from '../components/cards/HomeCard';
 import { PiNotebookLight } from 'react-icons/pi';
 import { CiViewList } from 'react-icons/ci';
 import { TbUsers } from 'react-icons/tb';

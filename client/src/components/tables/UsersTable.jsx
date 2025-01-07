@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { ContextGlobal } from '../utils/globalContext';
+import { ContextGlobal } from '../../utils/globalContext';
 import toast from 'react-hot-toast';
-import UpdateUsersForm from './UpdateUsersForm';
+import UpdateUsersForm from '../forms/UpdateUsersForm';
 
 const UsersTable = () => {
 

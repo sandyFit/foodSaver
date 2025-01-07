@@ -101,7 +101,50 @@ export const deleteUser = async (id) => {
         throw new Error('Error eliminando el usuario' + error.message);
     }
     
-}
+};
+
+export const updateInventory = async (userId, inventoryItem) => {
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        // Find the item in inventory
+        const existingItem = user.inventory.find((item) => item.itemName === inventoryItem.itemName);
+
+        if (existingItem) {
+            // Update existing item
+            existingItem.quantity = inventoryItem.quantity;
+            existingItem.expirationDate = inventoryItem.expirationDate;
+        } else {
+            // Add new item
+            user.inventory.push(inventoryItem);
+        }
+
+        await user.save();
+        return user;
+    } catch (error) {
+        throw new Error('Error updating inventory: ' + error.message);
+    }
+};
+
+export const triggerNotifications = async (userId) => {
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        // Generate notifications
+        await user.notifyExpiringMeals();
+        await user.notifyLowInventory();
+
+        return user.unseenNotifications;
+    } catch (error) {
+        throw new Error('Error triggering notifications: ' + error.message);
+    }
+};
 
 
 export default {
@@ -110,5 +153,7 @@ export default {
     getAllUsers,
     getUserInfo,
     updateUser,
-    deleteUser
+    deleteUser,
+    updateInventory,
+    triggerNotifications
 };

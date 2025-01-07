@@ -42,6 +42,24 @@ const userSchema = new mongoose.Schema(
             enum: ['user', 'admin'],
             default: 'user',
         },
+
+        inventory: [
+            {
+                itemName: { type: String, required: true },
+                quantity: { type: Number, default: 1 },
+                expirationDate: { type: Date, required: true },
+            },
+        ],
+
+        seenNotifications: {
+            type: Array,
+            default: [],
+        },
+        unseenNotifications: {
+            type: Array,
+            default: [],
+        },
+
         registrationDate: {
             type: Date,
             default: Date.now,
@@ -49,6 +67,7 @@ const userSchema = new mongoose.Schema(
         resetPasswordToken: String,
         resetPasswordExpire: Date,
     },
+
     { timestamps: true }
 );
 
@@ -84,6 +103,30 @@ userSchema.methods.genResetPasswordToken = function () {
     this.resetPasswordExpire = Date.now() + 30 * 60 * 1000; // Token lasts 30 minutes
     return resetToken;
 };
+
+userSchema.methods.notifyExpiringMeals = function () {
+    const expiringMeals = this.inventory.filter((item) => {
+        const daysToExpire = Math.ceil((item.expirationDate - Date.now()) / (1000 * 60 * 60 * 24));
+        return daysToExpire > 0 && daysToExpire <= 3; // Notify 3 days before expiration
+    });
+
+    expiringMeals.forEach((meal) => {
+        this.unseenNotifications.push(`The item "${meal.itemName}" is expiring in ${Math.ceil((meal.expirationDate - Date.now()) / (1000 * 60 * 60 * 24))} day(s).`);
+    });
+
+    return this.save();
+};
+
+userSchema.methods.notifyLowInventory = function () {
+    const lowStockItems = this.inventory.filter((item) => item.quantity <= 2); // Notify when quantity <= 2
+
+    lowStockItems.forEach((item) => {
+        this.unseenNotifications.push(`The item "${item.itemName}" is running low on stock (only ${item.quantity} left).`);
+    });
+
+    return this.save();
+};
+
 
 // Create and export the User model
 export default mongoose.model('User', userSchema);
