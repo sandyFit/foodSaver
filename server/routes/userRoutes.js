@@ -499,6 +499,69 @@ router.delete('/users-delete/:id', deleteUser);
  */
 router.post('/api/users/:id/inventory', updateInventory);
 
+/**
+ * @swagger
+ * /api/users/{id}/notifications:
+ *   get:
+ *     summary: Trigger notifications for a user
+ *     description: Retrieves and triggers notifications for a user, including notifications about expiring items and low stock levels.
+ *     tags:
+ *       - users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique identifier of the user for whom the notifications are being triggered.
+ *         example: "61d2f8f5f4d4b1e0c3a5a789"
+ *     responses:
+ *       200:
+ *         description: Successfully triggered notifications for the user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 unseenNotifications:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   description: List of notifications the user has not seen yet.
+ *                   example: 
+ *                     - "The item 'Milk' is expiring in 3 day(s)."
+ *                     - "The item 'Eggs' is running low on stock (only 2 left)."
+ *       400:
+ *         description: Bad request. This response is returned if the user ID is invalid or missing.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid user ID."
+ *       404:
+ *         description: User not found. This response is returned if the user ID does not exist in the system.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User not found."
+ *       500:
+ *         description: Internal server error. This response is returned if something goes wrong on the server side.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "An unexpected error occurred. Please try again later."
+ */
 
 router.get('/api/users/:id/notifications', triggerNotifications);
 

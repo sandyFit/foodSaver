@@ -107,7 +107,7 @@ userSchema.methods.genResetPasswordToken = function () {
 userSchema.methods.notifyExpiringMeals = function () {
     const expiringMeals = this.inventory.filter((item) => {
         const daysToExpire = Math.ceil((item.expirationDate - Date.now()) / (1000 * 60 * 60 * 24));
-        return daysToExpire > 0 && daysToExpire <= 3; // Notify 3 days before expiration
+        return daysToExpire > 0 && daysToExpire <= 8; 
     });
 
     expiringMeals.forEach((meal) => {
