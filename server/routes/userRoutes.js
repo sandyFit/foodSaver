@@ -420,7 +420,85 @@ router.put('/users-update/:id', updateUser);
 router.delete('/users-delete/:id', deleteUser);
 
 
+/**
+ * @swagger
+ * /api/users/{id}/inventory:
+ *   post:
+ *     summary: Update a user's inventory
+ *     description: Updates the inventory for a user identified by their unique ID.
+ *     tags:
+ *       - users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique identifier of the user whose inventory is to be updated.
+ *         example: "61d2f8f5f4d4b1e0c3a5a789"
+ *       - in: body
+ *         name: inventory
+ *         required: true
+ *         description: The updated inventory data for the user.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             items:
+ *               type: array
+ *               items:
+ *                 type: string
+ *               description: List of item names in the inventory.
+ *               example: ["item1", "item2", "item3"]
+ *             quantity:
+ *               type: object
+ *               additionalProperties:
+ *                 type: integer
+ *               description: Quantity of each item in the inventory.
+ *               example: {"item1": 10, "item2": 5}
+ *     responses:
+ *       200:
+ *         description: Successfully updated the user's inventory.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Inventory updated successfully."
+ *       400:
+ *         description: Bad request. This response is returned if the input data is invalid or incomplete.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid input data."
+ *       404:
+ *         description: User not found. This response is returned if the user ID does not exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User not found."
+ *       500:
+ *         description: Internal Server Error. This response is returned if something goes wrong on the server side.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "An unexpected error occurred. Please try again later."
+ */
 router.post('/api/users/:id/inventory', updateInventory);
+
 
 router.get('/api/users/:id/notifications', triggerNotifications);
 
