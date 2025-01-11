@@ -14,12 +14,12 @@ const Navbar = () => {
                 <div className='flex justify-center items-center gap-6'>
                     <button className='full-btn'>
                         <a href="/login">
-                            Acceder
+                            Accede
                         </a>
                     </button>
                     <button className='full-btn px-6 py-2.5'>
                         <a href="/register" >
-                            Registrarse
+                            Regístrate
                         </a>
                     </button>
                 </div>
