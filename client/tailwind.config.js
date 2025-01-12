@@ -13,6 +13,10 @@ export default {
           100: 'F6FFFE',
           200: '#D9EDEB',
           700: '#03776B',
+
+          bluesky: {
+            400: '#147995',
+          }
         },
         fontFamily: {
           sans: ['Quicksand', 'sans-serif'],

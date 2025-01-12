@@ -2,7 +2,6 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
-import App from './App.jsx';
 import ProtectedHome from './dashboard/ProtectedHome.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
@@ -15,6 +14,7 @@ import { Toaster } from 'react-hot-toast';
 import { ContextProvider } from './utils/globalContext.jsx'; 
 import Users from './dashboard/Users.jsx';
 import Loader from './components/ui/Loader.jsx';
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -30,7 +30,9 @@ createRoot(document.getElementById('root')).render(
             <Route path="recipes/:id" element={<RecipeDetail />} />
             <Route path="users" element={<Users />} />
           </Route>
-          <Route path="/" element={<Landing />} />
+
+          <Route path="/" element={<Landing />}/>
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
