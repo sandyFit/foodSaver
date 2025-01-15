@@ -12,8 +12,8 @@ const Hero = () => {
                         </h1>
                     </div>
                     <p className="w-2/3 text-xl text-[#fff] text-center">
-                        FoodSaver es la herramienta definitiva para gestionar el inventario de alimentos
-                        de tu hogar, reducir el desperdicio y ahorrar dinero.
+                        Food Saver es la aplicación que te permite llevar un control de los alimentos que tienes
+                        en tu hogar, reducir el desperdicio y ahorrar dinero fácilmente.
                     </p>
 
                     <div className="w-2/3 flex justify-center gap-5">
