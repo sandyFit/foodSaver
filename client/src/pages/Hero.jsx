@@ -11,7 +11,7 @@ const Hero = () => {
                             Despídete del Desperdicio de Alimentos
                         </h1>
                     </div>
-                    <p className="w-[68%] text-xl text-[#fff] text-center">
+                    <p className="w-[68%] text-xl text-[#fff] text-justify">
                         FoodSaver es la app que te permite organizar los alimentos en tu hogar,
                         reducir el desperdicio y ahorrar dinero fácilmente. Optimiza tus compras,
                         prolonga la vida útil de tus alimentos y contribuye al cuidado del planeta,

@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '../layouts/Navbar';
 import Hero from './Hero.jsx';
-import DidYouKnow from './DidYouKnow.jsx';
+import Stats from './Stats.jsx';
 import Features from './Features.jsx';
 
 const Landing = () => {
@@ -9,7 +9,7 @@ const Landing = () => {
         <section >
             <Navbar />
             <Hero />
-            <DidYouKnow />
+            <Stats />
             <Features />
         </section>
     );

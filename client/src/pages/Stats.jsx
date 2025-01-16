@@ -1,30 +1,59 @@
-import React from 'react';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import StatsCard from '../components/cards/StatsCard';
 
-const DidYouKnow = () => {
+gsap.registerPlugin(ScrollTrigger);
+
+const Stats = () => {
+    const statsRefs = useRef([]);
+
     const stats = [
         {
             bgColor: 'bg-red-100',
-            percentage: '30%',
+            percentage: 30,
+            suffix: '%',
             text: 'de los alimentos producidos a nivel mundial se desperdician.'
         },
         {
             bgColor: 'bg-teal-100',
-            percentage: '+60%',
+            percentage: 60,
+            suffix: '%+',
             text: 'del desperdicio de alimentos ocurre en los hogares.'
         },
         {
             bgColor: 'bg-blue-100',
-            percentage: '1Billón',
+            percentage: 1,
+            suffix: 'Billón',
             text: 'de dólares se pierden anualmente debido al desperdicio de alimentos.'
         },
         {
             bgColor: 'bg-purple-100',
-            percentage: '',
             text: `Frutas, verduras, pan, lácteos y carnes son los alimentos 
-                   que más se desperdician en los hogares.`
+                que más se desperdician en los hogares.` // No percentage here
         }
     ];
+
+    useEffect(() => {
+        statsRefs.current.forEach((ref, index) => {
+            if (!ref || stats[index].percentage === undefined) return;  // Skip if no percentage
+
+            gsap.to(ref, {
+                textContent: stats[index].percentage,
+                duration: 2,
+                ease: "power1.out",
+                snap: { textContent: 1 },
+
+                scrollTrigger: {
+                    trigger: ref,
+                    start: 'top bottom-=100',
+                    end: 'center center',
+                    toggleActions: "play none none reverse",
+                    once: true
+                }
+            });
+        });
+    }, []);
 
     return (
         <section id="did-you-know" className="bg-yellow-100 w-full h-screen px-24">
@@ -40,9 +69,8 @@ const DidYouKnow = () => {
                 {stats.map((stat, index) => (
                     <StatsCard
                         key={index}
-                        bgColor={stat.bgColor}
-                        percentage={stat.percentage}
-                        text={stat.text}
+                        ref={el => statsRefs.current[index] = el}
+                        {...stat}
                     />
                 ))}
             </div>
@@ -50,4 +78,4 @@ const DidYouKnow = () => {
     );
 };
 
-export default DidYouKnow;
+export default Stats;
