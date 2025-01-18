@@ -5,6 +5,8 @@ const Features = () => {
         <section className='bg-blue-100 w-full min-h-screen px-24'>
 
             <div className="w-full grid grid-cols-2 gap-2 h-full">    
+
+                
                 <div className=" w-[68%] h-full flex flex-col">
                     <h1 className='pt-12 uppercase text-6xl font-extrabold'>
                         FoodSaver <br/> te ayuda a:

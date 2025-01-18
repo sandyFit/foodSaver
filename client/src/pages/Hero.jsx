@@ -3,28 +3,45 @@ import React from 'react'
 const Hero = () => {
     return (
         <section>
-            <main className='w-full h-screen bg-tahiti-700 flex px-44'>
-                <div className="w-full flex flex-col justify-center items-center gap-6">
-                    <div className="flex flex-col">
-                        <h1 className='text-yellow-100 text-[8rem] font-extrabold mt-10 uppercase 
-                            tracking-tight leading-[115px] text-center'>
-                            Despídete del Desperdicio de Alimentos
+            <main className='w-full h-screen bg-tahiti-700 flex px-16 pt-32'>
+                <div className="w-full flex flex-col  gap-6">
+                    <div className="w-full h-full flex flex-col relative">
+                        <div className="w-28 h-28 absolute top-16 left-10 rounded-full bg-blue-100 flex 
+                            justify-center items-center">
+                            <img src="/img/strawberry.png" alt="strawberry" className="w-24 h-24" />
+                        </div>
+                        <div className="w-28 h-28 absolute top-16 left-36 rounded-full bg-red-600 flex 
+                            justify-center items-center">
+                            <img src="/img/bananas.png" alt="bananas" className="w-24 h-24" />
+                        </div>
+                        <h1 className='w-full text-yellow-100 text-[8rem] font-medium mt-10
+                            tracking-tight leading-[150px] text-center'>                            
+                            <span className='-ml-52'>
+                                Despídete <br /> del 
+                            </span>
+                            <span className='ml-6 pr-[28rem] text-white'>
+                                desperdicio<br />
+                            </span>
+                            <span className='ml-[28rem]'>de &nbsp;&nbsp;&nbsp; alimentos</span>
                         </h1>
+                        <div className="w-28 h-28 absolute bottom-32 right-[40rem] rounded-full bg-blue-100 flex 
+                            justify-center items-center">
+                            <img src="/img/watermelon.png" alt="watermelon" className="w-24 h-24" />
+                        </div>
                     </div>
-                    <p className="w-[68%] text-xl text-[#fff] text-justify">
-                        FoodSaver es la app que te permite organizar los alimentos en tu hogar,
-                        reducir el desperdicio y ahorrar dinero fácilmente. Optimiza tus compras,
-                        prolonga la vida útil de tus alimentos y contribuye al cuidado del planeta,
-                        todo desde un mismo lugar.
-                    </p>
+                    <div className="w-[28vw] flex items-end custom-border pt-12 pb-6 px-10 rounded-lg
+                        bg-white absolute bottom-28 left-16">
+                        <div className="absolute inset-0 w-full h-8 bg-purple-100 rounded-t-lg border-b-2 border-stone-900"></div>
+                        <p className="font-[500] text-sm text-black text-justify">
+                            Optimiza tus compras,
+                            prolonga la vida útil de tus alimentos y contribuye al cuidado del planeta,
+                            todo desde una sola aplicación.
+                        </p>
+                    </div>
 
-                    <div className="w-2/3 flex justify-center gap-5">
-                        <a href="/register" n className='w-1/2 shadow-btn bg-blue-100 py-3 text-center block'>
-                            ÚNETE y Empieza a Ahorrar
-                        </a>
-                        <a href="/login" className='w-1/2 shadow-btn bg-red-100 py-3 text-center block'>
-                            Conoce Más AQUÍ
-                        </a>
+                    <div className="w-[28vw] h-60 flex items-end custom-border pt-12 pb-6 px-10 rounded-lg
+                        absolute top-48 right-16 bg-white">
+
                     </div>
                 </div>
 

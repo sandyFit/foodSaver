@@ -23,7 +23,8 @@ export default {
           bai: ['Bai Jamjuree', 'sans-serif'],
           cursive: ['WindSong', 'cursive'],
           anybody: ['Anybody', 'sans-serif'],
-          inter: ["Inter", 'sans-serif']
+          inter: ["Inter", 'sans-serif'],
+          montserrat: ["Montserrat", 'serif']
         },
       },
     },

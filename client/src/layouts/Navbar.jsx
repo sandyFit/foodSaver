@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 const Navbar = () => {
 
@@ -11,17 +12,29 @@ const Navbar = () => {
                     </a>
                 </div>           
 
-                <div className='flex justify-center items-center gap-6'>
+                <div className='flex justify-center items-center gap-6 border-2 rounded-lg border-white'>
+                    <ul className='flex gap-6'>
+                        <li>
+                            <Link to="/about" className='text-white'>
+                                Acerca de
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/contact" className='text-white'>
+                                Contacto
+                            </Link>
+                        </li>
+                    </ul>
                     <button className='full-btn'>
                         <a href="/login">
-                            Accede
+                            Accede Aquí
                         </a>
                     </button>
-                    <button className='full-btn px-6 py-2.5'>
+                    {/* <button className='full-btn px-6 py-2.5'>
                         <a href="/register" >
                             Regístrate
                         </a>
-                    </button>
+                    </button> */}
                 </div>
             </div>
 
