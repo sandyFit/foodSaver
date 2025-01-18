@@ -4,7 +4,7 @@ const Hero = () => {
     return (
         <section>
             <main className='w-full h-screen bg-tahiti-700 flex px-16 pt-32'>
-                <div className="w-full flex flex-col  gap-6">
+                <div className="w-full flex flex-col gap-6">
                     <div className="w-full h-full flex flex-col relative">
                         <div className="w-28 h-28 absolute top-16 left-10 rounded-full bg-blue-100 flex 
                             justify-center items-center">
@@ -39,7 +39,7 @@ const Hero = () => {
                         </p>
                     </div>
 
-                    <div className="w-[28vw] h-60 flex items-end custom-border pt-12 pb-6 px-10 rounded-lg
+                    <div className="w-[28vw] h-64 flex items-end custom-border pt-12 pb-6 px-10 rounded-lg
                         absolute top-48 right-16 bg-white">
 
                     </div>
