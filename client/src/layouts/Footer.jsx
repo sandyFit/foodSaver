@@ -28,15 +28,19 @@ const Footer = () => {
                         </p>
                     </div>
                 </div>
+
                 <div className="w-full flex h-full col-span-9 col-start-4 col-end-13 row-span-3 row-start-1 
                     row-end-4 border-2 border-black rounded-lg p-12 bg-yellow-100">
                     <div className="w-full flex justify-between items-center">
-                        <p className='w-[60%]'>
-                            ¿Quieres reducir el desperdicio de alimentos en casa? Descubre consejos prácticos
-                            de cocina, almacenamiento inteligente y deliciosas recetas. ¡Suscríbete a nuestra
-                            newsletter y transforma tu forma de aprovechar los alimentos!
-                        </p>
-
+                        <div className="flex flex-col">
+                            <h4>Suscribete a la Newsletter</h4>
+                            <p className='w-[90%]'>
+                                ¿Quieres reducir el desperdicio de alimentos en casa? Descubre consejos prácticos
+                                de cocina, almacenamiento inteligente y deliciosas recetas. ¡Suscríbete a nuestra
+                                newsletter y transforma tu forma de aprovechar los alimentos!
+                            </p>
+                        </div>
+                        
                         <div className="flex flex-col gap-6">
                             <input type="text"
                                 className='w-80 h-12 border-2 border-black rounded-lg'
@@ -49,50 +53,62 @@ const Footer = () => {
                         
                     </div>
                 </div>
-                <div className="w-full flex h-full col-span-6 col-start-4 col-end-10 row-span-3 row-start-4 
-                    row-end-7 border-2 border-black rounded-lg p-12 bg-blue-100">
-                    <div className="w-full flex">
-                        <nav className='w-full flex justify-between font-medium'>
-                            <ul className='flex flex-col gap-3'>
-                                <li>
-                                    <Link to="stats" className='text-black hover:text-gray-500'>
-                                        Impacto Global🡭
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to="features" className='text-black hover:text-gray-500'>
-                                        Funcionalidades🡭
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to="why" className='text-black hover:text-gray-500'>
-                                        Por qué FoodSaver🡭
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to="contact" className='text-black hover:text-gray-500'> 
-                                        Contacto🡭
-                                    </Link>
-                                </li>
-                            </ul>
 
-                            <ul className='flex flex-col gap-3'>                                 
-                               <li>
-                                    <a href="#" className='text-black hover:text-gray-500'>
-                                        Blog🡭
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className='text-black hover:text-gray-500'>
-                                        Terminos & Condiciones🡭
-                                    </a>
-                                </li>
-                               <li>
-                                    <a href="#" className='text-black hover:text-gray-500'>
-                                        Política de Tratamiento de Datos🡭
-                                    </a>
-                                </li>
-                            </ul>
+                <div className="w-full flex h-full col-span-6 col-start-4 col-end-10 row-span-3 row-start-4 
+                    row-end-7 border-2 border-black rounded-lg py-10 px-12 bg-blue-100">
+                    <div className="w-full flex">
+                        <nav className='w-full flex justify-between text-sm'>
+                            <div className="flex flex-col">
+                                <h4>Producto</h4>
+                                <ul className='flex flex-col gap-2 mt-2'>
+                                    <li>
+                                        <Link to="stats" className='text-black hover:text-gray-500'>
+                                            Impacto Global🡭
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="features" className='text-black hover:text-gray-500'>
+                                            Funcionalidades🡭
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="why" className='text-black hover:text-gray-500'>
+                                            Por qué FoodSaver🡭
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="contact" className='text-black hover:text-gray-500'> 
+                                            Contacto🡭
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div className="flex flex-col">
+                                <h4>Más</h4>
+                                <ul className='flex flex-col gap-2 mt-2'>                                 
+                                    <li>
+                                        <a href="#" className='text-black hover:text-gray-500'>
+                                            Blog🡭
+                                        </a>
+                                    </li>
+                                    <li>
+                                            <a href="#" className='text-black hover:text-gray-500'>
+                                                Nuestra Hoja de Ruta🡭
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" className='text-black hover:text-gray-500'>
+                                                Terminos & Condiciones🡭
+                                            </a>
+                                        </li>
+                                    <li>
+                                        <a href="#" className='text-black hover:text-gray-500'>
+                                            Política de Tratamiento de Datos🡭
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </nav>
                     </div>
 

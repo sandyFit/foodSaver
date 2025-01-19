@@ -54,12 +54,15 @@ const Login = () => {
         <section className='w-full min-h-screen bg-tahiti-700'>
             <Navbar />
 
-            <main className="flex flex-col pt-48 justify-center items-center gap-12 ">
-                <h2 className='text-[#fcb8b8]'>
-                    Accede Ahora y Gestiona tu Despensa de Manera Inteligente
+            <main className="flex flex-col pt-44 justify-center items-center gap-12 ">
+                <h2 className='text-yellow-100 text-center'>
+                    Accede Ahora y
+                    <span className='text-white mx-3'>Gestiona</span>
+                    tu Despensa <br />
+                    de Manera Inteligente
                 </h2>
                 <form onSubmit={handleSubmit}
-                    className="w-[40%] flex flex-col mt-6 gap-6">
+                    className="w-[40%] flex flex-col mt-1 gap-6">
 
                     <input
                         type="email"
@@ -87,14 +90,15 @@ const Login = () => {
 
                     <p className='text-right text-white'>
                         No tienes cuenta?
-                        <a href="/register" className='underline underline-offset-4 ml-2'>
+                        <a href="/register"
+                            className='underline underline-offset-4 ml-2 hover:text-yellow-100'>
                             Registrate aquí
                         </a>
                     </p>
 
                     <button
                         type="submit"
-                        className='shadow-btn bg-blue-200 py-2.5'
+                        className='shadow-btn bg-blue-200 hover:bg-blue-400 py-2.5'
                         disabled={loading}
                     >
                         {loading ? (
@@ -103,7 +107,7 @@ const Login = () => {
                                 <span className="ml-2">Accediendo...</span>
                             </div>
                         ) : (
-                            'GESTIONA tu Despensa'
+                            'ACCEDE Ahora'
                         )}
                     </button>
                 </form>

@@ -60,9 +60,11 @@ const Register = () => {
     return (
         <section className='w-full min-h-screen bg-tahiti-700'>
             <Navbar />
-            <main className="flex flex-col pt-48 justify-center items-center gap-12">
-                <h2 className='text-blue-200'>
-                    ¡Únete y Aprende a Ahorrar Mientras Cuidas el Planeta!
+            <main className="flex flex-col pt-44 justify-center items-center gap-12">
+                <h2 className='text-yellow-100 text-center'>
+                    ¡Únete y Aprende a
+                    <span className='text-white mx-3'>Ahorrar</span>
+                    Mientras <br />Cuidas el Planeta!
                 </h2>
                 <form onSubmit={handleSubmit} className="w-[42%] flex flex-col gap-6">                  
                     <input
@@ -117,7 +119,7 @@ const Register = () => {
                     </div>
 
                     <div className="w-full flex justify-between">
-                        <div className="w-[14vw] flex justify-between">
+                        <div className="w-[18vw] flex justify-between">
                             <div className="flex gap-2">
                                 <label
                                     htmlFor='userRole'
@@ -155,7 +157,8 @@ const Register = () => {
                         </div>
                         <p className='w-full text-right text-white'>
                             Ya tienes una cuenta?
-                            <a href="/login" className='underline underline-offset-4 ml-2'>
+                            <a href="/login"
+                                className='underline underline-offset-4 ml-2 hover:text-yellow-100'>
                                 Accede aquí
                             </a>
                         </p>
@@ -163,16 +166,17 @@ const Register = () => {
 
                     <button
                         type="submit"
-                        className='shadow-btn bg-red-200 py-2.5'
+                        className='shadow-btn bg-red-200 hover:bg-red-300 py-2.5'
                         disabled={loading}
                     >
                         {loading ? (
                             <div className="flex items-center justify-center">
-                                <div className="w-5 h-5 border-t-2 border-tahiti-700 rounded-full animate-spin"></div>
+                                <div className="w-5 h-5 border-t-2 border-tahiti-700 rounded-full 
+                                    animate-spin"></div>
                                 <span className="ml-2">Registrando...</span>
                             </div>
                         ) : (
-                            'CREA tu Cuenta'
+                                <p className=''>CREA tu Cuenta</p>
                         )}
                     </button>
                 </form>
