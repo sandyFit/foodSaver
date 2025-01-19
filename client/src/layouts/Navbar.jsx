@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-scroll';
 
 const Navbar = () => {
 
@@ -15,27 +15,27 @@ const Navbar = () => {
                 <div className='flex justify-center items-center border-2 rounded-lg border-white'>
                     <ul className='flex gap-6 px-8 text-sm'>
                         <li>
-                            <Link to="/about" className='text-white hover:text-black'>
+                            <Link to="stats" className='text-white hover:text-black'>
                                 Impacto Global
                             </Link>
                         </li>
                         <li>
-                            <Link to="/contact" className='text-white hover:text-black'>
+                            <Link to="features" className='text-white hover:text-black'>
                                 Funcionalidades
                             </Link>
                         </li>
                         <li>
-                            <Link to="/contact" className='text-white hover:text-black'>
+                            <Link to="why" className='text-white hover:text-black'>
                                 Por qué FoodSaver
                             </Link>
                         </li>
                         <li>
-                            <Link to="/contact" className='text-white hover:text-black'> 
+                            <Link to="contact" className='text-white hover:text-black'> 
                                 Contacto
                             </Link>
                         </li>
                     </ul>
-                    <button className='full-btn rounded-r-lg'>
+                    <button className='full-btn py-2.5 rounded-r-lg'>
                         <a href="/login">
                             Accede Aquí
                         </a>

@@ -89,7 +89,7 @@ body {
     }
 
     .full-btn {
-        @apply px-6 py-2.5 text-sm font-[600] text-white hover:text-black bg-black hover:bg-white 
+        @apply px-6  text-sm font-[600] text-white hover:text-black bg-black hover:bg-white 
     }
 
     .sidebar-text {

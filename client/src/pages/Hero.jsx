@@ -2,7 +2,7 @@ import React from 'react'
 
 const Hero = () => {
     return (
-        <section>
+        <section id='hero'>
             <main className='w-full h-screen bg-tahiti-700 flex px-16 pt-32'>
                 <div className="w-full flex flex-col gap-6">
                     <div className="w-full h-full flex flex-col relative">
@@ -31,7 +31,7 @@ const Hero = () => {
                     </div>
                     <div className="w-[28vw] flex items-end custom-border pt-12 pb-6 px-10 rounded-lg
                         bg-white absolute bottom-28 left-16">
-                        <div className="absolute inset-0 w-full h-8 bg-purple-100 rounded-t-lg border-b-2 border-stone-900"></div>
+                        <div className="absolute inset-0 w-full h-8 bg-purple-200 rounded-t-lg border-b-2 border-stone-900"></div>
                         <p className="font-[500] text-sm text-black text-justify">
                             Optimiza tus compras,
                             prolonga la vida útil de tus alimentos y contribuye al cuidado del planeta,

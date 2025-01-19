@@ -56,7 +56,7 @@ const Stats = () => {
     }, []);
 
     return (
-        <section id="did-you-know" className="bg-yellow-100 w-full h-screen px-24">
+        <section id="stats" className="bg-yellow-100 w-full h-screen px-24">
             <header className="flex flex-col text-stone-900">
                 <h2 className="text-3xl font-semibold mt-16">Sabías que...</h2>
                 <h1 className="text-5xl font-bold mt-8">
