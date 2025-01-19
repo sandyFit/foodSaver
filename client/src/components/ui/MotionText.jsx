@@ -24,7 +24,7 @@ const MotionText = () => {
 
         timeline.to(textRef.current, {
             x: "-50%",
-            duration: 20,
+            duration: 30,
         });
 
         return () => timeline.kill();
