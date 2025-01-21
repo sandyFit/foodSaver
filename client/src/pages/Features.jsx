@@ -9,9 +9,9 @@ const Features = () => {
 
                 
                 <div className=" w-[68%] h-full flex flex-col">
-                    <h1 className='pt-12 uppercase text-6xl font-extrabold'>
+                    <h2 className='pt-12 uppercase text-6xl font-extrabold'>
                         FoodSaver <br/> te ayuda a:
-                    </h1>
+                    </h2>
                     <div className="flex flex-col justify-center mt-80">
                         <h2 className="text-3xl font-semibold">Controlar lo que tienes:</h2>
                         <p className="text-xl mt-8">

@@ -4,6 +4,7 @@ import Hero from './Hero.jsx';
 import Stats from './Stats.jsx';
 import Features from './Features.jsx';
 import Footer from '../layouts/Footer.jsx';
+import How from './How.jsx';
 
 
 const Landing = () => {
@@ -13,6 +14,7 @@ const Landing = () => {
             <Hero />
             <Stats />
             <Features />
+            <How/>
             <Footer/>
         </section>
     );
