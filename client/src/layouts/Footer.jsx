@@ -38,7 +38,7 @@ const Footer = () => {
                             </p>
                         </div>
                         
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-2">
                             <input type="text"
                                 className='w-80 h-12 border-2 border-black rounded-lg'
                                 placeholder='Ingresa tu correo'
@@ -46,6 +46,7 @@ const Footer = () => {
                             <button className='full-btn rounded-lg py-3 border-2 border-black'>
                                 Suscríbete
                             </button>
+                            <p className='text-sm'>Unsubscribe anytime, no hard feelings ✌️</p>
                         </div>
                         
                     </div>
@@ -74,21 +75,16 @@ const Footer = () => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="contact" className='text-black hover:text-gray-500'> 
-                                            Contacto🡭
-                                        </Link>
+                                        <a href="#" className='text-black hover:text-gray-500'>
+                                            Blog🡭
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
 
                             <div className="flex flex-col">
                                 <h4>Más</h4>
-                                <ul className='flex flex-col gap-2 mt-2'>                                 
-                                    <li>
-                                        <a href="#" className='text-black hover:text-gray-500'>
-                                            Blog🡭
-                                        </a>
-                                    </li>
+                                <ul className='flex flex-col gap-2 mt-2'>                                                                     
                                     <li>
                                         <a href="#" className='text-black hover:text-gray-500'>
                                             Nuestra Hoja de Ruta🡭
@@ -116,17 +112,17 @@ const Footer = () => {
                     <div className="flex gap-4">
                         <a href='http://instagram.com' target='_blank'
                             className="flex col-span-2 col-start-10 col-end-12 row-span-1 row-start-4 row-end-5
-                            p-6 border-2 border-black rounded-lg bg-purple-100 hover:bg-purple-500">
+                            p-6 border-2 border-black rounded-lg bg-purple-200 hover:bg-purple-500">
                             <FaInstagram className='text-[3rem]'/>
                         </a>
                         <a href='http://youtube.com' target='_blank'
                             className="flex col-span-1 col-start-11 col-end-12 row-span-1 row-start-4 row-end-5
-                            p-6 border-2 border-black rounded-lg bg-purple-100 hover:bg-purple-500">
+                            p-6 border-2 border-black rounded-lg bg-purple-200 hover:bg-purple-500">
                             <CiYoutube className='text-[3rem]' />
                         </a>
                         <a href='http://tiktok.com' target='_blank'
                             className="flex col-span-1 col-start-12 col-end-13 row-span-1 row-start-4 row-end-5
-                            p-6 border-2 border-black rounded-lg bg-purple-100 hover:bg-purple-500">
+                            p-6 border-2 border-black rounded-lg bg-purple-200 hover:bg-purple-500">
                             <FaTiktok className='text-[2.6rem]' />
                         </a>
                     </div>
@@ -150,9 +146,14 @@ const Footer = () => {
                     © {new Date().getFullYear()} FoodSaver
                 </p>
                 <p className='text-white'>
-                    Diseño y desarrollo por Trish Ramos
+                    Diseño y desarrollo por
+                    <a href="https://www.trishramos.com"
+                        className='ml-2 underline underline-offset-4 hover:text-gray-500'
+                    >
+                        Trish Ramos
+                    </a>
                 </p>
-                <Link to='hero' className='text-white'>
+                <Link to='hero' className='text-white underline underline-offset-4 hover:text-gray-500'>
                     Volver Arriba🡭
                 </Link>
             </aside>

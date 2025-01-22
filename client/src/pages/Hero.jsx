@@ -1,8 +1,10 @@
 import React from 'react'
+import Navbar from '../layouts/Navbar'
 
 const Hero = () => {
     return (
         <section id='hero'>
+            <Navbar className="fixed top-0 left-0 w-full z-[1000]" />
             <main className='w-full h-screen bg-tahiti-700 flex px-16 pt-32'>
                 <div className="w-full flex flex-col gap-6">
                     <div className="w-full h-full flex flex-col relative">
