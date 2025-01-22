@@ -22,7 +22,7 @@ const Navbar = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link to="why" className='text-white hover:text-black'>
+                            <Link to="how" className='text-white hover:text-black'>
                                 Por qué FoodSaver
                             </Link>
                         </li>

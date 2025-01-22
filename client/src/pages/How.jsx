@@ -13,7 +13,7 @@ const How = () => {
                     {/* Add any additional content or images here */}
                 </div>
                 <div className="w-full h-full flex flex-col justify-between col-span-1 col-start-2 
-                    col-end-3 p-8 min-h-screen relative">
+                    col-end-3 pl-12 p-8 min-h-screen relative">
                     <div className="w-full">
                         <h2 className='pt-12 uppercase text-6xl font-extrabold'>
                             Cómo Funciona FoodSaver
