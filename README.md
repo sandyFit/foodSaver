@@ -54,15 +54,15 @@ The FoodSaver project consists of the following components:
 - Node.js and npm installed
 - MongoDB instance running locally or in the cloud
 
-### Installation
+###  API Installation
 1. Clone the repository:
    ```bash
    git clone https://github.com/sandyFit/foodSaver.git
    ```
 
-2. Navigate to the project directory:
+2. Navigate to the server directory:
    ```bash
-   cd FoodSaver
+   cd foodsaver/server
    ```
 
 3. Install dependencies:
@@ -70,20 +70,48 @@ The FoodSaver project consists of the following components:
    npm install
    ```
 
-4. Start the development server:
+4. Set up environment variables:
+
+    - Create a .env file in the root directory.
+    - Add the following variables:
    ```bash
-   npm start
+   MONGO_URI=your_mongodb_connection_string
+   PORT=your_port
+   NODE_ENV=development
+   JWT_SECRET=your_secret_key
+   JWT_EXPIRE_TIME=1d
+   COOKIE_EXPIRES_TIME=1
    ```
 
-5. Access the application at `http://localhost:5000`.
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+6. Access the application at `http://localhost:${PORT}`.
 
 ## API Documentation
 
 Swagger documentation is available for all endpoints. To access it:
 1. Start the backend server.
-2. Navigate to `http://localhost:5000/api-docs` in your browser.
+2. Navigate to `http://localhost:${PORT}/api-docs` in your browser.
 
+
+## Frontend Installation
+1. Navigate to the client directory:
+   ```bash
+   cd foodsaver/client
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+
+3. Start the development client:
+   ```bash
+   npm run dev
+   ```
 
 ## Contact
-For questions, feedback, or support, please contact us at [support@foodsaver.com](mailto:support@foodsaver.com).
+For questions, feedback, or support, please contact us at [support@foodsaver.com](mailto:trishramos29@gmail.com).
 
