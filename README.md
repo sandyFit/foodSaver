@@ -114,10 +114,6 @@ FoodSaver combines a user-friendly interface with powerful backend functionality
 * **Problem:**  Frontend cannot connect to the backend.
     * **Solution:**  Verify that both the frontend and backend servers are running and that the correct port is being used in the frontend's API calls.
 
-## Contributing
-
-We welcome contributions to FoodSaver! Please feel free to submit bug reports, feature requests, or pull requests.
-
 ## Contact
 
 For questions, feedback, or support, please contact us at [support@foodsaver.com](mailto:trishramos29@gmail.com). 
