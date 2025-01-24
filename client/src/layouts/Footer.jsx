@@ -46,7 +46,9 @@ const Footer = () => {
                             <button className='full-btn rounded-lg py-3 border-2 border-black'>
                                 Suscríbete
                             </button>
-                            <p className='text-sm'>Unsubscribe anytime, no hard feelings ✌️</p>
+                            <p className='text-sm'>
+                                Cancela tu cuando quieras, ¡sin dramas! ✌️
+                            </p>
                         </div>
                         
                     </div>
