@@ -1,4 +1,6 @@
 import userService from '../services/userService.js';
+import Inventory from '../services/inventoryService.js';
+import foodItem from '../models/foodItem.js';
 
 export const registerUser = async (req, res) => {
     try {
@@ -171,7 +173,53 @@ export const triggerNotifications = async (req, res) => {
     }
 };
 
+export const handleUpdateInventory = async (req, res) => {
+    const { userId } = req.params;
+    const inventoryItem = req.body;
 
+    try {
+        const updateInventory = await Inventory.updateInventory(userId, inventoryItem);
+        res.status(200).json({
+            message: 'Inventario actualizado correctamente',
+            updateInventory
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message,
+        });
+    }
+};
+
+export const handleGetInventory = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const inventory = await Inventory.getInventory(userId);
+        res.status(200).json(inventory);
+    } catch (error) {
+        res.status(400).json({
+            error: 'Error al obtener el inventario',
+            details: error.message
+        });
+    };
+};
+
+export const handleDeleteInventoryItem = async (req, res) => {
+    const { userId } = req.params;
+    const { itemName } = req.body;
+
+    try {
+        const updatedInventory = await Inventory.deleteInventoryItem(userId, itemName);
+        res.status(200).json({
+            updatedInventory
+        });
+        
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
 
 
 export default {
@@ -182,5 +230,8 @@ export default {
     updateUser,
     deleteUser,
     updateInventory,
-    triggerNotifications
+    triggerNotifications,
+    handleUpdateInventory,
+    handleGetInventory,
+    handleDeleteInventoryItem
 };

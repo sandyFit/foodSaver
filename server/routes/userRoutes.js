@@ -497,7 +497,7 @@ router.delete('/users-delete/:id', deleteUser);
  *                   type: string
  *                   example: "An unexpected error occurred. Please try again later."
  */
-router.post('/api/users/:id/inventory', updateInventory);
+router.post('/users/:id/inventory', updateInventory);
 
 /**
  * @swagger
@@ -563,6 +563,6 @@ router.post('/api/users/:id/inventory', updateInventory);
  *                   example: "An unexpected error occurred. Please try again later."
  */
 
-router.get('/api/users/:id/notifications', triggerNotifications);
+router.get('/users/:id/notifications', triggerNotifications);
 
 export default router;

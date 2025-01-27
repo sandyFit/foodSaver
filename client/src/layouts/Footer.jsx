@@ -47,7 +47,7 @@ const Footer = () => {
                                 Suscríbete
                             </button>
                             <p className='text-sm'>
-                                Cancela tu cuando quieras, ¡sin dramas! ✌️
+                                Cancela cuando quieras, ¡sin dramas! ✌️
                             </p>
                         </div>
                         
