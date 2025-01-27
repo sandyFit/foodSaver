@@ -18,7 +18,12 @@ const inventorySchema = new mongoose.Schema(
         },
         category: {
             type: String,
-            required: true
+            enum: ['lácteos', 'Carnes', 'vegetales', 'frutas', 'granos', 'otros'],
+            default: 'otros'
+        },
+        addedDate: {
+            type: Date,
+            default: Date.now
         },
         user: {
             type: mongoose.Schema.Types.ObjectId,

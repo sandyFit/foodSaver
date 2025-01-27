@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Ej: username@mail.com'],
             unique: true,
+            lowercase: true,
             validate: [validator.isEmail, 'Ingrese un correo electrónico válido'], 
         },
         password: {
@@ -43,21 +44,11 @@ const userSchema = new mongoose.Schema(
             default: 'user',
         },
 
-        inventory: [
-            {
-                itemName: { type: String, required: true },
-                quantity: { type: Number, default: 1 },
-                expirationDate: { type: Date, required: true },
-            },
-        ],
-
-        seenNotifications: {
-            type: Array,
-            default: [],
-        },
-        unseenNotifications: {
-            type: Array,
-            default: [],
+        inventory: [inventoryItemSchema],
+        notifications: [notificationSchema],
+        createdAt: {
+            type: Date,
+            default: Date.now
         },
 
         registrationDate: {
