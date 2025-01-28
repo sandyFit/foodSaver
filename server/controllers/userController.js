@@ -1,38 +1,36 @@
-import userService from '../services/userService.js';
-import Inventory from '../services/inventoryService.js';
-import foodItem from '../models/foodItem.js';
+import User from '../models/User.js';
+import InventoryItem from '../models/InventoryItem.js';
+import Notification from '../models/Notification.js';
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
-export const registerUser = async (req, res) => {
+export const registerUser = async (req, res, next) => {
     try {
-        const { fullName, email, password, confirmPass, avatar, role } = req.body;
+        const { fullName, email, password } = req.body;
 
-        // El esquema Joi ya verifica si las contraseñas coinciden
-        const { user, token } = await userService.registerUser({
-            fullName,
-            email,
-            password,
-            avatar,
-            role,
-        });
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: 'El correo electrónico ya está registrado'
+            });
+        }
+
+        const user = await User.create({ fullName, email, password });
+        const token = user.getJwtToken();
 
         res.status(201).json({
+            success: true,
             message: 'Cuenta registrada correctamente',
+            token: token,
             user: {
                 id: user._id,
                 fullName: user.fullName,
                 email: user.email,
-                avatar: user.avatar,
-                role: user.role,
-            },
-            token,
+                role: user.role
+            }
         });
     } catch (error) {
-        // console.error(error);
-
-        if (error.message === 'El correo electrónico ya está registrado' || error.code === 11000) {
-            return res.status(400).json({ message: 'El correo electrónico ya está registrado' });
-        }
-
         res.status(500).json({
             message: 'Error interno en el servidor',
             details: error.message || error,
@@ -40,14 +38,27 @@ export const registerUser = async (req, res) => {
     }
 };
 
-
-export const login = async (req, res) => {
+export const loginUser = async (req, res, next) => {
     try {
-       const { email, password } = req.body;
-        // console.log("Datos recibidos en login:", req.body);
+        const { email, password } = req.body;
 
-        // Servicio se encarga de manejar validaciones y lógica
-        const { user, token } = await userService.login({ email, password });
+        const user = await User.findOne({ email }).select('+password');
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Credenciales incorrectas'
+            });
+        };      
+
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(401).json({
+                success: false,
+                message: 'Credenciales incorrectas'
+            });
+        }
+
+        const token = user.getJwtToken();
 
         // Configurar la cookiee con el token
         res.cookie("token", token, {
@@ -56,22 +67,18 @@ export const login = async (req, res) => {
             sameSite: "strict", // Refuerza seguridad en navegadores modernos
         });
 
-        // En el backend (Node.js)
         res.json({
+            success: true,
             message: 'Login Correcto',
-            user: user,
-            token: token
+            token: token,
+            user: {
+                id: user._id,
+                fullName: user.fullName,
+                email: user.email,
+                role: user.role
+            }
         });
-
     } catch (error) {
-        // console.error(error);
-
-        if (error.message === 'Credenciales incorrectas') {
-            return res.status(401).json({
-                message: 'Credenciales incorrectas'
-            });
-        }
-
         res.status(500).json({
             message: 'Error interno en el servidor',
             details: error.message || error,
@@ -79,9 +86,58 @@ export const login = async (req, res) => {
     }
 };
 
+export const getUserProfile = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user.id)
+            .populate('inventory notifications')
+            .select('-password');
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'Usuario no encontrado'
+            });
+        }
+
+        res.json({
+            success: true,
+            user
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error interno en el servidor',
+            details: error.message || error,
+        });
+    }
+};
+
+export const updateProfile = async (req, res, next) => {
+    try {
+        const updates = {
+            fullName: req.body.fullName,
+            email: req.body.email,
+            avatar: req.body.avatar
+        };
+
+        const user = await User.findByIdAndUpdate(req.user.id, updates, {
+            new: true,
+            runValidators: true
+        }).select('-password');
+
+        res.json({
+            success: true,
+            user
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await userService.getAllUsers();
+        const users = await User.find();
         res.status(200).json(users);
 
     } catch (error) {
@@ -95,143 +151,103 @@ export const getAllUsers = async (req, res) => {
 export const getUserInfo = async (req, res) => {
     const { id } = req.params;
     try {
-        const user = await userService.getUserInfo(id);
+        const user = await User.findById(id);
+
+        if (!user) {
+            res.status(404).json({
+                error: 'El usuario no se encuentra en la basse de datos',
+            });
+        }
         res.status(200).json(user);
 
     } catch (error) {
-        res.status(400).json({
-            error: 'Error al obtener el usuario',
-            details: error.message
+        res.status(500).json({
+            message: 'Error interno en el servidor',
+            details: error.message || error,
         });
     };
 };
 
-export const updateUser = async (req, res) => {
-    const { id } = req.params; // Get the ID from the URL
-    const updateData = req.body; // Get the data to update from the body
 
-    // Debug log to verify the route is being hit and the ID is received
-    // console.log('PUT /users-update/:id called with ID:', id);
-
-
+export const deleteUser = async (req, res, next) => {
     try {
-        // console.log("Attempting to update user with ID:", id); // Log the ID to verify it's correct
+        const user = await User.findByIdAndDelete(req.user.id);
 
-        const updatedUser = await userService.updateUser(id, updateData);
-        // console.log(updatedUser);
-        res.status(200).json({
-            message: 'Usuario actualizado exitosamente',
-            updatedUser
-        });
+        // Cleanup related data
+        await InventoryItem.deleteMany({ user: user._id });
+        await Notification.deleteMany({ user: user._id });
+
+        res.json({ success: true, message: 'User account deleted' });
     } catch (error) {
-        res.status(400).json({
-            error: 'Error al actualizar el usuario',
-            details: error.message
-        });
+        next(error);
     }
 };
 
-export const deleteUser = async (req, res) => {
-    const { id } = req.params;
+export const requestPasswordReset = async (req, res, next) => {
     try {
-        const user = await userService.deleteUser(id);
-
+        const user = await User.findOne({ email: req.body.email });
         if (!user) {
             return res.status(404).json({
-                error: 'El usuario no fue encontrado'
+                success: false,
+                message: 'Usuario no encontrado'
             });
         }
 
-        res.status(204).send(); // Respuesta exitosa sin contenido
+        const resetToken = user.getResetPasswordToken();
+        await user.save({ validateBeforeSave: false });
+
+        // Implement email sending logic here
+        console.log(`Password reset token: ${resetToken}`);
+
+        res.json({ success: true, message: 'Password reset email sent' });
     } catch (error) {
-        res.status(400).json({
-            message: 'Error eliminando el usuario',
-            details: error.message
-        })
+        next(error);
     }
 };
 
-export const updateInventory = async (req, res) => {
+export const resetPassword = async (req, res, next) => {
     try {
-        const updatedUser = await userService.updateInventory(req.params.id, req.body);
-        res.status(200).json(updatedUser);
-    } catch (error) {
-        res.status(400).json({
-            message: error.message
+        const resetPasswordToken = crypto
+            .createHash('sha256')
+            .update(req.params.token)
+            .digest('hex');
+
+        const user = await User.findOne({
+            resetPasswordToken,
+            resetPasswordExpire: { $gt: Date.now() }
         });
+
+        if (!user) {
+            return res.status(400).json({ success: false, message: 'Invalid or expired token' });
+        }
+
+        user.password = req.body.password;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+        await user.save();
+
+        const token = user.getJwtToken();
+
+        res.json({
+            success: true,
+            token,
+            message: 'Password updated successfully'
+        });
+    } catch (error) {
+        next(error);
     }
 };
-
-export const triggerNotifications = async (req, res) => {
-    try {
-        const notifications = await userService.triggerNotifications(req.params.id);
-        res.status(200).json({ notifications });
-    } catch (error) {
-        res.status(400).json({
-            message: error.message
-        });
-    }
-};
-
-export const handleUpdateInventory = async (req, res) => {
-    const { userId } = req.params;
-    const inventoryItem = req.body;
-
-    try {
-        const updateInventory = await Inventory.updateInventory(userId, inventoryItem);
-        res.status(200).json({
-            message: 'Inventario actualizado correctamente',
-            updateInventory
-        })
-
-    } catch (error) {
-        res.status(500).json({
-            message: error.message,
-        });
-    }
-};
-
-export const handleGetInventory = async (req, res) => {
-    const { userId } = req.params;
-    try {
-        const inventory = await Inventory.getInventory(userId);
-        res.status(200).json(inventory);
-    } catch (error) {
-        res.status(400).json({
-            error: 'Error al obtener el inventario',
-            details: error.message
-        });
-    };
-};
-
-export const handleDeleteInventoryItem = async (req, res) => {
-    const { userId } = req.params;
-    const { itemName } = req.body;
-
-    try {
-        const updatedInventory = await Inventory.deleteInventoryItem(userId, itemName);
-        res.status(200).json({
-            updatedInventory
-        });
-        
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
-    }
-}
-
 
 export default {
     registerUser,
-    login,
+    loginUser,
+    getUserProfile,
+    updateProfile,
     getAllUsers,
     getUserInfo,
-    updateUser,
     deleteUser,
-    updateInventory,
-    triggerNotifications,
-    handleUpdateInventory,
-    handleGetInventory,
-    handleDeleteInventoryItem
+    requestPasswordReset,
+    resetPassword,
+
 };
+

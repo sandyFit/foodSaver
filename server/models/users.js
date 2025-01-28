@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema(
             required: [true, 'Ingrese nombre y apellido'],
             trim: true,
             minlength: 3,
-            maxlength: [80, 'Maximum length of characters allowed is 80'],
+            maxlength: [80, 'Maximo 80 caracteres'],
         },
         email: {
             type: String,
@@ -40,12 +40,20 @@ const userSchema = new mongoose.Schema(
 
         role: {
             type: String,
-            enum: ['user', 'admin'],
-            default: 'user',
+            enum: ['usuario', 'admin'],
+            default: 'usuario',
         },
 
-        inventory: [inventoryItemSchema],
-        notifications: [notificationSchema],
+        inventory: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'InventoryItem'
+        }],
+
+        notifications: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Notification'
+        }],
+
         createdAt: {
             type: Date,
             default: Date.now
@@ -64,9 +72,7 @@ const userSchema = new mongoose.Schema(
 
 // Encrypt password before saving
 userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) {
-        return next();
-    }
+    if (!this.isModified('password')) return next();
     this.password = await bcrypt.hash(this.password, 10);
     next();
 });
@@ -90,7 +96,10 @@ userSchema.methods.getJwtToken = function () {
 // Generate a reset password token
 userSchema.methods.genResetPasswordToken = function () {
     const resetToken = crypto.randomBytes(20).toString('hex');
-    this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    this.resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
     this.resetPasswordExpire = Date.now() + 30 * 60 * 1000; // Token lasts 30 minutes
     return resetToken;
 };
