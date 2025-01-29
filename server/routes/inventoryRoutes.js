@@ -1,14 +1,26 @@
 import express from 'express';
 import {
-    handleUpdateInventory,
-    handleGetInventory,
-    handleDeleteInventoryItem
-} from '../controllers/userController.js';
+    getItems,
+    createItem,
+    getItem,
+    updateItem,
+    deleteItem
+
+} from '../controllers/inventoryController';
 
 const router = express.Router();
 
-router.get('/users/:id/inventory', handleGetInventory);
-router.post('/users/:id/inventory', handleUpdateInventory);
-router.delete('/users/:id/inventory', handleDeleteInventoryItem);
+
+router.route('/inventory')
+    .get(protect, getItems)
+    .post(protect, createItem);
+
+router.route('/inventory/:id')
+    .get(protect, getItem)
+    .put(protect, updateItem)
+    .delete(protect, deleteItem);
+
+router.get('/recipes', protect, getRecipeSuggestions);
+
 
 export default router;

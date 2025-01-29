@@ -1,84 +1,178 @@
-import User from '../models/user.js';
+import InventoryItem from '../models/inventory.js';
+import User from '../models/User.js';
+import Notification from '../models/notifications.js';
 import axios from 'axios';
 
-const LOW_STOCK_THRESHOLD = 3;
-const EXPIRATION_DAYS = 7;
+const checkExpiringItems = async (userId) => {
+    const threshold = new Date();
+    threshold.setDate(threshold.getDate() + 7);
 
-export const getInventory = async (userId) => {
-    const user = await User.findById(userId);
-    if (!user) throw new Error('Usuario no encontrado');
-    return user.inventory;
+    const expiringItems = await InventoryItem.find({
+        user: userId,
+        expirationDate: { $lte: threshold }
+    });
+
+    for (const item of expiringItems) {
+        const daysToExpire = Math.ceil(
+            (item.expirationDate - Date.now()) / (1000 * 60 * 60 * 24)
+        );
+
+        await Notification.create({
+            user: userId,
+            type: 'expiration',
+            message: `${item.itemName} expires in ${daysToExpire} days`,
+            relatedItem: item._id
+        });
+    }
 };
 
-export const addItem = async (userId, itemData) => {
-    const user = await User.findById(userId);
-    if (!user) throw new Error('Usuario no encontrado');
+const checkLowStock = async (userId, threshold = 3) => {
+    const lowStockItems = await InventoryItem.find({
+        user: userId,
+        quantity: { $lte: threshold }
+    });
 
-    const newItem = await user.addInventoryItem(itemData);
-    user.checkExpirations();
-    user.checkLowStock();
-    return newItem;
+    for (const item of lowStockItems) {
+        await Notification.create({
+            user: userId,
+            type: 'low-stock',
+            message: `${item.itemName} is low (${item.quantity} remaining)`,
+            relatedItem: item._id
+        });
+    }
 };
 
-export const updateItem = async (userId, itemId, updates) => {
-    const user = await User.findById(userId);
-    if (!user) throw new Error('Usuario no encontrado');
-
-    const updatedItem = await user.updateInventoryItem(itemId, updates);
-    user.checkExpirations();
-    user.checkLowStock();
-    return updatedItem;
-};
-
-export const removeItem = async (userId, itemId) => {
-    const user = await User.findById(userId);
-    if (!user) throw new Error('Usuario no encontrado');
-    return user.removeInventoryItem(itemId);
-};
-
-export const getRecipes = async (userId) => {
-    const user = await User.findById(userId);
-    if (!user) throw new Error('Usuario no encontrado');
-
-    const ingredients = user.inventory
-        .map(item => item.itemName.toLowerCase())
-        .join(',');
-
+export const createItem = async (req, res, next) => {
     try {
+        const item = await InventoryItem.create({
+            ...req.body,
+            user: req.user.id
+        });
+
+        await User.findByIdAndUpdate(req.user.id, {
+            $push: { inventory: item._id }
+        });
+
+        // Trigger checks
+        await checkExpiringItems(req.user.id);
+        await checkLowStock(req.user.id);
+
+        res.status(201).json({ success: true, item });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getItems = async (req, res, next) => {
+    try {
+        const items = await InventoryItem.find({ user: req.user.id })
+            .sort('-addedDate')
+            .populate('user', 'fullName email');
+
+        res.json({ success: true, count: items.length, items });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getItem = async (req, res, next) => {
+    try {
+        const item = await InventoryItem.findOne({
+            _id: req.params.id,
+            user: req.user.id
+        }).populate('user', 'fullName email');
+
+        if (!item) {
+            return res.status(404).json({
+                success: false,
+                message: 'Producto no encontrado'
+            });
+        }
+
+        res.json({ success: true, item });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const updateItem = async (req, res, next) => {
+    try {
+        const item = await InventoryItem.findOneAndUpdate(
+            { _id: req.params.id, user: req.user.id },
+            req.body,
+            { new: true, runValidators: true }
+        );
+
+        if (!item) {
+            return res.status(404).json({
+                success: false,
+                message: 'Producto no encontrado'
+            });
+        }
+
+        // Trigger checks
+        await checkExpiringItems(req.user.id);
+        await checkLowStock(req.user.id);
+
+        res.json({ success: true, item });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const deleteItem = async (req, res, next) => {
+    try {
+        const item = await InventoryItem.findOneAndDelete({
+            _id: req.params.id,
+            user: req.user.id
+        });
+
+        if (!item) {
+            return res.status(404).json({
+                success: false,
+                message: 'Producto no encontrado'
+            });
+        }
+
+        await User.findByIdAndUpdate(req.user.id, {
+            $pull: { inventory: item._id }
+        });
+
+        res.json({
+            success: true,
+            message: 'Producto eliminado'
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getRecipeSuggestions = async (req, res, next) => {
+    try {
+        const items = await InventoryItem.find({ user: req.user.id });
+        const ingredients = items.map(item => item.itemName.toLowerCase()).join(',');
+
         const response = await axios.get('https://api.spoonacular.com/recipes/findByIngredients', {
             params: {
                 ingredients,
-                apiKey: process.env.SPOONACULAR_API_KEY,
-                number: 5
+                number: 5,
+                apiKey: process.env.SPOONACULAR_API_KEY
             }
         });
 
-        return response.data.map(recipe => ({
+        const recipes = response.data.map(recipe => ({
             id: recipe.id,
             title: recipe.title,
             image: recipe.image,
             usedIngredients: recipe.usedIngredients,
             missingIngredients: recipe.missedIngredients
         }));
+
+        res.json({
+            success: true,
+            count: recipes.length, recipes
+        });
     } catch (error) {
-        throw new Error('Failed to fetch recipes: ' + error.message);
+        next(error);
     }
-};
-
-export const getNotifications = async (userId) => {
-    const user = await User.findById(userId);
-    if (!user) throw new Error('Usuario no encontrado');
-    return user.notifications.filter(n => !n.read);
-};
-
-export const markNotificationRead = async (userId, notificationId) => {
-    const user = await User.findById(userId);
-    if (!user) throw new Error('Usuario no encontrado');
-
-    const notification = user.notifications.id(notificationId);
-    if (!notification) throw new Error('Notification not found');
-
-    notification.read = true;
-    await user.save();
-    return notification;
 };
