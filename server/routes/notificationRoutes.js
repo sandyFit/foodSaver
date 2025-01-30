@@ -4,15 +4,17 @@ import {
     markAsRead,
     deleteNotification
 } from '../controllers/notificationsController.js';
+import { authenticateUser } from '../middleware/authMiddleware.js'; 
 
 const router = express.Router();
+router.use(authenticateUser);
 
 router.route('/notifications')
-    .get(protect, getNotifications);
+    .get(getNotifications);
 
 router.route('/notifications/:id')
-    .put(protect, markAsRead)
-    .delete(protect, deleteNotification);
+    .put(markAsRead)
+    .delete(deleteNotification);
 
 export default router;
 

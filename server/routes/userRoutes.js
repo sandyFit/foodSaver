@@ -6,8 +6,7 @@ import {
     getUserInfo,
     updateUser,
     deleteUser,
-    updateInventory,
-    triggerNotifications
+    deleteUserAdmin
 } from '../controllers/userController.js';
 import { validateRegisterUser, validateLogin } from '../validators/userValidator.js';
 import { authenticateUser } from '../middleware/authMiddleware.js';
@@ -79,7 +78,8 @@ const router = express.Router();
  *                   type: string
  *                   example: "An unexpected error occurred. Please try again later."
  */
-router.post('/users-register', validateRegisterUser, registerUser);
+router.route('/users-register')
+    .post(validateRegisterUser, registerUser);
 
 /**
  * @swagger
@@ -156,7 +156,8 @@ router.post('/users-register', validateRegisterUser, registerUser);
  *                   example: "An unexpected error occurred. Please try again later."
  */
 
-router.post('/users-login', validateLogin, login);
+router.route('/users-login')
+    .post(validateLogin, login);
 
 /**
  * @swagger
@@ -199,7 +200,9 @@ router.post('/users-login', validateLogin, login);
  *                   type: string
  *                   example: "An unexpected error occurred. Please try again later."
  */
-router.get('/users-getAll', getAllUsers);
+// Get all users (Admin only)
+router.route('/users-getAll')
+    .get(authenticateUser, authorize('admin'), getAllUsers);
 
 /**
  * @swagger
@@ -258,7 +261,8 @@ router.get('/users-getAll', getAllUsers);
  *                   type: string
  *                   example: "An unexpected error occurred. Please try again later."
  */
-router.post('/users-getUserInfo/:id', authenticateUser, getUserInfo);
+router.route('/users-getUserInfo/:id')
+    .post(authenticateUser, authorize('admin'), getUserInfo);
 
 /**
  * @swagger
@@ -334,7 +338,8 @@ router.post('/users-getUserInfo/:id', authenticateUser, getUserInfo);
  *                   type: string
  *                   example: "An unexpected error occurred. Please try again later."
  */
-router.put('/users-update/:id', updateUser);
+router.route('/users-update/:id')
+    .put(authenticateUser, updateUser);
 
 /**
  * @swagger
@@ -377,192 +382,10 @@ router.put('/users-update/:id', updateUser);
  *                   example: "An unexpected error occurred. Please try again later."
  */
 
-/**
- * @swagger
- * /users-delete/{id}:
- *   delete:
- *     summary: Delete a user by ID
- *     description: Deletes a user from the system by their unique ID.
- *     tags:
- *       - users
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Unique identifier of the user to delete.
- *         example: "61d2f8f5f4d4b1e0c3a5a789"
- *     responses:
- *       204:
- *         description: User deleted successfully. No content is returned.
- *       404:
- *         description: User not found. This response is returned if the user ID does not exist.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "User not found."
- *       500:
- *         description: Internal Server Error. This response is returned if something goes wrong on the server side.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "An unexpected error occurred. Please try again later."
- */
-router.delete('/users-delete/:id', deleteUser);
+router.route('/users-delete/:id')
+    .delete(authenticateUser, deleteUser);
 
-
-/**
- * @swagger
- * /api/users/{id}/inventory:
- *   post:
- *     summary: Update a user's inventory
- *     description: Updates the inventory for a user identified by their unique ID.
- *     tags:
- *       - users
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Unique identifier of the user whose inventory is to be updated.
- *         example: "61d2f8f5f4d4b1e0c3a5a789"
- *       - in: body
- *         name: inventory
- *         required: true
- *         description: The updated inventory data for the user.
- *         schema:
- *           type: object
- *           properties:
- *             items:
- *               type: array
- *               items:
- *                 type: string
- *               description: List of item names in the inventory.
- *               example: ["item1", "item2", "item3"]
- *             quantity:
- *               type: object
- *               additionalProperties:
- *                 type: integer
- *               description: Quantity of each item in the inventory.
- *               example: {"item1": 10, "item2": 5}
- *     responses:
- *       200:
- *         description: Successfully updated the user's inventory.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Inventory updated successfully."
- *       400:
- *         description: Bad request. This response is returned if the input data is invalid or incomplete.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Invalid input data."
- *       404:
- *         description: User not found. This response is returned if the user ID does not exist.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "User not found."
- *       500:
- *         description: Internal Server Error. This response is returned if something goes wrong on the server side.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "An unexpected error occurred. Please try again later."
- */
-router.post('/users/:id/inventory', updateInventory);
-
-/**
- * @swagger
- * /api/users/{id}/notifications:
- *   get:
- *     summary: Trigger notifications for a user
- *     description: Retrieves and triggers notifications for a user, including notifications about expiring items and low stock levels.
- *     tags:
- *       - users
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Unique identifier of the user for whom the notifications are being triggered.
- *         example: "61d2f8f5f4d4b1e0c3a5a789"
- *     responses:
- *       200:
- *         description: Successfully triggered notifications for the user.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 unseenNotifications:
- *                   type: array
- *                   items:
- *                     type: string
- *                   description: List of notifications the user has not seen yet.
- *                   example: 
- *                     - "The item 'Milk' is expiring in 3 day(s)."
- *                     - "The item 'Eggs' is running low on stock (only 2 left)."
- *       400:
- *         description: Bad request. This response is returned if the user ID is invalid or missing.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Invalid user ID."
- *       404:
- *         description: User not found. This response is returned if the user ID does not exist in the system.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "User not found."
- *       500:
- *         description: Internal server error. This response is returned if something goes wrong on the server side.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "An unexpected error occurred. Please try again later."
- */
-
-router.get('/users/:id/notifications', triggerNotifications);
+router.route('/admin/users/:id')
+    .delete(authenticateUser, authorize('admin'), deleteUserAdmin);
 
 export default router;

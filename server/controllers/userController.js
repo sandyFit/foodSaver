@@ -1,7 +1,6 @@
 import User from '../models/User.js';
 import InventoryItem from '../models/InventoryItem.js';
 import Notification from '../models/Notification.js';
-import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 
 export const registerUser = async (req, res, next) => {
@@ -150,6 +149,10 @@ export const getAllUsers = async (req, res) => {
 
 export const getUserInfo = async (req, res) => {
     const { id } = req.params;
+
+    if (req.user.role !== 'admin' && req.params.id !== req.user.id) {
+        return res.status(403).json({ message: 'Unauthorized access' });
+    }
     try {
         const user = await User.findById(id);
 
@@ -177,9 +180,44 @@ export const deleteUser = async (req, res, next) => {
         await InventoryItem.deleteMany({ user: user._id });
         await Notification.deleteMany({ user: user._id });
 
-        res.json({ success: true, message: 'User account deleted' });
+        res.json({
+            success: true,
+            message: 'Cuenta eliminada'
+        });
     } catch (error) {
         next(error);
+    }
+};
+
+// Delete user Admin
+export const deleteUserAdmin = async (req, res) => {
+    // Example check in getUserInfo
+    if (req.user.role !== 'admin' && req.params.id !== req.user.id) {
+        return res.status(403).json({ message: 'Unauthorized access' });
+    }
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'Usuario no encontrado'
+            });
+        }
+
+        // Cleanup related data
+        await InventoryItem.deleteMany({ user: user._id });
+        await Notification.deleteMany({ user: user._id });
+
+        res.json({
+            success: true,
+            message: 'Cuenta eliminada por el admin'
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error interno en el servidor',
+            details: error.message
+        });
     }
 };
 
@@ -199,7 +237,10 @@ export const requestPasswordReset = async (req, res, next) => {
         // Implement email sending logic here
         console.log(`Password reset token: ${resetToken}`);
 
-        res.json({ success: true, message: 'Password reset email sent' });
+        res.json({
+            success: true,
+            message: 'Hemos reestablecido tu contraseña. Revisa tu bandeja de entrada para crear una nueva.'
+        });
     } catch (error) {
         next(error);
     }
@@ -218,7 +259,10 @@ export const resetPassword = async (req, res, next) => {
         });
 
         if (!user) {
-            return res.status(400).json({ success: false, message: 'Invalid or expired token' });
+            return res.status(400).json({
+                success: false,
+                message: 'El token no es válido o ha expirado'
+            });
         }
 
         user.password = req.body.password;
@@ -231,7 +275,7 @@ export const resetPassword = async (req, res, next) => {
         res.json({
             success: true,
             token,
-            message: 'Password updated successfully'
+            message: 'Tu contraseña se ha actualizado correctamente. ¡Ya puedes acceder a tu cuenta!'
         });
     } catch (error) {
         next(error);
