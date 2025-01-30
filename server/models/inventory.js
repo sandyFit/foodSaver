@@ -7,13 +7,11 @@ const inventoryItemSchema = new mongoose.Schema(
             ref: 'User',
             required: true
         },
-
         itemName: {
             type: String,
             required: [true, 'Ingrese el nombre del producto'],
             trim: true
         },
-
         quantity: {
             type: Number,
             required: true,
@@ -32,30 +30,11 @@ const inventoryItemSchema = new mongoose.Schema(
             type: Date,
             default: Date.now
         },
-
     },
     { timestamps: true }
 );
 
-// Inventory methods
-userSchema.methods.addInventoryItem = function (item) {
-    this.inventory.push(item);
-    return this.save();
-};
-
-userSchema.methods.updateInventoryItem = function (itemId, updates) {
-    const item = this.inventory.id(itemId);
-    if (!item) throw new Error('Item not found');
-    item.set(updates);
-    return this.save();
-};
-
-userSchema.methods.removeInventoryItem = function (itemId) {
-    this.inventory.pull(itemId);
-    return this.save();
-};
-
-// Expiration check method
+// Expiration check method (correctly added to inventoryItemSchema)
 inventoryItemSchema.methods.checkExpiration = function () {
     const daysToExpire = Math.ceil(
         (this.expirationDate - Date.now()) / (1000 * 60 * 60 * 24)
@@ -63,6 +42,7 @@ inventoryItemSchema.methods.checkExpiration = function () {
     return daysToExpire <= 7 ? daysToExpire : null;
 };
 
+// The inventory management methods should be in the User model
 
 
-export default mongoose.model('InventoryItem', inventorySchema);
+export default mongoose.model('InventoryItem', inventoryItemSchema);

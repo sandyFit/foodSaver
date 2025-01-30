@@ -1,6 +1,6 @@
-import User from '../models/User.js';
-import InventoryItem from '../models/InventoryItem.js';
-import Notification from '../models/Notification.js';
+import User from '../models/users.js';
+import InventoryItem from '../models/inventory.js';
+import Notification from '../models/notifications.js';
 import crypto from 'crypto';
 
 export const registerUser = async (req, res, next) => {

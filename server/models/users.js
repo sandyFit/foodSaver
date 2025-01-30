@@ -84,6 +84,24 @@ userSchema.methods.comparePass = async function (passData) {
 
 console.log('JWT_EXPIRE_TIME:', process.env.JWT_EXPIRE_TIME);
 
+// In User.js
+userSchema.methods.addInventoryItem = function (item) {
+    this.inventory.push(item);
+    return this.save();
+};
+
+userSchema.methods.updateInventoryItem = function (itemId, updates) {
+    const item = this.inventory.id(itemId);
+    if (!item) throw new Error('Item not found');
+    item.set(updates);
+    return this.save();
+};
+
+userSchema.methods.removeInventoryItem = function (itemId) {
+    this.inventory.pull(itemId);
+    return this.save();
+};
+
 // Return a JWT token
 userSchema.methods.getJwtToken = function () {
     return jwt.sign(
@@ -126,6 +144,7 @@ userSchema.methods.notifyLowInventory = function () {
 
     return this.save();
 };
+
 
 
 // Create and export the User model
