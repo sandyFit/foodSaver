@@ -1,7 +1,6 @@
 import InventoryItem from '../models/inventory.js';
-import User from '../models/User.js';
+import User from '../models/users.js';
 import Notification from '../models/notifications.js';
-import axios from 'axios';
 
 const checkExpiringItems = async (userId) => {
     const threshold = new Date();

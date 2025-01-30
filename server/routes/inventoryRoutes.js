@@ -6,21 +6,23 @@ import {
     updateItem,
     deleteItem
 
-} from '../controllers/inventoryController';
+} from '../controllers/inventoryController.js';
+import { authenticateUser } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 
 router.route('/inventory')
-    .get(protect, getItems)
-    .post(protect, createItem);
+    .post(authenticateUser, createItem) 
+    .get(authenticateUser, getItems);
 
 router.route('/inventory/:id')
-    .get(protect, getItem)
-    .put(protect, updateItem)
-    .delete(protect, deleteItem);
+    .get(authenticateUser, getItem)
+    .put(authenticateUser, updateItem)
+    .delete(authenticateUser, deleteItem);
 
-router.get('/recipes', protect, getRecipeSuggestions);
+
+//router.get('/recipes', authenticateUser, getRecipeSuggestions);
 
 
 export default router;
