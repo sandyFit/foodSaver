@@ -6,6 +6,7 @@ import itemRoutes from './routes/itemRoutes.js';
 import recipeRoutes from './routes/recipeRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import inventoryRoutes from './routes/inventoryRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
@@ -31,6 +32,7 @@ app.use('/api', itemRoutes);
 app.use('/api', recipeRoutes);
 app.use('/api', userRoutes);
 app.use('/api', inventoryRoutes);
+app.use('/api', notificationRoutes);
 
 app._router.stack.forEach((middleware) => {
     if (middleware.route) {

@@ -4,10 +4,14 @@ export const getNotifications = async (req, res, next) => {
     try {
         const notifications = await Notifications.find({ user: req.user.id })
             .sort('-createdAt')
-            .populate('relatedItem', 'itemName category')
+            .populate('item', 'itemName category')  // Changed from 'relatedItem' to 'item'
             .populate('user', 'fullName email');
 
-        res.json({ success: true, count: notifications.length, notifications });
+        res.json({
+            success: true,
+            count: notifications.length,
+            notifications
+        });
     } catch (error) {
         next(error);
     }
@@ -22,10 +26,16 @@ export const markAsRead = async (req, res, next) => {
         );
 
         if (!notification) {
-            return res.status(404).json({ success: false, message: 'Notification not found' });
+            return res.status(404).json({
+                success: false,
+                message: 'Notification not found'
+            });
         }
 
-        res.json({ success: true, notification });
+        res.json({
+            success: true,
+            notification
+        });
     } catch (error) {
         next(error);
     }
