@@ -345,7 +345,7 @@ router.route('/users-getUserInfo/:id')
  *                   type: string
  *                   example: "An unexpected error occurred. Please try again later."
  */
-router.route('/users-update/:id')
+router.route('/users-updateProfile/:id')
     .put(authenticateUser, updateProfile);
 
 /**

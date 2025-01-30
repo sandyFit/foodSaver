@@ -19,8 +19,8 @@ const checkExpiringItems = async (userId) => {
 
         await Notification.create({
             user: userId,
-            type: 'expiration',
-            message: `${item.itemName} expires in ${daysToExpire} days`,
+            type: 'caducado',
+            message: `${item.itemName} expira en ${daysToExpire} días`,
             relatedItem: item._id
         });
     }
@@ -35,8 +35,8 @@ const checkLowStock = async (userId, threshold = 3) => {
     for (const item of lowStockItems) {
         await Notification.create({
             user: userId,
-            type: 'low-stock',
-            message: `${item.itemName} is low (${item.quantity} remaining)`,
+            type: 'pocas existencias',
+            message: `${item.itemName}: solo quedan (${item.quantity})`,
             relatedItem: item._id
         });
     }
@@ -57,7 +57,10 @@ export const createItem = async (req, res, next) => {
         await checkExpiringItems(req.user.id);
         await checkLowStock(req.user.id);
 
-        res.status(201).json({ success: true, item });
+        res.status(201).json({
+            uccess: true,
+            item
+        });
     } catch (error) {
         next(error);
     }

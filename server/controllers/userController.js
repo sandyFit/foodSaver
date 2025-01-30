@@ -49,7 +49,7 @@ export const loginUser = async (req, res, next) => {
             });
         };      
 
-        const isMatch = await user.comparePassword(password);
+        const isMatch = await user.comparePass(password);
         if (!isMatch) {
             return res.status(401).json({
                 success: false,
@@ -124,6 +124,12 @@ export const updateProfile = async (req, res, next) => {
             runValidators: true
         }).select('-password');
 
+        if (!user) {
+            res.status(404).json({
+                error: 'El usuario no se encuentra en la base de datos',
+            });
+        }
+
         res.json({
             success: true,
             user
@@ -158,7 +164,7 @@ export const getUserInfo = async (req, res) => {
 
         if (!user) {
             res.status(404).json({
-                error: 'El usuario no se encuentra en la basse de datos',
+                error: 'El usuario no se encuentra en la base de datos',
             });
         }
         res.status(200).json(user);
