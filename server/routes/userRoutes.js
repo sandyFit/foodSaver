@@ -1,15 +1,18 @@
 import express from 'express';
 import {
     registerUser,
-    login,
+    loginUser,
+    getUserProfile,
     getAllUsers,
     getUserInfo,
-    updateUser,
+    updateProfile,
     deleteUser,
-    deleteUserAdmin
+    deleteUserAdmin,
+    requestPasswordReset,
+    resetPassword,
 } from '../controllers/userController.js';
 import { validateRegisterUser, validateLogin } from '../validators/userValidator.js';
-import { authenticateUser } from '../middleware/authMiddleware.js';
+import { authenticateUser, authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -157,7 +160,11 @@ router.route('/users-register')
  */
 
 router.route('/users-login')
-    .post(validateLogin, login);
+    .post(validateLogin, loginUser);
+
+
+router.route('/users-getProfile/:id')
+    .get(authenticateUser, getUserProfile);
 
 /**
  * @swagger
@@ -339,7 +346,7 @@ router.route('/users-getUserInfo/:id')
  *                   example: "An unexpected error occurred. Please try again later."
  */
 router.route('/users-update/:id')
-    .put(authenticateUser, updateUser);
+    .put(authenticateUser, updateProfile);
 
 /**
  * @swagger
@@ -385,7 +392,15 @@ router.route('/users-update/:id')
 router.route('/users-delete/:id')
     .delete(authenticateUser, deleteUser);
 
-router.route('/admin/users/:id')
+router.route('/users/admin/:id')
     .delete(authenticateUser, authorize('admin'), deleteUserAdmin);
+
+// Password reset request (no auth needed)
+router.post('/forgot-password', requestPasswordReset);
+
+// Password reset execution (no auth needed)
+router.put('/reset-password/:resetToken', resetPassword);
+
+
 
 export default router;

@@ -94,7 +94,7 @@ userSchema.methods.getJwtToken = function () {
 };
 
 // Generate a reset password token
-userSchema.methods.genResetPasswordToken = function () {
+userSchema.methods.getResetPasswordToken = function () {
     const resetToken = crypto.randomBytes(20).toString('hex');
     this.resetPasswordToken = crypto
         .createHash('sha256')

@@ -221,7 +221,7 @@ export const deleteUserAdmin = async (req, res) => {
     }
 };
 
-export const requestPasswordReset = async (req, res, next) => {
+export const requestPasswordReset = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
@@ -230,21 +230,24 @@ export const requestPasswordReset = async (req, res, next) => {
                 message: 'Usuario no encontrado'
             });
         }
-
         const resetToken = user.getResetPasswordToken();
         await user.save({ validateBeforeSave: false });
 
-        // Implement email sending logic here
+        // Send email with reset URL
+        const resetURL = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
+        await new Email(user, resetURL).sendPasswordReset();
+
         console.log(`Password reset token: ${resetToken}`);
 
         res.json({
             success: true,
-            message: 'Hemos reestablecido tu contraseña. Revisa tu bandeja de entrada para crear una nueva.'
+            message: 'Hemos reestablecido tu contraseña. Revisa tu correo electrónico para crear una nueva.'
         });
     } catch (error) {
         next(error);
     }
 };
+ 
 
 export const resetPassword = async (req, res, next) => {
     try {
