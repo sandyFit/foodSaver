@@ -162,6 +162,46 @@ router.route('/users-register')
 router.route('/users-login')
     .post(validateLogin, loginUser);
 
+/**
+ * @swagger
+ * /users-getProfile/{id}:
+ *   get:
+ *     summary: Retrieve user profile
+ *     description: Fetches the profile details of a specific user by their unique ID. The user must be authenticated.
+ *     tags:
+ *       - users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique identifier of the user whose profile is being retrieved.
+ *         example: "61d2f8f5f4d4b1e0c3a5a789"
+ *     responses:
+ *       200:
+ *         description: User profile retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   example: "61d2f8f5f4d4b1e0c3a5a789"
+ *                 fullName:
+ *                   type: string
+ *                   example: John Doe
+ *                 email:
+ *                   type: string
+ *                   example: john@doe.com
+ *       401:
+ *         description: Unauthorized. User must be authenticated.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal Server Error.
+ */
 
 router.route('/users-getProfile/:id')
     .get(authenticateUser, getUserProfile);
@@ -392,11 +432,109 @@ router.route('/users-updateProfile/:id')
 router.route('/users-delete/:id')
     .delete(authenticateUser, deleteUser);
 
+/**
+ * @swagger
+ * /users-deleteAdmin/{id}:
+ *   delete:
+ *     summary: Delete a user (Admin only)
+ *     description: Deletes a user from the system by their unique ID. Only admins can perform this action.
+ *     tags:
+ *       - users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique identifier of the user to delete.
+ *         example: "61d2f8f5f4d4b1e0c3a5a789"
+ *     responses:
+ *       204:
+ *         description: User deleted successfully. No content is returned.
+ *       401:
+ *         description: Unauthorized. Only admins can perform this action.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
 router.route('/users/admin/:id')
     .delete(authenticateUser, authorize('admin'), deleteUserAdmin);
 
+
+/**
+ * @swagger
+ * /users-requestPasswordReset:
+ *   post:
+ *     summary: Request password reset
+ *     description: Sends a password reset link to the user's email.
+ *     tags:
+ *       - users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: User's registered email address.
+ *                 example: john@doe.com
+ *     responses:
+ *       200:
+ *         description: Password reset request successful. Check your email for reset instructions.
+ *       400:
+ *         description: Bad request. Invalid email format or missing email.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
 // Password reset request (no auth needed)
 router.post('/forgot-password', requestPasswordReset);
+
+
+/**
+ * @swagger
+ * /users-resetPassword:
+ *   post:
+ *     summary: Reset password
+ *     description: Allows users to reset their password using a valid reset token.
+ *     tags:
+ *       - users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - token
+ *               - newPassword
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: The password reset token received via email.
+ *                 example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *               newPassword:
+ *                 type: string
+ *                 format: password
+ *                 description: The new password to set.
+ *                 example: "NewSecurePass!123"
+ *     responses:
+ *       200:
+ *         description: Password reset successful.
+ *       400:
+ *         description: Bad request. Invalid token or weak password.
+ *       401:
+ *         description: Unauthorized. Invalid or expired token.
+ *       500:
+ *         description: Internal Server Error.
+ */
 
 // Password reset execution (no auth needed)
 router.put('/reset-password/:resetToken', resetPassword);
