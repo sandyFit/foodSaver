@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 import {
     reducer,
     SET_LOADING,
-    SET_ALL_FOODITEMS,
+    SET_ALL_INVENTORY_ITEMS,
     SET_ALL_USERS,
     SET_USER,
     SET_ERROR,
@@ -13,8 +13,8 @@ import {
 
 
 export const initialState = {
-    allFoodItems: [],
-    foodItem: {},
+    allInventoryItems: [],
+    inventoryItem: {},
     allRecipes: [],
     recipe: {},
     suggestedRecipes: [],
@@ -30,7 +30,7 @@ const BASE_URL = 'http://localhost:5555/api';
 
 export const ContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const { allFoodItems, allUsers, loading, error } = state;
+    const { allInventoryItems, allUsers, loading, error } = state;
 
     // Helper function for API requests
     const apiRequest = async (url, method = 'GET', data = null) => {
@@ -56,26 +56,26 @@ export const ContextProvider = ({ children }) => {
     };
 
 
-    // Fetch all meals
-    const getAllMeals = async () => {
+    // Fetch all inventory items
+    const getAllInventoryItems = async () => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const data = await apiRequest('get-foodItems');
-            dispatch({ type: SET_ALL_FOODITEMS, payload: data });
+            const data = await apiRequest('inventory');
+            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: data });
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
     };
 
-    // Add a food item
-    const addFoodItem = async (formData) => {
+    // Create an inventory item
+    const createInventoryItem = async (formData) => {
         // console.log('FormData enviado:', formData);
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const data = await apiRequest('add-foodItem', 'POST', formData);
+            const data = await apiRequest('inventory', 'POST', formData);
             if (data.message === 'Alimento agregado exitosamente') {
                 toast.success('Producto registrado con éxito');
-                getAllMeals();
+                getAllInventoryItems();
             } else {
                 toast.error(`Error al registrar el producto: ${data.message}`);
             }
@@ -84,19 +84,19 @@ export const ContextProvider = ({ children }) => {
         }
     };
 
-    // Update a meal
-    const updateMeal = async (id, updatedData) => {
+    // Update an inventory item
+    const updateInventoryItem = async (id, updatedData) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const updatedMeal = await apiRequest(`update-foodItem/${id}`, 'PUT', updatedData);
+            const updatedItem = await apiRequest(`inventory/${id}`, 'PUT', updatedData);
             dispatch({
-                type: SET_ALL_FOODITEMS,
-                payload: allFoodItems.map((meal) =>
-                    meal._id === id ? { ...meal, ...updatedMeal } : meal
+                type: SET_ALL_INVENTORY_ITEMS,
+                payload: allInventoryItems.map((item) =>
+                    item._id === id ? { ...item, ...updatedItem } : item
                 ),
             });
 
-            getAllMeals();
+            getAllInventoryItems();
             toast.success('Producto actualizado correctamente.');
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
@@ -104,13 +104,13 @@ export const ContextProvider = ({ children }) => {
     };
 
 
-    // Delete a meal
-    const deleteMeal = async (id) => {
+    // Delete an inventory item
+    const deleteInventoryItem = async (id) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            await apiRequest(`delete-foodItem/${id}`, 'DELETE');
-            const filteredMeals = allFoodItems.filter((meal) => meal._id !== id);
-            dispatch({ type: SET_ALL_FOODITEMS, payload: filteredMeals });
+            await apiRequest(`inventory/${id}`, 'DELETE');
+            const filteredItems = allInventoryItems.filter((item) => item._id !== id);
+            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: filteredItems });
             toast.success('Producto eliminado.');
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
@@ -202,10 +202,10 @@ export const ContextProvider = ({ children }) => {
         }
     };
 
-    const updateUser = async (id, updatedData) => {
+    const updateUserProfile = async (id, updatedData) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const updatedUser = await apiRequest(`users-update/${id}`, 'PUT', updatedData);
+            const updatedUser = await apiRequest(`users-updateProfile/${id}`, 'PUT', updatedData);
             dispatch({
                 type: SET_ALL_USERS,
                 payload: allUsers.map((user) =>
@@ -225,7 +225,7 @@ export const ContextProvider = ({ children }) => {
         try {
             await apiRequest(`users-delete/${id}`, 'DELETE');
             const filteredUser = allUsers.filter((user) => user._id !== id);
-            dispatch({ type: SET_ALL_FOODITEMS, payload: filteredUser });
+            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: filteredUser });
             toast.success('Usuario eliminado.');
             getAllUsers();
         } finally {
@@ -236,7 +236,7 @@ export const ContextProvider = ({ children }) => {
 
     // Fetch data on load
     useEffect(() => {
-        getAllMeals();
+        getAllInventoryItems();
         getAllUsers();
     }, []);
 
@@ -253,17 +253,17 @@ export const ContextProvider = ({ children }) => {
     // Context value
     const contextValue = {
         ...state,
-        allFoodItems,
-        getAllMeals,
-        addFoodItem,
-        updateMeal,
-        deleteMeal,
+        allInventoryItems,
+        getAllInventoryItems,
+        createInventoryItem,
+        updateInventoryItem,
+        deleteInventoryItem,
         registerUser,
         login,
         allUsers,
         getAllUsers,
         getUserInfo,
-        updateUser,
+        updateUserProfile,
         deleteUser,
         loading,
         error,

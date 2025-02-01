@@ -1,6 +1,6 @@
-export const ADD_FOODITEM = 'ADD_FOODITEM';
-export const SET_ALL_FOODITEMS = 'SET_ALL_FOODITEMS';
-export const SET_FOODITEM = 'SET_FOODITEM';
+export const ADD_INVENTORY_ITEM = 'ADD_INVENTORY_ITEM';
+export const SET_ALL_INVENTORY_ITEMS = 'SET_ALL_INVENTORY_ITEMS';
+export const SET_INVENTORY_ITEM = 'SET_INVENTORY_ITEM';
 export const REGISTER_USER = 'REGISTER_USER';
 export const SET_ALL_USERS = 'SET_ALL_USERS';
 export const SET_USER = 'SET_USER';
@@ -14,12 +14,12 @@ export const SET_LOADING = 'SET_LOADING';
 
 export const reducer = (state, action) => {
     switch (action.type) {
-        case ADD_FOODITEM:
-            return { ...state, allFoodItems: [...state.allFoodItems, action.payload] };
-        case SET_ALL_FOODITEMS:
-            return { ...state, allFoodItems: action.payload };
-        case SET_FOODITEM:
-            return { ...state, foodItem: action.payload };
+        case ADD_INVENTORY_ITEM:
+            return { ...state, allInventoryItems: [...state.allInventoryItems, action.payload] };
+        case SET_ALL_INVENTORY_ITEMS:
+            return { ...state, allInventoryItems: action.payload };
+        case SET_INVENTORY_ITEM:
+            return { ...state, inventoryItem: action.payload };
         case SET_EXPIRING_MEALS:
 
             return { ...state, expiringMeals: action.payload }; 

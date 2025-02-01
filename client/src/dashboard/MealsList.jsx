@@ -6,10 +6,10 @@ import toast from 'react-hot-toast';
 
 const MealsList = () => {
     const {
-        addFoodItem,
-        updateMeal,
-        deleteMeal,
-        allFoodItems,
+        createInventoryItem,
+        updateInventoryItem,
+        deleteInventoryItem,
+        allInventoryItems,
         loading,
     } = useContext(ContextGlobal);
 
@@ -20,7 +20,7 @@ const MealsList = () => {
         quantity: 1,
     }));
 
-    const [editingMeal, setEditingMeal] = useState(null);
+    const [editingItem, setEditingItem] = useState(null);
     const [updatedData, setUpdatedData] = useState({
         itemName: '',
         expirationDate: '',
@@ -38,13 +38,13 @@ const MealsList = () => {
         }));
     };
 
-    const handleEditClick = (meal) => {
-        setEditingMeal(meal);
+    const handleEditClick = (item) => {
+        setEditingItem(item);
         setUpdatedData({
-            itemName: meal.itemName,
-            expirationDate: meal.expirationDate,
-            category: meal.category,
-            quantity: meal.quantity,
+            itemName: item.itemName,
+            expirationDate: item.expirationDate,
+            category: item.category,
+            quantity: item.quantity,
         });
     };
 
@@ -58,7 +58,7 @@ const MealsList = () => {
 
 
     const handleClose = () => {
-        setEditingMeal(null);
+        setEditingItem(null);
     };
 
     const handleSubmitUpdate = async (e) => {
@@ -70,7 +70,7 @@ const MealsList = () => {
         }
 
         try {
-            await updateMeal(editingMeal._id, updatedData);
+            await updateInventoryItem(editingItem._id, updatedData);
             handleClose(); // Cierra el formulario de edición
         } catch (error) {
             console.error('Error actualizando el producto:', error);
@@ -79,9 +79,9 @@ const MealsList = () => {
     };
 
 
-    const handleDeleteMeal = (mealId) => {
+    const handleDeleteItem = (itemId) => {
         if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-            deleteMeal(mealId);
+            deleteInventoryItem(itemId);
         }
     };
 
@@ -93,7 +93,7 @@ const MealsList = () => {
         }
 
         try {
-            await addFoodItem(formData);
+            await createInventoryItem(formData);
             setFormData({
                 itemName: '',
                 expirationDate: '',
@@ -107,8 +107,8 @@ const MealsList = () => {
     };
 
     useEffect(() => {
-        console.log('Tabla actualizada:', allFoodItems); // Verifica si el estado cambia
-    }, [allFoodItems]);
+        console.log('Tabla actualizada:', allInventoryItems); // Verifica si el estado cambia
+    }, [allInventoryItems]);
 
     return (
         <section className="w-full grid grid-cols-12">
@@ -176,15 +176,15 @@ const MealsList = () => {
                 <div className="w-full col-span-12 flex flex-col items-center mt-6">
                     <h4 className="text-lg font-bold mb-2">Tu Lista de Productos</h4>
                     <MealsTable
-                        meals={allFoodItems}
-                        onHandleDeleteMeal={handleDeleteMeal}
+                        meals={allInventoryItems}
+                        onHandleDeleteMeal={handleDeleteItem}
                         onHandleEditClick={handleEditClick}
                     />
                 </div>
 
                 {/* Formulario de edición */}
                 <div className="w-[90%] col-span-12 mt-6">
-                    {editingMeal && (
+                    {editingItem && (
                         <UpdateForm
                             updatedData={updatedData}
                             onHandleUpdateChange={handleUpdateChange}
