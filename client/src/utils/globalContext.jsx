@@ -35,26 +35,33 @@ export const ContextProvider = ({ children }) => {
     // Helper function for API requests
     const apiRequest = async (url, method = 'GET', data = null) => {
         try {
+            const token = localStorage.getItem('token');
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` })
+            };
+
             const config = {
                 method,
                 url: `${BASE_URL}/${url}`,
-                headers: { 'Content-Type': 'application/json' },
+                headers,
+                withCredentials: true // For cookies if used
             };
 
-            if (data !== null) {
-                config.data = data;
-            }
+            if (data) config.data = data;
 
+            console.log('Sending API request with config:', config); // Debugging
             const response = await axios(config);
-            // console.log('API Response:', response);  // Log the full response to debug
-            return response.data;  // Make sure this is the expected structure
+            console.log('API response:', response); // Debugging
+
+            return response.data;
         } catch (error) {
+            console.error('API Request Error:', error); // Debugging
             dispatch({ type: SET_ERROR, payload: error.message });
             toast.error(error.message || 'An error occurred.');
-            throw error;
+            throw error; // Ensure the error is thrown so it can be caught in the calling function
         }
     };
-
 
     // Fetch all inventory items
     const getAllInventoryItems = async () => {
@@ -138,31 +145,30 @@ export const ContextProvider = ({ children }) => {
     const login = async (formData) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const data = await apiRequest('users-login',
-                'POST',
-                formData,
-                { withCredentials: true }
-            );
-            console.log("Datos de la respuesta:", data); 
+            console.log('Sending login request with data:', formData); // Debugging
+            const response = await apiRequest('users-login', 'POST', formData);
+            console.log('Login response:', response); // Debugging
 
-            if (data.message === 'Login Correcto' && data.token) {  // Ensure data and token exist before proceeding
-                toast.success(`Bienvenid@, ${data.user.fullName}!`,  // Show a success message using toast
-                    { duration: 4000 }
-                );
-                console.log("User data:", data); // Log user data for debugging
+            if (response && response.message === 'Login Correcto' && response.token) {
+                // Store token and user data in localStorage
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('user', JSON.stringify(response.user));
 
-                localStorage.setItem('user', JSON.stringify(data.user)); // Store user data in localStorage
-                dispatch({ type: 'SET_USER', payload: data.user });
+                // Update global state
+                dispatch({ type: SET_USER, payload: response.user });
 
-                return data;
+                // Show success message
+                toast.success(`Bienvenid@, ${response.user.fullName}!`, { duration: 4000 });
 
+                // Return the response for the component to use
+                return response;
             } else {
-                toast.error('Error al iniciar sesión: ' + data.message );
+                toast.error('Error al iniciar sesión: ' + (response?.message || 'Respuesta inesperada del servidor'));
                 return null;
             }
         } catch (error) {
-            console.error('Login failed:', error);  // This logs the error to the console
-            toast.error('Login failed: ' + error.message);  // This shows an error message using toast
+            console.error('Login failed:', error); // Debugging
+            toast.error('Login failed: ' + (error.message || 'Error desconocido'));
             return null;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
@@ -172,35 +178,58 @@ export const ContextProvider = ({ children }) => {
     const getAllUsers = async () => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user?.role !== 'admin') {
+                throw new Error('Unauthorized access');
+            }
             const data = await apiRequest('users-getAll');
             dispatch({ type: SET_ALL_USERS, payload: data });
+        } catch (error) {
+            toast.error(error.message);
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
     };
 
     const getUserInfo = async (id) => {
-        dispatch({ type: SET_LOADING, payload: true });
-        try {
-            const token = localStorage.getItem('token');
-            console.log('Token antes de hacer la solicitud:', token);
-
-            const data = await apiRequest(`users-getUserInfo/${id}`,
-                'POST',
-                null, {
-                'Authorization': `Bearer ${localStorage.getItem(token)}`
-            });
-            
-            if (data.message.success) {
-                dispatch({ type: SET_USER, payload: data });
-            }
-            else {
-                toast.error('Error al obtener el usuario');
-            }
-        } finally {
-            dispatch({ type: SET_LOADING, payload: false });
+    dispatch({ type: SET_LOADING, payload: true });
+    try {
+        // Fix token retrieval
+        const data = await apiRequest(`users-getUserInfo/${id}`);
+        
+        if (data.success) { // Match your actual response structure
+            dispatch({ type: SET_USER, payload: data.user });
+        } else {
+            toast.error(data.message || 'Error al obtener el usuario');
         }
-    };
+    } catch (error) {
+        // Handle error
+    } finally {
+        dispatch({ type: SET_LOADING, payload: false });
+    }
+};
+    // const getUserInfo = async (id) => {
+    //     dispatch({ type: SET_LOADING, payload: true });
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         console.log('Token antes de hacer la solicitud:', token);
+
+    //         const data = await apiRequest(`users-getUserInfo/${id}`,
+    //             'POST',
+    //             null, {
+    //             'Authorization': `Bearer ${localStorage.getItem(token)}`
+    //         });
+            
+    //         if (data.message.success) {
+    //             dispatch({ type: SET_USER, payload: data });
+    //         }
+    //         else {
+    //             toast.error('Error al obtener el usuario');
+    //         }
+    //     } finally {
+    //         dispatch({ type: SET_LOADING, payload: false });
+    //     }
+    // };
 
     const updateUserProfile = async (id, updatedData) => {
         dispatch({ type: SET_LOADING, payload: true });
@@ -225,14 +254,16 @@ export const ContextProvider = ({ children }) => {
         try {
             await apiRequest(`users-delete/${id}`, 'DELETE');
             const filteredUser = allUsers.filter((user) => user._id !== id);
-            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: filteredUser });
+            dispatch({ type: SET_ALL_USERS, payload: filteredUsers });
             toast.success('Usuario eliminado.');
             getAllUsers();
+        } catch (error) {
+            toast.error(error.message);
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
-            
         }
-    }
+    };
+    
 
     // Fetch data on load
     useEffect(() => {

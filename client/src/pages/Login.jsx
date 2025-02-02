@@ -30,15 +30,18 @@ const Login = () => {
             // console.log('Datos de Acceso:', data);
 
             if (data && data.token) {  // Ensure data and token exist before proceeding
+                // Clear the form
                 setFormData({
                     email: '',
                     password: ''
                 });
 
+                // Store the token in localStorage
                 localStorage.setItem('token', data.token);
-                console.log("Token guardado:", localStorage.getItem('token'));  // Verifica que el token esté guardado
+                console.log("Token guardado:", localStorage.getItem('token'));  // Debugging
 
-                navigate('/dashboard');  // Navigate to the dashboard
+                // Navigate to the dashboard
+                navigate('/dashboard');  
             } else {
                 toast.error('Error: no se pudo obtener el token.');
             }
