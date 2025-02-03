@@ -14,7 +14,7 @@ import { Toaster } from 'react-hot-toast';
 import { ContextProvider } from './utils/globalContext.jsx'; 
 import Users from './dashboard/Users.jsx';
 import Loader from './components/ui/Loader.jsx';
-
+import PrivateRoute from './dashboard/PrivateRoute.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -23,7 +23,11 @@ createRoot(document.getElementById('root')).render(
         <Toaster containerClassName='toast-container-custom' position="top-center" reverseOrder={false} />
         <Loader/>
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />}>
+          <Route path="/dashboard" element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }>
             <Route index element={<ProtectedHome />} />
             <Route path="meals-users" element={<MealsList />} />
             <Route path="recipes" element={<Recipes />} />

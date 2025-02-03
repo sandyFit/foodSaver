@@ -16,15 +16,17 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const { user, loading } = useContext(ContextGlobal);
 
-    useEffect(() => {
-        if (!user) {
-            const storedUser = localStorage.getItem('user');
-            console.log('Stored user:', storedUser);
-            if (!storedUser) {
-                navigate('/login');
-            }
-        }
-    }, [user, navigate]);
+    // useEffect(() => {
+    //     if (!user) {
+    //         const token = localStorage.getItem('token');
+    //         const storedUser = localStorage.getItem('user');
+    //         console.log('Stored user:', storedUser);
+    //         if (!token || !storedUser) {
+    //             navigate('/login');
+    //             return;
+    //         }
+    //     }
+    // }, [navigate]);
 
     if (loading) {
         return <div>Loading...</div>;

@@ -32,6 +32,7 @@ export const ContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const { allInventoryItems, allUsers, loading, error } = state;
 
+
     // Helper function for API requests
     const apiRequest = async (url, method = 'GET', data = null) => {
         try {
@@ -292,24 +293,30 @@ export const ContextProvider = ({ children }) => {
     }, []);
 
 
-    // Context value
     const contextValue = {
-        ...state,
-        allInventoryItems,
-        getAllInventoryItems,
-        createInventoryItem,
-        updateInventoryItem,
-        deleteInventoryItem,
-        registerUser,
-        login,
-        allUsers,
-        getAllUsers,
-        getUserInfo,
-        updateUserProfile,
-        deleteUser,
-        loading,
-        error,
-        dispatch
+        // Base state spread
+        ...state,  // Contains: user, token, etc.
+
+        // UI States
+        loading,   // Loading state for async operations
+        error,     // Error handling state
+        dispatch,  // Reducer dispatch function
+
+        // Inventory Operations
+        allInventoryItems,     // List of all inventory items
+        getAllInventoryItems,  // Fetch all items
+        createInventoryItem,   // Create new item
+        updateInventoryItem,   // Update existing item
+        deleteInventoryItem,   // Delete item
+
+        // Auth & User Operations
+        registerUser,        // New user registration
+        login,              // User login
+        allUsers,           // List of all users (admin only)
+        getAllUsers,        // Fetch all users
+        getUserInfo,        // Get single user info
+        updateUserProfile,  // Update user profile
+        deleteUser         // Delete user account
     };
 
     return (
