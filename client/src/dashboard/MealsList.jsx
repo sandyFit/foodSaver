@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { ContextGlobal } from '../utils/globalContext';
 import MealsTable from '../components/tables/MealsTable';
-import UpdateForm from '../components/forms/UpdateForm'; 
+import UpdateForm from '../components/forms/UpdateForm';
 import toast from 'react-hot-toast';
 
 const MealsList = () => {
@@ -13,12 +13,12 @@ const MealsList = () => {
         loading,
     } = useContext(ContextGlobal);
 
-    const [formData, setFormData] = useState(() => ({
+    const [formData, setFormData] = useState({
         itemName: '',
         expirationDate: '',
         category: '',
         quantity: 1,
-    }));
+    });
 
     const [editingItem, setEditingItem] = useState(null);
     const [updatedData, setUpdatedData] = useState({
@@ -28,7 +28,6 @@ const MealsList = () => {
         quantity: 1,
     });
 
-    const [isClosed, setIsClosed] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -56,7 +55,6 @@ const MealsList = () => {
         }));
     };
 
-
     const handleClose = () => {
         setEditingItem(null);
     };
@@ -71,17 +69,25 @@ const MealsList = () => {
 
         try {
             await updateInventoryItem(editingItem._id, updatedData);
-            handleClose(); // Cierra el formulario de edición
+            toast.success('Producto actualizado correctamente');
+
+            handleClose();
         } catch (error) {
             console.error('Error actualizando el producto:', error);
             toast.error('Error al actualizar el producto.');
         }
     };
 
-
-    const handleDeleteItem = (itemId) => {
+    const handleDeleteItem = async (itemId) => {
         if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-            deleteInventoryItem(itemId);
+            try {
+                await deleteInventoryItem(itemId);
+                toast.success('Producto eliminado');
+
+            } catch (error) {
+                console.error('Error eliminando el producto:', error);
+                toast.error('Error al eliminar el producto.');
+            }
         }
     };
 
@@ -94,21 +100,19 @@ const MealsList = () => {
 
         try {
             await createInventoryItem(formData);
+            toast.success('Producto agregado correctamente');
             setFormData({
                 itemName: '',
                 expirationDate: '',
                 category: '',
                 quantity: 1,
             });
+            
         } catch (error) {
-            console.error('Error adding food item:', error);
+            console.error('Error agregando el producto:', error);
             toast.error('Error agregando el producto.');
         }
     };
-
-    useEffect(() => {
-        console.log('Tabla actualizada:', allInventoryItems); // Verifica si el estado cambia
-    }, [allInventoryItems]);
 
     return (
         <section className="w-full grid grid-cols-12">
@@ -116,10 +120,7 @@ const MealsList = () => {
                 {/* Header */}
                 <header className="w-[90%] col-span-12 flex flex-col justify-between border-b-2 border-stone-900">
                     <h4 className="text-lg font-bold mb-2">Agrega tus Productos</h4>
-                    <form
-                        onSubmit={handleSubmit}
-                        className="flex w-full justify-between mb-8"
-                    >
+                    <form onSubmit={handleSubmit} className="flex w-full justify-between mb-8">
                         <input
                             type="text"
                             id="itemName"
@@ -147,10 +148,12 @@ const MealsList = () => {
                             <option disabled value="">
                                 Seleccione la categoría
                             </option>
-                            <option value="Refrigerados">Refrigerados</option>
-                            <option value="Congelados">Congelados</option>
-                            <option value="Frescos">Frescos</option>
-                            <option value="Alacena">Alacena</option>
+                            <option value="lacteos">Lácteos</option>
+                            <option value="carnes">Carnes</option>
+                            <option value="vegetales">Vegetales</option>
+                            <option value="frutas">Frutas</option>
+                            <option value="granos">Granos</option>
+                            <option value="otros">Otros</option>
                         </select>
                         <input
                             type="number"
@@ -193,7 +196,6 @@ const MealsList = () => {
                         />
                     )}
                 </div>
-                
             </div>
         </section>
     );

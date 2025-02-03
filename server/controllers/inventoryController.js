@@ -57,7 +57,7 @@ export const createItem = async (req, res, next) => {
         await checkLowStock(req.user.id);
 
         res.status(201).json({
-            uccess: true,
+            success: true,
             item
         });
     } catch (error) {

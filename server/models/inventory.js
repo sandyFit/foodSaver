@@ -23,7 +23,7 @@ const inventoryItemSchema = new mongoose.Schema(
         },
         category: {
             type: String,
-            enum: ['lácteos', 'Carnes', 'vegetales', 'frutas', 'granos', 'otros'],
+            enum: ['lacteos', 'carnes', 'vegetales', 'frutas', 'granos', 'otros'],
             default: 'otros'
         },
         addedDate: {

@@ -56,10 +56,10 @@ export const ContextProvider = ({ children }) => {
 
             return response.data;
         } catch (error) {
-            console.error('API Request Error:', error); // Debugging
-            dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error(error.message || 'An error occurred.');
-            throw error; // Ensure the error is thrown so it can be caught in the calling function
+            console.error('API Request Error:', error.response?.data || error.message);
+            dispatch({ type: SET_ERROR, payload: error.response?.data?.message || error.message });
+            toast.error(error.response?.data?.message || 'An error occurred.');
+            throw error;
         }
     };
 
@@ -76,16 +76,27 @@ export const ContextProvider = ({ children }) => {
 
     // Create an inventory item
     const createInventoryItem = async (formData) => {
-        // console.log('FormData enviado:', formData);
         dispatch({ type: SET_LOADING, payload: true });
         try {
+            console.log('Creating inventory item with data:', formData); // Debugging
             const data = await apiRequest('inventory', 'POST', formData);
-            if (data.message === 'Alimento agregado exitosamente') {
-                toast.success('Producto registrado con éxito');
+            console.log('Create item response:', data); 
+
+            if (data.success && data.item) {
+                // Update the global state with the new item
+                dispatch({
+                    type: SET_ALL_INVENTORY_ITEMS,
+                    payload: [...allInventoryItems, data.item]
+                });
+
                 getAllInventoryItems();
+                toast.success('Producto registrado con éxito');
             } else {
                 toast.error(`Error al registrar el producto: ${data.message}`);
             }
+        } catch (error) {
+            console.error('Error creating inventory item:', error); 
+            toast.error('Error agregando el producto.');
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
