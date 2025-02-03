@@ -13,20 +13,12 @@ import { TbUsers } from "react-icons/tb";
 
 const Dashboard = () => {
 
-    const navigate = useNavigate();
-    const { user, loading } = useContext(ContextGlobal);
+    // const navigate = useNavigate();
+    const { user, loading, getAllInventoryItems } = useContext(ContextGlobal);
 
-    // useEffect(() => {
-    //     if (!user) {
-    //         const token = localStorage.getItem('token');
-    //         const storedUser = localStorage.getItem('user');
-    //         console.log('Stored user:', storedUser);
-    //         if (!token || !storedUser) {
-    //             navigate('/login');
-    //             return;
-    //         }
-    //     }
-    // }, [navigate]);
+    useEffect(() => {
+        getAllInventoryItems();
+    }, []);
 
     if (loading) {
         return <div>Loading...</div>;

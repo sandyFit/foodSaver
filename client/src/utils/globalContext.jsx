@@ -36,12 +36,17 @@ export const ContextProvider = ({ children }) => {
     // Helper function for API requests
     const apiRequest = async (url, method = 'GET', data = null) => {
         try {
-            const token = localStorage.getItem('token');
             const headers = {
-                'Content-Type': 'application/json',
-                ...(token && { Authorization: `Bearer ${token}` })
+                'Content-Type': 'application/json'
             };
 
+            // Only add token for protected routes
+            if (url.includes('dashboard') || url.includes('user')) {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    headers.Authorization = `Bearer ${token}`;
+                }
+            }
             const config = {
                 method,
                 url: `${BASE_URL}/${url}`,
@@ -57,9 +62,12 @@ export const ContextProvider = ({ children }) => {
 
             return response.data;
         } catch (error) {
-            console.error('API Request Error:', error.response?.data || error.message);
-            dispatch({ type: SET_ERROR, payload: error.response?.data?.message || error.message });
-            toast.error(error.response?.data?.message || 'An error occurred.');
+            // Only show auth errors for protected routes
+            if (error.response?.status === 401 &&
+                (window.location.pathname.includes('dashboard') ||
+                    window.location.pathname.includes('user'))) {
+                toast.error('No autorizado. Por favor inicia sesión.');
+            }
             throw error;
         }
     };
@@ -67,6 +75,10 @@ export const ContextProvider = ({ children }) => {
     // Fetch all inventory items
     const getAllInventoryItems = async () => {
         dispatch({ type: SET_LOADING, payload: true });
+
+        if (!window.location.pathname.includes('dashboard')) {
+            return; // Don't fetch inventory data on non-dashboard routes
+        }
         try {
             const data = await apiRequest('inventory');
             dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: data });
@@ -279,8 +291,10 @@ export const ContextProvider = ({ children }) => {
 
     // Fetch data on load
     useEffect(() => {
-        getAllInventoryItems();
-        getAllUsers();
+        if (window.location.pathname.includes('dashboard')) {
+            getAllInventoryItems();
+            getAllUsers();
+        }
     }, []);
 
     // Fetch the user from localStorage on component mount

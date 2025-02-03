@@ -23,6 +23,12 @@ createRoot(document.getElementById('root')).render(
         <Toaster containerClassName='toast-container-custom' position="top-center" reverseOrder={false} />
         <Loader/>
         <Routes>
+          <Route path="/" element={<Landing />} />
+
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Rutas protegidas con auth */}
           <Route path="/dashboard" element={
             <PrivateRoute>
               <Dashboard />
@@ -34,11 +40,6 @@ createRoot(document.getElementById('root')).render(
             <Route path="recipes/:id" element={<RecipeDetail />} />
             <Route path="users" element={<Users />} />
           </Route>
-
-          <Route path="/" element={<Landing />}/>
-
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
         </Routes>
       </ContextProvider>
     </Router>

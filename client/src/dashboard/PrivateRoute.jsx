@@ -1,20 +1,17 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { ContextGlobal } from '../utils/globalContext';
+import toast from 'react-hot-toast';
 
 const PrivateRoute = ({ children }) => {
-    const navigate = useNavigate();
     const token = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
 
-    useEffect(() => {
-        if (!token || !storedUser) {
-            navigate('/login');
-        }
-    }, [navigate]);
+    if (!token || !storedUser) {
+        toast.error('No autorizado. Por favor inicia sesión.');
+        return <Navigate to="/login" replace />;
+    }
 
-    return token && storedUser ? children : null;
+    return children;
 };
 
 PrivateRoute.propTypes = {
