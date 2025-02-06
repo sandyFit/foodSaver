@@ -14,11 +14,8 @@ import { TbUsers } from "react-icons/tb";
 const Dashboard = () => {
 
     // const navigate = useNavigate();
-    const { user, loading, getAllInventoryItems } = useContext(ContextGlobal);
+    const { user, loading,  } = useContext(ContextGlobal);
 
-    useEffect(() => {
-        getAllInventoryItems();
-    }, []);
 
     if (loading) {
         return <div>Loading...</div>;

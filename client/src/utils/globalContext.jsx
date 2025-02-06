@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect } from "react";
+import { createContext, useReducer, useEffect, useCallback } from "react";
 import axios from "./axios.config";
 import { toast } from 'react-hot-toast';
 
@@ -73,7 +73,7 @@ export const ContextProvider = ({ children }) => {
     };
 
     // Fetch all inventory items
-    const getAllInventoryItems = async () => {
+    const getAllInventoryItems = useCallback(async () => {
         dispatch({ type: SET_LOADING, payload: true });
 
         if (!window.location.pathname.includes('dashboard')) {
@@ -85,7 +85,7 @@ export const ContextProvider = ({ children }) => {
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    };
+    }, [dispatch]);
 
     // Create an inventory item
     const createInventoryItem = async (formData) => {
@@ -102,7 +102,7 @@ export const ContextProvider = ({ children }) => {
                     payload: [...allInventoryItems, data.item]
                 });
 
-                getAllInventoryItems();
+                // getAllInventoryItems();
                 toast.success('Producto registrado con éxito');
             } else {
                 toast.error(`Error al registrar el producto: ${data.message}`);

@@ -1,11 +1,12 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { ContextGlobal } from '../utils/globalContext';
+import React, { useState, useContext, useEffect, useCallback, useMemo } from 'react';
+import { ContextGlobal, initialState } from '../utils/globalContext';
 import MealsTable from '../components/tables/MealsTable';
 import UpdateForm from '../components/forms/UpdateForm';
 import toast from 'react-hot-toast';
 
 const MealsList = () => {
     const {
+        getAllInventoryItems,
         createInventoryItem,
         updateInventoryItem,
         deleteInventoryItem,
@@ -28,6 +29,14 @@ const MealsList = () => {
         quantity: 1,
     });
 
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+    useEffect(() => {
+        if (isInitialLoad) {
+            getAllInventoryItems();
+            setIsInitialLoad(false);
+        }
+    }, [isInitialLoad]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -37,7 +46,7 @@ const MealsList = () => {
         }));
     };
 
-    const handleEditClick = (item) => {
+    const handleEditBtn = (item) => {
         setEditingItem(item);
         setUpdatedData({
             itemName: item.itemName,
@@ -45,6 +54,19 @@ const MealsList = () => {
             category: item.category,
             quantity: item.quantity,
         });
+    };
+
+    const handleDeleteBtn = async (itemId) => {
+        if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+            try {
+                await deleteInventoryItem(itemId);
+                toast.success('Producto eliminado');
+
+            } catch (error) {
+                console.error('Error eliminando el producto:', error);
+                toast.error('Error al eliminar el producto.');
+            }
+        }
     };
 
     const handleUpdateChange = (e) => {
@@ -59,6 +81,7 @@ const MealsList = () => {
         setEditingItem(null);
     };
 
+    // submit data to update an item
     const handleSubmitUpdate = async (e) => {
         e.preventDefault();
 
@@ -78,20 +101,8 @@ const MealsList = () => {
         }
     };
 
-    const handleDeleteItem = async (itemId) => {
-        if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-            try {
-                await deleteInventoryItem(itemId);
-                toast.success('Producto eliminado');
-
-            } catch (error) {
-                console.error('Error eliminando el producto:', error);
-                toast.error('Error al eliminar el producto.');
-            }
-        }
-    };
-
-    const handleSubmit = async (e) => {
+    // Submit data to create a new item
+    const handleSubmitData = async (e) => {
         e.preventDefault();
         if (!formData.itemName || !formData.expirationDate || !formData.category) {
             toast.error('Todos los campos son obligatorios.');
@@ -120,7 +131,7 @@ const MealsList = () => {
                 {/* Header */}
                 <header className="w-[90%] col-span-12 flex flex-col justify-between border-b-2 border-stone-900">
                     <h4 className="text-lg font-bold mb-2">Agrega tus Productos</h4>
-                    <form onSubmit={handleSubmit} className="flex w-full justify-between mb-8">
+                    <form onSubmit={handleSubmitData} className="flex w-full justify-between mb-8">
                         <input
                             type="text"
                             id="itemName"
@@ -179,9 +190,10 @@ const MealsList = () => {
                 <div className="w-full col-span-12 flex flex-col items-center mt-6">
                     <h4 className="text-lg font-bold mb-2">Tu Lista de Productos</h4>
                     <MealsTable
-                        meals={allInventoryItems}
-                        onHandleDeleteMeal={handleDeleteItem}
-                        onHandleEditClick={handleEditClick}
+                        items={allInventoryItems || []}
+                        loading={loading}
+                        onDeleteBtn={handleDeleteBtn}
+                        onUpdateBtn={handleEditBtn}
                     />
                 </div>
 

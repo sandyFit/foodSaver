@@ -1,5 +1,4 @@
 import inventory from '../models/inventory.js';
-import Inventory from '../models/inventory.js';
 import User from '../models/users.js';
 
 /**
