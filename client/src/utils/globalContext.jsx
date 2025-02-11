@@ -8,7 +8,6 @@ import {
     SET_ALL_INVENTORY_ITEMS,
     SET_ALL_USERS,
     SET_USER,
-    SET_ERROR,
 } from "../utils/reducer";
 
 
