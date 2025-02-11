@@ -306,31 +306,31 @@ export const ContextProvider = ({ children }) => {
     }, []);
 
 
-    const contextValue = {
+    const contextValue = useMemo(() => ({
         // Base state spread
-        ...state,  // Contains: user, token, etc.
+        ...state,
 
         // UI States
-        loading,   // Loading state for async operations
-        error,     // Error handling state
-        dispatch,  // Reducer dispatch function
+        loading,
+        error,
+        dispatch,
 
         // Inventory Operations
-        allInventoryItems,     // List of all inventory items
-        getAllInventoryItems,  // Fetch all items
-        createInventoryItem,   // Create new item
-        updateInventoryItem,   // Update existing item
-        deleteInventoryItem,   // Delete item
+        allInventoryItems,
+        getAllInventoryItems,
+        createInventoryItem,
+        updateInventoryItem,
+        deleteInventoryItem,
 
         // Auth & User Operations
-        registerUser,        // New user registration
-        login,              // User login
-        allUsers,           // List of all users (admin only)
-        getAllUsers,        // Fetch all users
-        getUserInfo,        // Get single user info
-        updateUserProfile,  // Update user profile
-        deleteUser         // Delete user account
-    };
+        registerUser,
+        login,
+        allUsers,
+        getAllUsers,
+        getUserInfo,
+        updateUserProfile,
+        deleteUser,
+    }), [state, loading, error, allInventoryItems, allUsers]);
 
     return (
         <ContextGlobal.Provider value={contextValue}>
