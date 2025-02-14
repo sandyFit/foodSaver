@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { ContextGlobal } from '../../utils/globalContext';
 import { formatDate } from '../../utils/functions';
 
-const MealsTable = ({ items, onEditBtn, onDeleteBtn }) => {
+const MealsTable = React.memo(({ items, onEditBtn, onDeleteBtn }) => {
     const { allInventoryItems, loading } = useContext(ContextGlobal);     
 
     if (loading) return <div>Loading...</div>;
@@ -60,6 +60,6 @@ const MealsTable = ({ items, onEditBtn, onDeleteBtn }) => {
             
         </article>
     );
-};
+});
 
 export default MealsTable;

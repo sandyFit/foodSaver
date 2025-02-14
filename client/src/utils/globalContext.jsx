@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect, useCallback } from "react";
+import { createContext, useReducer, useEffect, useCallback, useMemo } from "react";
 import axios from "./axios.config";
 import { toast } from 'react-hot-toast';
 
@@ -86,33 +86,27 @@ export const ContextProvider = ({ children }) => {
         }
     }, [dispatch]);
 
-    // Create an inventory item
-    const createInventoryItem = async (formData) => {
+    const createInventoryItem = useCallback(async (formData) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            console.log('Creating inventory item with data:', formData); // Debugging
             const data = await apiRequest('inventory', 'POST', formData);
-            console.log('Create item response:', data); 
-
             if (data.success && data.item) {
-                // Update the global state with the new item
                 dispatch({
                     type: SET_ALL_INVENTORY_ITEMS,
-                    payload: [...allInventoryItems, data.item]
+                    payload: [...allInventoryItems, data.item],
                 });
-
-                // getAllInventoryItems();
                 toast.success('Producto registrado con éxito');
             } else {
                 toast.error(`Error al registrar el producto: ${data.message}`);
             }
         } catch (error) {
-            console.error('Error creating inventory item:', error); 
+            console.error('Error creating inventory item:', error);
             toast.error('Error agregando el producto.');
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    };
+    }, [allInventoryItems, dispatch]);
+
 
     // Update an inventory item
     const updateInventoryItem = async (id, updatedData) => {

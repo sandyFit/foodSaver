@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect, useCallback, useMemo } from 'react';
-import { ContextGlobal, initialState } from '../utils/globalContext';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
+import { ContextGlobal } from '../utils/globalContext';
 import MealsTable from '../components/tables/MealsTable';
 import UpdateForm from '../components/forms/UpdateForm';
 import toast from 'react-hot-toast';
@@ -29,24 +29,15 @@ const MealsList = () => {
         quantity: 1,
     });
 
-    const [isInitialLoad, setIsInitialLoad] = useState(true);
-
-    useEffect(() => {
-        if (isInitialLoad) {
-            getAllInventoryItems();
-            setIsInitialLoad(false);
-        }
-    }, [isInitialLoad]);
-
-    const handleInputChange = (e) => {
+    const handleInputChange = useCallback((e) => {
         const { name, value } = e.target;
         setFormData((prevFormData) => ({
             ...prevFormData,
             [name]: name === 'quantity' ? parseInt(value, 10) : value,
         }));
-    };
+    }, []);
 
-    const handleEditBtn = (item) => {
+    const handleEditBtn = useCallback((item) => {
         setEditingItem(item);
         setUpdatedData({
             itemName: item.itemName,
@@ -54,61 +45,54 @@ const MealsList = () => {
             category: item.category,
             quantity: item.quantity,
         });
-    };
+    }, []);
 
-    const handleDeleteBtn = async (itemId) => {
+    const handleDeleteBtn = useCallback(async (itemId) => {
         if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
             try {
                 await deleteInventoryItem(itemId);
                 toast.success('Producto eliminado');
-
             } catch (error) {
                 console.error('Error eliminando el producto:', error);
                 toast.error('Error al eliminar el producto.');
             }
         }
-    };
+    }, [deleteInventoryItem]);
 
-    const handleUpdateChange = (e) => {
+    const handleUpdateChange = useCallback((e) => {
         const { name, value } = e.target;
         setUpdatedData((prevData) => ({
             ...prevData,
             [name]: name === 'quantity' ? parseInt(value, 10) : value,
         }));
-    };
+    }, []);
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setEditingItem(null);
-    };
+    }, []);
 
-    // submit data to update an item
-    const handleSubmitUpdate = async (e) => {
+    const handleSubmitUpdate = useCallback(async (e) => {
         e.preventDefault();
-
         if (!updatedData.itemName || !updatedData.category || !updatedData.expirationDate) {
             toast.error('Por favor, complete todos los campos.');
             return;
         }
-
         try {
             await updateInventoryItem(editingItem._id, updatedData);
             toast.success('Producto actualizado correctamente');
-
             handleClose();
         } catch (error) {
             console.error('Error actualizando el producto:', error);
             toast.error('Error al actualizar el producto.');
         }
-    };
+    }, [editingItem, updatedData, updateInventoryItem, handleClose]);
 
-    // Submit data to create a new item
-    const handleSubmitData = async (e) => {
+    const handleSubmitData = useCallback(async (e) => {
         e.preventDefault();
         if (!formData.itemName || !formData.expirationDate || !formData.category) {
             toast.error('Todos los campos son obligatorios.');
             return;
         }
-
         try {
             await createInventoryItem(formData);
             toast.success('Producto agregado correctamente');
@@ -118,12 +102,15 @@ const MealsList = () => {
                 category: '',
                 quantity: 1,
             });
-            
         } catch (error) {
             console.error('Error agregando el producto:', error);
             toast.error('Error agregando el producto.');
         }
-    };
+    }, [formData, createInventoryItem]);
+
+    useEffect(() => {
+        getAllInventoryItems();
+    }, [getAllInventoryItems]);
 
     return (
         <section className="w-full grid grid-cols-12">
@@ -193,7 +180,7 @@ const MealsList = () => {
                         items={allInventoryItems || []}
                         loading={loading}
                         onDeleteBtn={handleDeleteBtn}
-                        onUpdateBtn={handleEditBtn}
+                        onEditBtn={handleEditBtn}
                     />
                 </div>
 
@@ -213,4 +200,4 @@ const MealsList = () => {
     );
 };
 
-export default MealsList;
+export default React.memo(MealsList);
