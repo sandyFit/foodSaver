@@ -259,6 +259,50 @@ export const ContextProvider = ({ children }) => {
         }
     };
     
+    // Create stable references for state values
+    const stableState = useMemo(() => ({
+        // Base state spread
+        ...state,
+
+        // Inventory
+        allInventoryItems,
+
+        // Users
+        allUsers,
+
+        // UI States
+        loading,
+        error,
+        dispatch,
+  
+    }), [state, loading, error, allInventoryItems, allUsers]);
+
+    // Separate callbacks object
+    const callbacks = useMemo(() => ({
+        // Inventory Operations
+        getAllInventoryItems,
+        createInventoryItem,
+        updateInventoryItem,
+        deleteInventoryItem,
+
+        // Auth & User Operations
+        registerUser,
+        login,
+        getAllUsers,
+        getUserInfo,
+        updateUserProfile,
+        deleteUser,
+    }), [getAllInventoryItems, deleteInventoryItem]);
+
+    // Combine stable state and callbacks
+    const contextValue = useMemo(() => ({
+        ...stableState,
+        ...callbacks
+    }), [stableState, callbacks]);
+
+    useEffect(() => {
+        console.log('Context state updated:', stableState);
+    }, [stableState]);
 
     // Fetch data on load
     useEffect(() => {
@@ -279,31 +323,31 @@ export const ContextProvider = ({ children }) => {
     }, []);
 
 
-    const contextValue = useMemo(() => ({
-        // Base state spread
-        ...state,
+    // const contextValue = useMemo(() => ({
+    //     // Base state spread
+    //     ...state,
 
-        // UI States
-        loading,
-        error,
-        dispatch,
+    //     // UI States
+    //     loading,
+    //     error,
+    //     dispatch,
 
-        // Inventory Operations
-        allInventoryItems,
-        getAllInventoryItems,
-        createInventoryItem,
-        updateInventoryItem,
-        deleteInventoryItem,
+    //     // Inventory Operations
+    //     allInventoryItems,
+    //     getAllInventoryItems,
+    //     createInventoryItem,
+    //     updateInventoryItem,
+    //     deleteInventoryItem,
 
-        // Auth & User Operations
-        registerUser,
-        login,
-        allUsers,
-        getAllUsers,
-        getUserInfo,
-        updateUserProfile,
-        deleteUser,
-    }), [state, loading, error, allInventoryItems, allUsers]);
+    //     // Auth & User Operations
+    //     registerUser,
+    //     login,
+    //     allUsers,
+    //     getAllUsers,
+    //     getUserInfo,
+    //     updateUserProfile,
+    //     deleteUser,
+    // }), [state, loading, error, allInventoryItems, allUsers]);
 
     return (
         <ContextGlobal.Provider value={contextValue}>
