@@ -15,6 +15,7 @@ import { ContextProvider } from './utils/globalContext.jsx';
 import Users from './dashboard/Users.jsx';
 import Loader from './components/ui/Loader.jsx';
 import PrivateRoute from './dashboard/PrivateRoute.jsx';
+import ListTest from './dashboard/ListTest.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -35,7 +36,7 @@ createRoot(document.getElementById('root')).render(
             </PrivateRoute>
           }>
             <Route index element={<ProtectedHome />} />
-            <Route path="meals-users" element={<MealsList />} />
+            <Route path="meals-users" element={<ListTest />} />
             <Route path="recipes" element={<Recipes />} />
             <Route path="recipes/:id" element={<RecipeDetail />} />
             <Route path="users" element={<Users />} />

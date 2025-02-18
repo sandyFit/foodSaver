@@ -17,7 +17,15 @@ export const reducer = (state, action) => {
         case ADD_INVENTORY_ITEM:
             return { ...state, allInventoryItems: [...state.allInventoryItems, action.payload] };
         case SET_ALL_INVENTORY_ITEMS:
-            return { ...state, allInventoryItems: action.payload };
+            console.log('Reducer payload:', action.payload);
+            return {
+                ...state,
+                allInventoryItems: JSON.stringify(state.allInventoryItems) === JSON.stringify(action.payload)
+                    ? state.allInventoryItems
+                    : action.payload,
+                loading: false,
+            };
+
         case SET_INVENTORY_ITEM:
             return { ...state, inventoryItem: action.payload };
         case SET_EXPIRING_MEALS:

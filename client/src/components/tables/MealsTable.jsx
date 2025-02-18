@@ -3,10 +3,15 @@ import { ContextGlobal } from '../../utils/globalContext';
 import { formatDate } from '../../utils/functions';
 
 const MealsTable = React.memo(({ items, onEditBtn, onDeleteBtn }) => {
-    const { allInventoryItems, loading } = useContext(ContextGlobal);     
+    const { loading } = useContext(ContextGlobal);   
+    
+    if (!Array.isArray(items)) {
+        console.error('Items prop must be an array');
+        return null;
+    }
 
     if (loading) return <div>Loading...</div>;
-    
+    console.log('Rendering MealsTable with items:', items);
     
     return (
         <article className="min-w-full flex flex-col justify-center items-center">
@@ -21,8 +26,8 @@ const MealsTable = React.memo(({ items, onEditBtn, onDeleteBtn }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {allInventoryItems.length > 0 ? (
-                        allInventoryItems.map((item) => (
+                    {items.length > 0 ? (
+                        items.map((item) => (
                             <tr key={item._id || item.id}>
                                 <td className="table-td">{item.itemName}</td>
                                 <td className="table-td">{formatDate(item.expirationDate)}</td>

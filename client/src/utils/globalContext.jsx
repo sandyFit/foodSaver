@@ -33,35 +33,30 @@ export const ContextProvider = ({ children }) => {
 
 
     // Helper function for API requests
-    const apiRequest = async (url, method = 'GET', data = null) => {
+    const apiRequest = useCallback(async (url, method = 'GET', data = null) => {
         try {
             const headers = {
                 'Content-Type': 'application/json'
             };
 
-            // Only add token for protected routes
             if (url.includes('dashboard') || url.includes('user')) {
                 const token = localStorage.getItem('token');
                 if (token) {
                     headers.Authorization = `Bearer ${token}`;
                 }
             }
+
             const config = {
                 method,
                 url: `${BASE_URL}/${url}`,
                 headers,
-                withCredentials: true // For cookies if used
+                withCredentials: true
             };
 
             if (data) config.data = data;
-
-            console.log('Sending API request with config:', config); // Debugging
             const response = await axios(config);
-            console.log('API response:', response); // Debugging
-
             return response.data;
         } catch (error) {
-            // Only show auth errors for protected routes
             if (error.response?.status === 401 &&
                 (window.location.pathname.includes('dashboard') ||
                     window.location.pathname.includes('user'))) {
@@ -69,7 +64,7 @@ export const ContextProvider = ({ children }) => {
             }
             throw error;
         }
-    };
+    }, []); 
 
     // Fetch all inventory items
     const getAllInventoryItems = useCallback(async () => {
@@ -79,12 +74,16 @@ export const ContextProvider = ({ children }) => {
             return; // Don't fetch inventory data on non-dashboard routes
         }
         try {
-            const data = await apiRequest('inventory');
-            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: data });
-        } finally {
+            const response = await apiRequest('inventory');
+            const items = Array.isArray(response) ? response : response.items || [];
+            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: items });
+        } catch (error) {
+            dispatch({ type: 'SET_ERROR', payload: error.message });
+        }
+        finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    }, [dispatch]);
+    }, [apiRequest]);
 
     const createInventoryItem = useCallback(async (formData) => {
         dispatch({ type: SET_LOADING, payload: true });
@@ -225,28 +224,7 @@ export const ContextProvider = ({ children }) => {
         dispatch({ type: SET_LOADING, payload: false });
     }
 };
-    // const getUserInfo = async (id) => {
-    //     dispatch({ type: SET_LOADING, payload: true });
-    //     try {
-    //         const token = localStorage.getItem('token');
-    //         console.log('Token antes de hacer la solicitud:', token);
 
-    //         const data = await apiRequest(`users-getUserInfo/${id}`,
-    //             'POST',
-    //             null, {
-    //             'Authorization': `Bearer ${localStorage.getItem(token)}`
-    //         });
-            
-    //         if (data.message.success) {
-    //             dispatch({ type: SET_USER, payload: data });
-    //         }
-    //         else {
-    //             toast.error('Error al obtener el usuario');
-    //         }
-    //     } finally {
-    //         dispatch({ type: SET_LOADING, payload: false });
-    //     }
-    // };
 
     const updateUserProfile = async (id, updatedData) => {
         dispatch({ type: SET_LOADING, payload: true });
@@ -270,7 +248,7 @@ export const ContextProvider = ({ children }) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             await apiRequest(`users-delete/${id}`, 'DELETE');
-            const filteredUser = allUsers.filter((user) => user._id !== id);
+            const filteredUsers = allUsers.filter((user) => user._id !== id);
             dispatch({ type: SET_ALL_USERS, payload: filteredUsers });
             toast.success('Usuario eliminado.');
             getAllUsers();
@@ -285,9 +263,10 @@ export const ContextProvider = ({ children }) => {
     // Fetch data on load
     useEffect(() => {
         if (window.location.pathname.includes('dashboard')) {
+            console.log("Ejecutando useEffect en ContextGlobal...");
             getAllInventoryItems();
             getAllUsers();
-        }
+        } 
     }, []);
 
     // Fetch the user from localStorage on component mount
