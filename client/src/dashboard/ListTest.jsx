@@ -2,13 +2,23 @@ import React, { useContext, useEffect, useCallback, useState, useMemo } from 're
 import { ContextGlobal } from '../utils/globalContext';
 import MealsTable from '../components/tables/MealsTable';
 import TableTest from '../components/tables/TableTest';
+import UpdateForm from '../components/forms/UpdateForm';
 
 const ListTest = React.memo(() => {
     console.log('ListTest rendering');
 
+    const [editingItem, setEditingItem] = useState(null);
+    const [updatedData, setUpdatedData] = useState({
+        itemName: '',
+        category: '',
+        expirationDate: '',
+        quantity: 1
+    });
+
     const {
         allInventoryItems,
         getAllInventoryItems,
+        updateInventoryItem,
         deleteInventoryItem,
         loading
     } = useContext(ContextGlobal);
@@ -26,15 +36,46 @@ const ListTest = React.memo(() => {
         },
         handleDeleteBtn: (itemId) => {
             if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-                deleteInventoryItem(itemId)
-                    .then(() => toast.success('Producto eliminado'))
-                    .catch((error) => {
-                        console.error('Error eliminando el producto:', error);
-                        toast.error('Error al eliminar el producto.');
-                    });
+                try {
+                    deleteInventoryItem(itemId);
+                    toast.success('Producto eliminado');
+                } catch (error) {
+                    console.error('Error eliminando el producto:', error);
+                    toast.error('Error al eliminar el producto.');
+                }
             }
         }
     }), [deleteInventoryItem]);
+
+    const handleUpdateChange = useCallback((e) => {
+        const { name, value } = e.target;
+        setUpdatedData((prevData) => ({
+            ...prevData,
+            [name]: name === 'quantity' ? parseInt(value, 10) : value,
+        }));
+    }, []);
+
+    const handleClose = useCallback(() => {
+        setEditingItem(null);
+    })
+
+    const handleSubmitUpdate = useCallback(async (e) => {
+        e.preventDefault();
+        if (!updatedData.itemName || !updatedData.category || !updatedData.expirationDate) {
+            toast.error('Por favor, complete todos los campos.');
+            return;
+        };
+        try {
+            await updateInventoryItem(editingItem._id, updatedData);
+            toast.success('Producto actualizado correctamente');
+            handleClose();
+        } catch (error) {
+            console.error('Error actualizando el producto:', error);
+            toast.error('Error al actualizar el producto.');
+        }
+    },
+        [editingItem, updatedData, updateInventoryItem, handleClose]
+    )
 
     // Fetch data only once on mount
     useEffect(() => {
@@ -53,10 +94,25 @@ const ListTest = React.memo(() => {
     console.log('ListTest tableProps:', tableProps);
 
     return (
-        <div className="w-full col-span-12 flex flex-col items-center mt-6">
-            <h4 className="text-lg font-bold mb-2">Tu Lista de Productos</h4>
-            <TableTest {...tableProps} />
-        </div>
+        <section>
+
+            <div className="w-full col-span-12 flex flex-col items-center mt-6">
+                <h4 className="text-lg font-bold mb-2">Tu Lista de Productos</h4>
+                <TableTest {...tableProps} />
+            </div>
+
+            {/* Formulario de edición */ }
+            <div className="w-[90%] col-span-12 mt-6">
+                {editingItem && (
+                    <UpdateForm
+                        updatedData={updatedData}
+                        onHandleUpdateChange={handleUpdateChange}
+                        onHandleSubmitUpdate={handleSubmitUpdate}
+                        onClose={handleClose}
+                    />
+                )}
+            </div>
+        </section>
     );
 });
 
