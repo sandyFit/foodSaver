@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useCallback, useState, useMemo } from 'react';
 import { ContextGlobal } from '../utils/globalContext';
-import MealsTable from '../components/tables/MealsTable';
 import TableTest from '../components/tables/TableTest';
 import UpdateForm from '../components/forms/UpdateForm';
 
@@ -9,6 +8,7 @@ const ListTest = React.memo(() => {
 
     const [editingItem, setEditingItem] = useState(null);
     const [updatedData, setUpdatedData] = useState({
+        editingItem: null,
         itemName: '',
         category: '',
         expirationDate: '',
@@ -49,15 +49,18 @@ const ListTest = React.memo(() => {
 
     const handleUpdateChange = useCallback((e) => {
         const { name, value } = e.target;
-        setUpdatedData((prevData) => ({
-            ...prevData,
-            [name]: name === 'quantity' ? parseInt(value, 10) : value,
+        setFormState((prev) => ({
+            ...prev,
+            updatedData: {
+                ...prev.updatedData,
+                [name]: name === 'quantity' ? parseInt(value, 10) : value,
+            },
         }));
     }, []);
 
     const handleClose = useCallback(() => {
-        setEditingItem(null);
-    })
+        setFormState((prev) => ({ ...prev, editingItem: null }));
+    }, []);
 
     const handleSubmitUpdate = useCallback(async (e) => {
         e.preventDefault();
@@ -80,8 +83,10 @@ const ListTest = React.memo(() => {
     // Fetch data only once on mount
     useEffect(() => {
         console.log('ListTest useEffect running');
-        getAllInventoryItems();
-    }, []);  // Remove getAllInventoryItems from deps
+        if (allInventoryItems.length === 0) { // Only fetch if data is empty
+            getAllInventoryItems();
+        }
+    }, [getAllInventoryItems, allInventoryItems.length]); // Add allInventoryItems.length as a dependency
 
     // Create stable reference for table props
     const tableProps = useMemo(() => ({

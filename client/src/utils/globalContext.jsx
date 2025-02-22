@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect, useCallback, useMemo } from "react";
+import { createContext, useReducer, useEffect, useCallback, useMemo, useRef } from "react";
 import axios from "./axios.config";
 import { toast } from 'react-hot-toast';
 
@@ -67,21 +67,23 @@ export const ContextProvider = ({ children }) => {
     }, []); 
 
     // Fetch all inventory items
+    const isFetching = useRef(false);
+
     const getAllInventoryItems = useCallback(async () => {
+        if (isFetching.current) return; // Avoid redundant calls
+        isFetching.current = true;
+
         dispatch({ type: SET_LOADING, payload: true });
 
-        if (!window.location.pathname.includes('dashboard')) {
-            return; // Don't fetch inventory data on non-dashboard routes
-        }
         try {
             const response = await apiRequest('inventory');
             const items = Array.isArray(response) ? response : response.items || [];
             dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: items });
         } catch (error) {
             dispatch({ type: 'SET_ERROR', payload: error.message });
-        }
-        finally {
+        } finally {
             dispatch({ type: SET_LOADING, payload: false });
+            isFetching.current = false;
         }
     }, [apiRequest]);
 
