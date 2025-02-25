@@ -67,12 +67,7 @@ export const ContextProvider = ({ children }) => {
     }, []); 
 
     // Fetch all inventory items
-    const isFetching = useRef(false);
-
     const getAllInventoryItems = useCallback(async () => {
-        if (isFetching.current) return; // Avoid redundant calls
-        isFetching.current = true;
-
         dispatch({ type: SET_LOADING, payload: true });
 
         try {
@@ -110,7 +105,7 @@ export const ContextProvider = ({ children }) => {
 
 
     // Update an inventory item
-    const updateInventoryItem = async (id, updatedData) => {
+    const updateInventoryItem = useCallback(async (id, updatedData) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             const updatedItem = await apiRequest(`inventory/${id}`, 'PUT', updatedData);
@@ -120,17 +115,17 @@ export const ContextProvider = ({ children }) => {
                     item._id === id ? { ...item, ...updatedItem } : item
                 ),
             });
-
+            // Optionally refresh inventory list
             getAllInventoryItems();
             toast.success('Producto actualizado correctamente.');
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    };
+    }, [allInventoryItems, apiRequest, getAllInventoryItems]);
 
 
     // Delete an inventory item
-    const deleteInventoryItem = async (id) => {
+    const deleteInventoryItem = useCallback(async (id) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             await apiRequest(`inventory/${id}`, 'DELETE');
@@ -140,7 +135,7 @@ export const ContextProvider = ({ children }) => {
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    };
+    }, [allInventoryItems, apiRequest]);
 
     // === USERS ===
     // globalContext.jsx
@@ -308,12 +303,14 @@ export const ContextProvider = ({ children }) => {
 
     // Fetch data on load
     useEffect(() => {
-        if (window.location.pathname.includes('dashboard')) {
-            console.log("Ejecutando useEffect en ContextGlobal...");
-            getAllInventoryItems();
+        if (!state.allUsers.length) {
             getAllUsers();
-        } 
-    }, []);
+        }
+        if (location.pathname.includes("dashboard") && !state.allInventoryItems.length) {
+            getAllInventoryItems();
+        }
+    }, [location.pathname, state.allUsers.length, state.allInventoryItems.length]);
+
 
     // Fetch the user from localStorage on component mount
     useEffect(() => {
