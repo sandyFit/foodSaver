@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect, useCallback, useMemo, useRef } from "react";
+import { createContext, useReducer, useEffect, useCallback, useMemo } from "react";
 import axios from "./axios.config";
 import { toast } from 'react-hot-toast';
 
@@ -33,30 +33,35 @@ export const ContextProvider = ({ children }) => {
 
 
     // Helper function for API requests
-    const apiRequest = useCallback(async (url, method = 'GET', data = null) => {
+    const apiRequest = async (url, method = 'GET', data = null) => {
         try {
             const headers = {
                 'Content-Type': 'application/json'
             };
 
+            // Only add token for protected routes
             if (url.includes('dashboard') || url.includes('user')) {
                 const token = localStorage.getItem('token');
                 if (token) {
                     headers.Authorization = `Bearer ${token}`;
                 }
             }
-
             const config = {
                 method,
                 url: `${BASE_URL}/${url}`,
                 headers,
-                withCredentials: true
+                withCredentials: true // For cookies if used
             };
 
             if (data) config.data = data;
+
+            console.log('Sending API request with config:', config); // Debugging
             const response = await axios(config);
+            console.log('API response:', response); // Debugging
+
             return response.data;
         } catch (error) {
+            // Only show auth errors for protected routes
             if (error.response?.status === 401 &&
                 (window.location.pathname.includes('dashboard') ||
                     window.location.pathname.includes('user'))) {
@@ -64,23 +69,22 @@ export const ContextProvider = ({ children }) => {
             }
             throw error;
         }
-    }, []); 
+    };
 
     // Fetch all inventory items
     const getAllInventoryItems = useCallback(async () => {
         dispatch({ type: SET_LOADING, payload: true });
 
+        if (!window.location.pathname.includes('dashboard')) {
+            return; // Don't fetch inventory data on non-dashboard routes
+        }
         try {
-            const response = await apiRequest('inventory');
-            const items = Array.isArray(response) ? response : response.items || [];
-            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: items });
-        } catch (error) {
-            dispatch({ type: 'SET_ERROR', payload: error.message });
+            const data = await apiRequest('inventory');
+            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: data });
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
-            isFetching.current = false;
         }
-    }, [apiRequest]);
+    }, [dispatch]);
 
     const createInventoryItem = useCallback(async (formData) => {
         dispatch({ type: SET_LOADING, payload: true });
@@ -105,7 +109,7 @@ export const ContextProvider = ({ children }) => {
 
 
     // Update an inventory item
-    const updateInventoryItem = useCallback(async (id, updatedData) => {
+    const updateInventoryItem = async (id, updatedData) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             const updatedItem = await apiRequest(`inventory/${id}`, 'PUT', updatedData);
@@ -115,17 +119,17 @@ export const ContextProvider = ({ children }) => {
                     item._id === id ? { ...item, ...updatedItem } : item
                 ),
             });
-            // Optionally refresh inventory list
+
             getAllInventoryItems();
             toast.success('Producto actualizado correctamente.');
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    }, [allInventoryItems, apiRequest, getAllInventoryItems]);
+    };
 
 
     // Delete an inventory item
-    const deleteInventoryItem = useCallback(async (id) => {
+    const deleteInventoryItem = async (id) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             await apiRequest(`inventory/${id}`, 'DELETE');
@@ -135,7 +139,7 @@ export const ContextProvider = ({ children }) => {
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    }, [allInventoryItems, apiRequest]);
+    };
 
     // === USERS ===
     // globalContext.jsx
@@ -146,7 +150,7 @@ export const ContextProvider = ({ children }) => {
             const data = await apiRequest('users-register', 'POST', formData);
             if (data.message === 'Cuenta registrada correctamente') {
                 toast.success('Tu cuenta ha sido registrada correctamente. ¡Inicia sesión para comenzar!');
-                await getAllUsers(); 
+                await getAllUsers();
             } else {
                 toast.error(`Error al registrar el usuario: ${data.message}`);
             }
@@ -205,22 +209,22 @@ export const ContextProvider = ({ children }) => {
     };
 
     const getUserInfo = async (id) => {
-    dispatch({ type: SET_LOADING, payload: true });
-    try {
-        // Fix token retrieval
-        const data = await apiRequest(`users-getUserInfo/${id}`);
-        
-        if (data.success) { // Match your actual response structure
-            dispatch({ type: SET_USER, payload: data.user });
-        } else {
-            toast.error(data.message || 'Error al obtener el usuario');
+        dispatch({ type: SET_LOADING, payload: true });
+        try {
+            // Fix token retrieval
+            const data = await apiRequest(`users-getUserInfo/${id}`);
+
+            if (data.success) { // Match your actual response structure
+                dispatch({ type: SET_USER, payload: data.user });
+            } else {
+                toast.error(data.message || 'Error al obtener el usuario');
+            }
+        } catch (error) {
+            // Handle error
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
         }
-    } catch (error) {
-        // Handle error
-    } finally {
-        dispatch({ type: SET_LOADING, payload: false });
-    }
-};
+    };
 
 
     const updateUserProfile = async (id, updatedData) => {
@@ -255,62 +259,16 @@ export const ContextProvider = ({ children }) => {
             dispatch({ type: SET_LOADING, payload: false });
         }
     };
-    
-    // Create stable references for state values
-    const stableState = useMemo(() => ({
-        // Base state spread
-        ...state,
 
-        // Inventory
-        allInventoryItems,
-
-        // Users
-        allUsers,
-
-        // UI States
-        loading,
-        error,
-        dispatch,
-  
-    }), [state, loading, error, allInventoryItems, allUsers]);
-
-    // Separate callbacks object
-    const callbacks = useMemo(() => ({
-        // Inventory Operations
-        getAllInventoryItems,
-        createInventoryItem,
-        updateInventoryItem,
-        deleteInventoryItem,
-
-        // Auth & User Operations
-        registerUser,
-        login,
-        getAllUsers,
-        getUserInfo,
-        updateUserProfile,
-        deleteUser,
-    }), [getAllInventoryItems, deleteInventoryItem]);
-
-    // Combine stable state and callbacks
-    const contextValue = useMemo(() => ({
-        ...stableState,
-        ...callbacks
-    }), [stableState, callbacks]);
-
-    useEffect(() => {
-        console.log('Context state updated:', stableState);
-    }, [stableState]);
 
     // Fetch data on load
     useEffect(() => {
-        if (!state.allUsers.length) {
+        if (window.location.pathname.includes('dashboard')) {
+            console.log("Ejecutando useEffect en ContextGlobal...");
+            getAllInventoryItems();
             getAllUsers();
         }
-        if (location.pathname.includes("dashboard") && !state.allInventoryItems.length) {
-            getAllInventoryItems();
-        }
-    }, [location.pathname, state.allUsers.length, state.allInventoryItems.length]);
-
+    }, []);
 
     // Fetch the user from localStorage on component mount
     useEffect(() => {
@@ -322,31 +280,31 @@ export const ContextProvider = ({ children }) => {
     }, []);
 
 
-    // const contextValue = useMemo(() => ({
-    //     // Base state spread
-    //     ...state,
+    const contextValue = useMemo(() => ({
+        // Base state spread
+        ...state,
 
-    //     // UI States
-    //     loading,
-    //     error,
-    //     dispatch,
+        // UI States
+        loading,
+        error,
+        dispatch,
 
-    //     // Inventory Operations
-    //     allInventoryItems,
-    //     getAllInventoryItems,
-    //     createInventoryItem,
-    //     updateInventoryItem,
-    //     deleteInventoryItem,
+        // Inventory Operations
+        allInventoryItems,
+        getAllInventoryItems,
+        createInventoryItem,
+        updateInventoryItem,
+        deleteInventoryItem,
 
-    //     // Auth & User Operations
-    //     registerUser,
-    //     login,
-    //     allUsers,
-    //     getAllUsers,
-    //     getUserInfo,
-    //     updateUserProfile,
-    //     deleteUser,
-    // }), [state, loading, error, allInventoryItems, allUsers]);
+        // Auth & User Operations
+        registerUser,
+        login,
+        allUsers,
+        getAllUsers,
+        getUserInfo,
+        updateUserProfile,
+        deleteUser,
+    }), [state, loading, error, allInventoryItems, allUsers]);
 
     return (
         <ContextGlobal.Provider value={contextValue}>
@@ -354,3 +312,4 @@ export const ContextProvider = ({ children }) => {
         </ContextGlobal.Provider>
     );
 };
+
