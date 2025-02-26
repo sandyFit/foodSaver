@@ -1,13 +1,10 @@
-// Complete rewrite of ListTest with proper memoization
-import React, { useContext, useEffect, useCallback, useState, useMemo } from 'react';
+import React, { useContext, useEffect, useCallback, useState } from 'react';
 import { ContextGlobal } from '../utils/globalContext';
 import TableTest from '../components/tables/TableTest';
 import UpdateForm from '../components/forms/UpdateForm';
-import { toast } from 'react-hot-toast'; // Add this import 
+import { toast } from 'react-hot-toast';
 
 const ListTest = () => {
-    console.log('ListTest rendering');
-
     // Use a single state object
     const [state, setState] = useState({
         editingItem: null,
@@ -19,36 +16,22 @@ const ListTest = () => {
         }
     });
 
-    // Get context values - destructure only what's needed
-    const context = useContext(ContextGlobal);
-    const { loading } = context;
+    // Reference the context
+    const {
+        loading,
+        allInventoryItems,
+        getAllInventoryItems,
+        updateInventoryItem,
+        deleteInventoryItem
+    } = useContext(ContextGlobal);
 
-    // Memoize the inventory items to prevent unnecessary re-renders
-    const allInventoryItems = useMemo(() =>
-        context.allInventoryItems || [],
-        [context.allInventoryItems]
-    );
+    // Debug information - helps track component state
+    useEffect(() => {
+        console.log('ListTest rendering. Items length:', allInventoryItems?.length);
+        console.log('First few items:', allInventoryItems?.slice(0, 2));
+    });
 
-    // Memoize functions from context to prevent them from causing re-renders
-    const getAllInventoryItems = useCallback(() => {
-        if (context.getAllInventoryItems) {
-            context.getAllInventoryItems();
-        }
-    }, [context.getAllInventoryItems]);
-
-    const updateInventoryItem = useCallback((id, data) => {
-        if (context.updateInventoryItem) {
-            return context.updateInventoryItem(id, data);
-        }
-    }, [context.updateInventoryItem]);
-
-    const deleteInventoryItem = useCallback((id) => {
-        if (context.deleteInventoryItem) {
-            return context.deleteInventoryItem(id);
-        }
-    }, [context.deleteInventoryItem]);
-
-    // Handler functions with proper dependencies
+    // Handler functions
     const handleEditBtn = useCallback((item) => {
         setState({
             editingItem: item,
@@ -63,13 +46,14 @@ const ListTest = () => {
 
     const handleDeleteBtn = useCallback((itemId) => {
         if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-            try {
-                deleteInventoryItem(itemId);
-                toast.success('Producto eliminado');
-            } catch (error) {
-                console.error('Error eliminando el producto:', error);
-                toast.error('Error al eliminar el producto.');
-            }
+            deleteInventoryItem(itemId)
+                .then(() => {
+                    toast.success('Producto eliminado');
+                })
+                .catch((error) => {
+                    console.error('Error eliminando el producto:', error);
+                    toast.error('Error al eliminar el producto.');
+                });
         }
     }, [deleteInventoryItem]);
 
@@ -79,7 +63,7 @@ const ListTest = () => {
             ...prev,
             updatedData: {
                 ...prev.updatedData,
-                [name]: name === 'quantity' ? parseInt(value, 10) : value,
+                [name]: name === 'quantity' ? parseInt(value, 10) || 0 : value,
             }
         }));
     }, []);
@@ -91,7 +75,7 @@ const ListTest = () => {
         }));
     }, []);
 
-    const handleSubmitUpdate = useCallback(async (e) => {
+    const handleSubmitUpdate = useCallback((e) => {
         e.preventDefault();
         const { editingItem, updatedData } = state;
 
@@ -100,37 +84,39 @@ const ListTest = () => {
             return;
         }
 
-        try {
-            await updateInventoryItem(editingItem._id, updatedData);
-            toast.success('Producto actualizado correctamente');
-            handleClose();
-        } catch (error) {
-            console.error('Error actualizando el producto:', error);
-            toast.error('Error al actualizar el producto.');
-        }
+        updateInventoryItem(editingItem._id, updatedData)
+            .then(() => {
+                toast.success('Producto actualizado correctamente');
+                handleClose();
+            })
+            .catch((error) => {
+                console.error('Error actualizando el producto:', error);
+                toast.error('Error al actualizar el producto.');
+            });
     }, [state, updateInventoryItem, handleClose]);
 
-    // Fetch data only once on mount
+    // Fetch data on mount
     useEffect(() => {
-        console.log('ListTest useEffect running');
-        if (allInventoryItems.length === 0 && !loading) {
-            getAllInventoryItems();
-        }
-    }, [getAllInventoryItems, allInventoryItems.length, loading]);
-
-    // Memoize props for child components
-    const tableProps = useMemo(() => ({
-        items: allInventoryItems,
-        loading,
-        onDeleteBtn: handleDeleteBtn,
-        onEditBtn: handleEditBtn
-    }), [allInventoryItems, loading, handleDeleteBtn, handleEditBtn]);
+        console.log('ListTest - Initial mount effect');
+        getAllInventoryItems();
+    }, [getAllInventoryItems]);
 
     return (
         <section>
             <div className="w-full col-span-12 flex flex-col items-center mt-6">
                 <h4 className="text-lg font-bold mb-2">Tu Lista de Productos</h4>
-                <TableTest {...tableProps} />
+
+                {/* Debug info */}
+                <div className="text-xs text-gray-500 mb-2">
+                    Items: {allInventoryItems?.length || 0} | Loading: {loading ? 'Yes' : 'No'}
+                </div>
+
+                <TableTest
+                    items={allInventoryItems || []}
+                    loading={loading}
+                    onDeleteBtn={handleDeleteBtn}
+                    onEditBtn={handleEditBtn}
+                />
             </div>
 
             <div className="w-[90%] col-span-12 mt-6">
@@ -147,4 +133,4 @@ const ListTest = () => {
     );
 };
 
-export default React.memo(ListTest);
+export default ListTest;

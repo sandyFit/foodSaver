@@ -72,19 +72,97 @@ export const ContextProvider = ({ children }) => {
     };
 
     // Fetch all inventory items
-    const getAllInventoryItems = useCallback(async () => {
-        dispatch({ type: SET_LOADING, payload: true });
+    // Update the getAllInventoryItems function to handle the correct response structure
 
-        if (!window.location.pathname.includes('dashboard')) {
-            return; // Don't fetch inventory data on non-dashboard routes
+    const getAllInventoryItems = useCallback(async () => {
+        console.log('getAllInventoryItems called');
+
+        // Don't set loading for quick refreshes
+        const shouldShowLoading = allInventoryItems.length === 0;
+
+        if (shouldShowLoading) {
+            dispatch({ type: SET_LOADING, payload: true });
         }
+
         try {
-            const data = await apiRequest('inventory');
-            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: data });
+            // Check if we need to fetch at all
+            if (!window.location.pathname.includes('dashboard')) {
+                console.log('Not on dashboard, skipping inventory fetch');
+                return;
+            }
+
+            console.log('Fetching inventory data from API...');
+            const response = await apiRequest('inventory');
+            console.log('Inventory API response:', response);
+
+            // Extract the items array from the response object
+            let items = [];
+
+            if (response && response.items && Array.isArray(response.items)) {
+                items = response.items;
+            } else if (Array.isArray(response)) {
+                items = response;
+            } else {
+                console.error('Could not extract items array from API response:', response);
+            }
+
+            console.log('Extracted items array:', items);
+            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: items });
+            console.log('Updated inventory state with', items.length, 'items');
+        } catch (error) {
+            console.error('Error fetching inventory items:', error);
+        } finally {
+            if (shouldShowLoading) {
+                dispatch({ type: SET_LOADING, payload: false });
+            }
+        }
+    }, [dispatch, window.location.pathname, allInventoryItems.length]);
+
+    // Also update the updateInventoryItem function
+    const updateInventoryItem = useCallback(async (id, updatedData) => {
+        dispatch({ type: SET_LOADING, payload: true });
+        try {
+            const response = await apiRequest(`inventory/${id}`, 'PUT', updatedData);
+            console.log('Update response:', response);
+
+            // Handle different response formats
+            let updatedItem = null;
+            if (response.item) {
+                updatedItem = response.item;
+            } else if (response.updatedItem) {
+                updatedItem = response.updatedItem;
+            } else {
+                updatedItem = response;
+            }
+
+            // Get fresh data instead of manually updating
+            await getAllInventoryItems();
+            return updatedItem;
+        } catch (error) {
+            console.error('Error updating inventory item:', error);
+            throw error;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    }, [dispatch]);
+    }, [dispatch, getAllInventoryItems]);
+
+    // Similarly update deleteInventoryItem
+    const deleteInventoryItem = useCallback(async (id) => {
+        dispatch({ type: SET_LOADING, payload: true });
+        try {
+            const response = await apiRequest(`inventory/${id}`, 'DELETE');
+            console.log('Delete response:', response);
+
+            // Refresh all items rather than filtering locally
+            await getAllInventoryItems();
+            return response;
+        } catch (error) {
+            console.error('Error deleting inventory item:', error);
+            throw error;
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
+        }
+    }, [dispatch, getAllInventoryItems]);
 
     const createInventoryItem = useCallback(async (formData) => {
         dispatch({ type: SET_LOADING, payload: true });
@@ -109,37 +187,44 @@ export const ContextProvider = ({ children }) => {
 
 
     // Update an inventory item
-    const updateInventoryItem = async (id, updatedData) => {
-        dispatch({ type: SET_LOADING, payload: true });
-        try {
-            const updatedItem = await apiRequest(`inventory/${id}`, 'PUT', updatedData);
-            dispatch({
-                type: SET_ALL_INVENTORY_ITEMS,
-                payload: allInventoryItems.map((item) =>
-                    item._id === id ? { ...item, ...updatedItem } : item
-                ),
-            });
+    // const updateInventoryItem = useCallback(async (id, updatedData) => {
+    //     dispatch({ type: SET_LOADING, payload: true });
+    //     try {
+    //         const response = await apiRequest(`inventory/${id}`, 'PUT', updatedData);
+    //         const updatedItem = response.item || response; // Handle different API response formats
 
-            getAllInventoryItems();
-            toast.success('Producto actualizado correctamente.');
-        } finally {
-            dispatch({ type: SET_LOADING, payload: false });
-        }
-    };
+    //         // Directly update the state with the correct format
+    //         const updatedItems = allInventoryItems.map((item) =>
+    //             item._id === id ? { ...item, ...updatedItem } : item
+    //         );
+
+    //         dispatch({
+    //             type: SET_ALL_INVENTORY_ITEMS,
+    //             payload: updatedItems,
+    //         });
+
+    //         return updatedItem;
+    //     } catch (error) {
+    //         console.error('Error updating inventory item:', error);
+    //         throw error; // Rethrow to handle in component
+    //     } finally {
+    //         dispatch({ type: SET_LOADING, payload: false });
+    //     }
+    // }, [allInventoryItems, dispatch]);
 
 
-    // Delete an inventory item
-    const deleteInventoryItem = async (id) => {
-        dispatch({ type: SET_LOADING, payload: true });
-        try {
-            await apiRequest(`inventory/${id}`, 'DELETE');
-            const filteredItems = allInventoryItems.filter((item) => item._id !== id);
-            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: filteredItems });
-            toast.success('Producto eliminado.');
-        } finally {
-            dispatch({ type: SET_LOADING, payload: false });
-        }
-    };
+    // // Delete an inventory item
+    // const deleteInventoryItem = async (id) => {
+    //     dispatch({ type: SET_LOADING, payload: true });
+    //     try {
+    //         await apiRequest(`inventory/${id}`, 'DELETE');
+    //         const filteredItems = allInventoryItems.filter((item) => item._id !== id);
+    //         dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: filteredItems });
+    //         toast.success('Producto eliminado.');
+    //     } finally {
+    //         dispatch({ type: SET_LOADING, payload: false });
+    //     }
+    // };
 
     // === USERS ===
     // globalContext.jsx
