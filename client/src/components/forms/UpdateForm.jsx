@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, memo } from 'react';
 import { ContextGlobal } from '../../utils/globalContext';
 import { IoCloseCircleOutline } from "react-icons/io5";
 
-const UpdateForm = ({ updatedData, onHandleUpdateChange, onHandleSubmitUpdate, onClose }) => {
+// Use memo to prevent re-rendering when props don't change
+const UpdateForm = memo(({ updatedData, onHandleUpdateChange, onHandleSubmitUpdate, onClose }) => {
+    const { loading } = useContext(ContextGlobal);
 
-    const {loading} = useContext(ContextGlobal);
     return (
         <section className="w-full ">
             <div className='flex flex-col justify-center border-t-2 border-stone-900 mt-6 relative'>
@@ -13,7 +14,7 @@ const UpdateForm = ({ updatedData, onHandleUpdateChange, onHandleSubmitUpdate, o
                     className='absolute top-2 right-0'>
                     <IoCloseCircleOutline className='text-xl' />
                 </button>
-                
+
                 <h4 className="text-lg font-bold my-2">Edita tu Producto</h4>
                 <form onSubmit={onHandleSubmitUpdate} className="flex w-full justify-between mb-6" >
                     <input
@@ -59,6 +60,9 @@ const UpdateForm = ({ updatedData, onHandleUpdateChange, onHandleSubmitUpdate, o
             </div>
         </section>
     );
-};
+});
+
+// Add display name for better debugging
+UpdateForm.displayName = 'UpdateForm';
 
 export default UpdateForm;

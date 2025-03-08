@@ -1,49 +1,61 @@
-import React, { useContext, useEffect, useCallback, useState } from 'react';
-import { ContextGlobal } from '../utils/globalContext';
+import React, { useEffect, useCallback, useState } from 'react';
+import { useInventory } from '../utils/inventoryContext'; // Use the custom hook
 import TableTest from '../components/tables/TableTest';
-import UpdateForm from '../components/forms/UpdateForm';
+import UpdateFormModal from '../components/modals/UpdateFormModal';
 import { toast } from 'react-hot-toast';
 
-const ListTest = () => {
-    // Use a single state object
-    const [state, setState] = useState({
-        editingItem: null,
-        updatedData: {
-            itemName: '',
-            category: '',
-            expirationDate: '',
-            quantity: 1
-        }
-    });
+// Render counter for tracking re-renders
+let renderCount = 0;
 
-    // Reference the context
+// Monitor children re-renders
+class RenderTracker extends React.Component {
+    constructor(props) {
+        super(props);
+        this.renders = 0;
+    }
+
+    componentDidUpdate() {
+        this.renders++;
+        if (this.renders % 100 === 0) {
+            console.warn(`⚠️ EXCESSIVE RENDERS: ${this.props.componentName} has rendered ${this.renders} times!`);
+        }
+    }
+
+    render() {
+        return this.props.children;
+    }
+}
+
+// Simplified ListTest component with minimal state
+const ListTest = () => {
+    // Increment render counter to track re-renders
+    renderCount++;
+    if (renderCount % 10 === 0) {
+        console.log('🔄 ListTest render count:', renderCount);
+    }
+
+    // Use a single state value to track the edited item
+    const [editingItem, setEditingItem] = useState(null);
+
+    // Reference the inventory context using our custom hook
     const {
         loading,
         allInventoryItems,
         getAllInventoryItems,
-        updateInventoryItem,
         deleteInventoryItem
-    } = useContext(ContextGlobal);
+    } = useInventory(); // Changed to use our custom hook
 
-    // Debug information - helps track component state
-    useEffect(() => {
-        console.log('ListTest rendering. Items length:', allInventoryItems?.length);
-        console.log('First few items:', allInventoryItems?.slice(0, 2));
-    });
-
-    // Handler functions
+    // Simple function to edit an item - sets it for the modal
     const handleEditBtn = useCallback((item) => {
-        setState({
-            editingItem: item,
-            updatedData: {
-                itemName: item.itemName,
-                expirationDate: item.expirationDate,
-                category: item.category,
-                quantity: item.quantity,
-            }
-        });
+        setEditingItem(item);
     }, []);
 
+    // Simple function to close the modal
+    const handleCloseModal = useCallback(() => {
+        setEditingItem(null);
+    }, []);
+
+    // Delete button handler
     const handleDeleteBtn = useCallback((itemId) => {
         if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
             deleteInventoryItem(itemId)
@@ -57,80 +69,38 @@ const ListTest = () => {
         }
     }, [deleteInventoryItem]);
 
-    const handleUpdateChange = useCallback((e) => {
-        const { name, value } = e.target;
-        setState(prev => ({
-            ...prev,
-            updatedData: {
-                ...prev.updatedData,
-                [name]: name === 'quantity' ? parseInt(value, 10) || 0 : value,
-            }
-        }));
-    }, []);
-
-    const handleClose = useCallback(() => {
-        setState(prev => ({
-            ...prev,
-            editingItem: null
-        }));
-    }, []);
-
-    const handleSubmitUpdate = useCallback((e) => {
-        e.preventDefault();
-        const { editingItem, updatedData } = state;
-
-        if (!updatedData.itemName || !updatedData.category || !updatedData.expirationDate) {
-            toast.error('Por favor, complete todos los campos.');
-            return;
-        }
-
-        updateInventoryItem(editingItem._id, updatedData)
-            .then(() => {
-                toast.success('Producto actualizado correctamente');
-                handleClose();
-            })
-            .catch((error) => {
-                console.error('Error actualizando el producto:', error);
-                toast.error('Error al actualizar el producto.');
-            });
-    }, [state, updateInventoryItem, handleClose]);
-
-    // Fetch data on mount
+    // Fetch data on mount only
     useEffect(() => {
-        console.log('ListTest - Initial mount effect');
+        console.log('ListTest - Fetching inventory items on mount');
         getAllInventoryItems();
-    }, [getAllInventoryItems]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // Execute only on mount
 
     return (
-        <section>
-            <div className="w-full col-span-12 flex flex-col items-center mt-6">
-                <h4 className="text-lg font-bold mb-2">Tu Lista de Productos</h4>
+        <RenderTracker componentName="ListTest">
+            <section>
+                <div className="w-full col-span-12 flex flex-col items-center mt-6">
+                    <h4 className="text-lg font-bold mb-2">Tu Lista de Productos</h4>
 
-                {/* Debug info */}
-                <div className="text-xs text-gray-500 mb-2">
-                    Items: {allInventoryItems?.length || 0} | Loading: {loading ? 'Yes' : 'No'}
+                    <TableTest
+                        items={allInventoryItems || []}
+                        loading={loading}
+                        onDeleteBtn={handleDeleteBtn}
+                        onEditBtn={handleEditBtn}
+                    />
                 </div>
 
-                <TableTest
-                    items={allInventoryItems || []}
-                    loading={loading}
-                    onDeleteBtn={handleDeleteBtn}
-                    onEditBtn={handleEditBtn}
-                />
-            </div>
-
-            <div className="w-[90%] col-span-12 mt-6">
-                {state.editingItem && (
-                    <UpdateForm
-                        updatedData={state.updatedData}
-                        onHandleUpdateChange={handleUpdateChange}
-                        onHandleSubmitUpdate={handleSubmitUpdate}
-                        onClose={handleClose}
+                {/* Render modal only when there's an item to edit */}
+                {editingItem && (
+                    <UpdateFormModal
+                        itemToEdit={editingItem}
+                        onClose={handleCloseModal}
                     />
                 )}
-            </div>
-        </section>
+            </section>
+        </RenderTracker>
     );
 };
 
+// No need for React.memo since we've simplified the component
 export default ListTest;

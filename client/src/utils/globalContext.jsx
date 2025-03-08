@@ -77,7 +77,8 @@ export const ContextProvider = ({ children }) => {
     const getAllInventoryItems = useCallback(async () => {
         console.log('getAllInventoryItems called');
 
-        // Don't set loading for quick refreshes
+        // Always set loading state to true, but don't wait to set it back to false
+        // if there's already data in the cache
         const shouldShowLoading = allInventoryItems.length === 0;
 
         if (shouldShowLoading) {
@@ -85,11 +86,8 @@ export const ContextProvider = ({ children }) => {
         }
 
         try {
-            // Check if we need to fetch at all
-            if (!window.location.pathname.includes('dashboard')) {
-                console.log('Not on dashboard, skipping inventory fetch');
-                return;
-            }
+            // Remove conditional check for dashboard path that causes dependency issues
+            // and rely on component to decide when to call this function
 
             console.log('Fetching inventory data from API...');
             const response = await apiRequest('inventory');
@@ -116,7 +114,7 @@ export const ContextProvider = ({ children }) => {
                 dispatch({ type: SET_LOADING, payload: false });
             }
         }
-    }, [dispatch, window.location.pathname, allInventoryItems.length]);
+    }, [dispatch]);
 
     // Also update the updateInventoryItem function
     const updateInventoryItem = useCallback(async (id, updatedData) => {
@@ -135,8 +133,12 @@ export const ContextProvider = ({ children }) => {
                 updatedItem = response;
             }
 
-            // Get fresh data instead of manually updating
-            await getAllInventoryItems();
+            // Update the item locally instead of fetching all items
+            const updatedItems = allInventoryItems.map(item =>
+                item._id === id ? { ...item, ...updatedItem } : item
+            );
+
+            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: updatedItems });
             return updatedItem;
         } catch (error) {
             console.error('Error updating inventory item:', error);
@@ -144,7 +146,7 @@ export const ContextProvider = ({ children }) => {
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    }, [dispatch, getAllInventoryItems]);
+    }, [dispatch, allInventoryItems]);
 
     // Similarly update deleteInventoryItem
     const deleteInventoryItem = useCallback(async (id) => {
@@ -153,8 +155,10 @@ export const ContextProvider = ({ children }) => {
             const response = await apiRequest(`inventory/${id}`, 'DELETE');
             console.log('Delete response:', response);
 
-            // Refresh all items rather than filtering locally
-            await getAllInventoryItems();
+            // Update items locally by filtering out the deleted item
+            const filteredItems = allInventoryItems.filter(item => item._id !== id);
+            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: filteredItems });
+
             return response;
         } catch (error) {
             console.error('Error deleting inventory item:', error);
@@ -162,7 +166,7 @@ export const ContextProvider = ({ children }) => {
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    }, [dispatch, getAllInventoryItems]);
+    }, [dispatch, allInventoryItems]);
 
     const createInventoryItem = useCallback(async (formData) => {
         dispatch({ type: SET_LOADING, payload: true });
