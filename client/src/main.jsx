@@ -6,7 +6,6 @@ import ProtectedHome from './dashboard/ProtectedHome.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Landing from './pages/Landing.jsx';
-import MealsList from './dashboard/MealsList.jsx';
 import Recipes from './dashboard/Recipes.jsx';
 import Dashboard from './dashboard/Layout.jsx';
 import RecipeDetail from './dashboard/RecipeDetail.jsx';
@@ -16,7 +15,7 @@ import { InventoryProvider } from './utils/inventoryContext.jsx';
 import Users from './dashboard/Users.jsx';
 import Loader from './components/ui/Loader.jsx';
 import PrivateRoute from './dashboard/PrivateRoute.jsx';
-import ListTest from './dashboard/ListTest.jsx';
+import ItemsList from './dashboard/ItemsList.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -38,7 +37,7 @@ createRoot(document.getElementById('root')).render(
               </PrivateRoute>
             }>
               <Route index element={<ProtectedHome />} />
-              <Route path="meals-users" element={<ListTest />} />
+              <Route path="meals-users" element={<ItemsList />} />
               <Route path="recipes" element={<Recipes />} />
               <Route path="recipes/:id" element={<RecipeDetail />} />
               <Route path="users" element={<Users />} />

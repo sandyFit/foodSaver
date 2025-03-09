@@ -3,6 +3,7 @@ import { useInventory } from '../utils/inventoryContext'; // Use the custom hook
 import TableTest from '../components/tables/TableTest';
 import UpdateFormModal from '../components/modals/UpdateFormModal';
 import { toast } from 'react-hot-toast';
+import AddItemButton from '../components/buttons/AddItemButton';
 
 // Render counter for tracking re-renders
 let renderCount = 0;
@@ -27,11 +28,11 @@ class RenderTracker extends React.Component {
 }
 
 // Simplified ListTest component with minimal state
-const ListTest = () => {
+const ItemsList = () => {
     // Increment render counter to track re-renders
     renderCount++;
     if (renderCount % 10 === 0) {
-        console.log('🔄 ListTest render count:', renderCount);
+        console.log('🔄 ItemsList render count:', renderCount);
     }
 
     // Use a single state value to track the edited item
@@ -71,16 +72,18 @@ const ListTest = () => {
 
     // Fetch data on mount only
     useEffect(() => {
-        console.log('ListTest - Fetching inventory items on mount');
+        console.log('ItemsList - Fetching inventory items on mount');
         getAllInventoryItems();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // Execute only on mount
 
     return (
-        <RenderTracker componentName="ListTest">
+        <RenderTracker componentName="ItemsList">
             <section>
-                <div className="w-full col-span-12 flex flex-col items-center mt-6">
-                    <h4 className="text-lg font-bold mb-2">Tu Lista de Productos</h4>
+                <div className="w-full col-span-12 flex flex-col items-center ">
+                    <AddItemButton />
+
+                    <h4 className="text-lg font-bold mt-8 mb-3">Tu Lista de Productos</h4>
 
                     <TableTest
                         items={allInventoryItems || []}
@@ -90,7 +93,6 @@ const ListTest = () => {
                     />
                 </div>
 
-                {/* Render modal only when there's an item to edit */}
                 {editingItem && (
                     <UpdateFormModal
                         itemToEdit={editingItem}
@@ -102,5 +104,4 @@ const ListTest = () => {
     );
 };
 
-// No need for React.memo since we've simplified the component
-export default ListTest;
+export default ItemsList;
