@@ -2,6 +2,9 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
+// Import i18n config - this needs to be imported before any components that use translations
+import './utils/i18n';
+
 import ProtectedHome from './dashboard/ProtectedHome.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';

@@ -1,7 +1,10 @@
 import React from 'react'
 import Navbar from '../layouts/Navbar'
+import { useTranslation } from 'react-i18next';
 
 const Hero = () => {
+    const { t } = useTranslation();
+
     return (
         <section id='hero'>
             <Navbar className="fixed top-0 left-0 w-full z-20" />
@@ -17,14 +20,14 @@ const Hero = () => {
                             <img src="/img/bananas.png" alt="bananas" className="w-24 h-24" />
                         </div>
                         <h1 className='w-full text-yellow-100 text-[8rem] font-medium mt-10
-                            tracking-tight leading-[150px] text-center'>                            
+                            tracking-tight leading-[150px] text-center'>
                             <span className='-ml-52'>
-                                Despídete <br /> del 
+                                {t('landing.hero.title1')} <br />
                             </span>
                             <span className='ml-6 pr-[28rem] text-white'>
-                                desperdicio<br />
+                                {t('landing.hero.title2')}<br />
                             </span>
-                            <span className='ml-[28rem]'>de &nbsp;&nbsp;&nbsp; alimentos</span>
+                            <span className='ml-[28rem]'>{t('landing.hero.title3')}</span>
                         </h1>
                         <div className="w-28 h-28 absolute bottom-32 right-[40rem] rounded-full bg-blue-100 flex 
                             justify-center items-center">
@@ -35,9 +38,7 @@ const Hero = () => {
                         bg-white absolute bottom-28 left-16">
                         <div className="absolute inset-0 w-full h-8 bg-purple-200 rounded-t-lg border-b-2 border-stone-900"></div>
                         <p className="font-[500] text-sm text-black text-justify">
-                            Optimiza tus compras,
-                            prolonga la vida útil de tus alimentos y contribuye al cuidado del planeta,
-                            todo desde una sola aplicación.
+                            {t('landing.hero.description')}
                         </p>
                     </div>
 
@@ -46,8 +47,6 @@ const Hero = () => {
 
                     </div>
                 </div>
-
-
             </main>
         </section>
     )

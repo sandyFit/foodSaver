@@ -1,0 +1,119 @@
+{
+    "common": {
+        "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "add": "Agregar",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "save": "Guardar",
+        "update": "Actualizar",
+        "loading": "Cargando...",
+        "error": "Error",
+        "success": "Éxito",
+        "search": "Buscar...",
+        "home": "Inicio",
+        "products": "Productos",
+        "recipes": "Recetas",
+        "settings": "Configuración",
+        "users": "Usuarios"
+    },
+    "auth": {
+        "login": "Iniciar Sesión",
+        "logout": "Cerrar Sesión",
+        "register": "Registrarse",
+        "forgotPassword": "Olvidé mi Contraseña",
+        "email": "Correo Electrónico",
+        "password": "Contraseña",
+        "confirmPassword": "Confirmar Contraseña",
+        "username": "Nombre de Usuario",
+        "fullName": "Nombre Completo",
+        "logoutConfirmTitle": "Confirmar Cierre de Sesión",
+        "logoutConfirmMessage": "¿Estás seguro de que quieres cerrar sesión de tu cuenta?"
+    },
+    "inventory": {
+        "title": "Tu Lista de Productos",
+        "addItem": "Agregar Producto",
+        "addItemButton": "Agrega tus productos",
+        "itemName": "Nombre del Producto",
+        "expirationDate": "Fecha de Expiración",
+        "category": "Categoría",
+        "quantity": "Cantidad",
+        "addingItem": "Agregando...",
+        "editingItem": "Edita tu Producto",
+        "updatingItem": "Actualizando...",
+        "deletingItem": "Eliminando...",
+        "deleteConfirmTitle": "Confirmar Eliminación",
+        "deleteConfirmMessage": "¿Estás seguro de que quieres eliminar este producto?",
+        "noItems": "No hay productos disponibles",
+        "categories": {
+            "refrigerated": "Refrigerados",
+            "frozen": "Congelados",
+            "fresh": "Frescos",
+            "pantry": "Alacena"
+        }
+    },
+    "validations": {
+        "required": "Por favor, complete todos los campos.",
+        "invalidEmail": "Por favor, introduce un correo electrónico válido.",
+        "passwordMismatch": "Las contraseñas no coinciden.",
+        "minLength": "Debe tener al menos {{count}} caracteres."
+    },
+    "notifications": {
+        "itemAdded": "Producto agregado correctamente",
+        "itemUpdated": "Producto actualizado correctamente",
+        "itemDeleted": "Producto eliminado",
+        "addError": "Error al agregar el producto.",
+        "updateError": "Error al actualizar el producto.",
+        "deleteError": "Error al eliminar el producto.",
+        "loginSuccess": "¡Bienvenid@, {{name}}!",
+        "loginError": "Error al iniciar sesión: {{message}}",
+        "registerSuccess": "Tu cuenta ha sido registrada correctamente. ¡Inicia sesión para comenzar!",
+        "registerError": "Error al registrar el usuario: {{message}}",
+        "unauthorized": "No autorizado. Por favor inicia sesión."
+    },
+    "table": {
+        "product": "Producto",
+        "expiresIn": "Expira en",
+        "category": "Categoría",
+        "quantity": "Cantidad",
+        "actions": "Acciones"
+    },
+    "landing": {
+        "navbar": {
+            "globalImpact": "Impacto Global",
+            "features": "Funcionalidades",
+            "whyFoodSaver": "Por qué FoodSaver",
+            "contact": "Contacto",
+            "registerAccount": "Regístrate",
+            "accessHere": "Accede Aquí"
+        },
+        "hero": {
+            "title1": "Despídete",
+            "title2": "del desperdicio",
+            "title3": "de alimentos",
+            "description": "Optimiza tus compras, prolonga la vida útil de tus alimentos y contribuye al cuidado del planeta, todo desde una sola aplicación."
+        },
+        "stats": {
+            "heading": "Impacto Global",
+            "stat1": "de los alimentos producidos globalmente se desperdician",
+            "stat2": "toneladas de alimentos desperdiciados anualmente",
+            "stat3": "de gases de efecto invernadero provienen del desperdicio de alimentos"
+        },
+        "features": {
+            "heading": "Funcionalidades",
+            "feature1Title": "Gestión de Inventario",
+            "feature1Desc": "Lleva un registro de tus productos con fechas de caducidad.",
+            "feature2Title": "Sugerencias de Recetas",
+            "feature2Desc": "Obtén ideas de recetas basadas en lo que tienes en stock.",
+            "feature3Title": "Reducción de Desperdicio",
+            "feature3Desc": "Monitorea tu progreso en la reducción del desperdicio de alimentos."
+        },
+        "how": {
+            "heading": "Por qué FoodSaver",
+            "step1": "Registra tus productos",
+            "step2": "Recibe notificaciones antes de que caduquen",
+            "step3": "Descubre recetas usando tus ingredientes",
+            "step4": "Reduce el desperdicio y ahorra dinero"
+        }
+    }
+}

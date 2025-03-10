@@ -11,42 +11,49 @@ body {
 }
 
 .custom-shadow {
-    -webkit-box-shadow: -4px 4px 0px 0px rgba(0,0,0,1);
-    -moz-box-shadow: -4px 4px 0px 0px rgba(0,0,0,1);
-    box-shadow: -4px 4px 0px 0px rgba(0,0,0,1);
+    -webkit-box-shadow: -4px 4px 0px 0px rgba(0, 0, 0, 1);
+    -moz-box-shadow: -4px 4px 0px 0px rgba(0, 0, 0, 1);
+    box-shadow: -4px 4px 0px 0px rgba(0, 0, 0, 1);
+    transition: all 0.15s ease-in-out;
 }
 
 .loader {
-  width: 5rem;
-  padding: 8px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: #0f766e;
-  --_m: 
-    conic-gradient(#0000 10%,#000),
-    linear-gradient(#000 0 0) content-box;
-  -webkit-mask: var(--_m);
-          mask: var(--_m);
-  -webkit-mask-composite: source-out;
-          mask-composite: subtract;
-  animation: l3 1s infinite linear;
+    width: 5rem;
+    padding: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #0f766e;
+    --_m:
+        conic-gradient(#0000 10%, #000),
+        linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--_m);
+    mask: var(--_m);
+    -webkit-mask-composite: source-out;
+    mask-composite: subtract;
+    animation: l3 1s infinite linear;
 }
-@keyframes l3 {to{transform: rotate(1turn)}}
+
+@keyframes l3 {
+    to {
+        transform: rotate(1turn)
+    }
+}
 
 /* Personalizar la posición de las alertas */
 .toast-container-custom {
-  top: 46px !important; 
+    top: 46px !important;
 }
 
 
 @layer base {
 
-    html, body {
+    html,
+    body {
         @apply w-full h-full font-[62.5%] box-border m-0 p-0 bg-tahiti-200
     }
 
     button, a {
-        @apply cursor-pointer 
+        @apply cursor-pointer
     }
 
 
@@ -75,28 +82,39 @@ body {
 
 @layer utilities {
     .table-btn {
-        @apply px-2 border-2  rounded-md  uppercase font-[500] text-[.8rem] 
+        @apply px-2 border-2 rounded-md uppercase font-[500] text-[.8rem]
     }
-   
-    .table-th, 
+
+    .table-th,
     .table-td {
         @apply px-4 border-2 border-stone-500 py-2 text-center
     }
 
 
     .shadow-btn {
-        @apply  font-[600] text-stone-700 border-2 border-stone-700 rounded-lg custom-shadow 
+        @apply font-[600] text-stone-700 border-2 border-stone-700 rounded-lg custom-shadow 
+        relative transition-all duration-150 ease-in-out hover:translate-x-[3px] hover:translate-y-[3px] 
+        hover:shadow-none dark:hover:shadow-none active:translate-x-[4px] active:translate-y-[4px]
+    }
+
+    .shadow-btn-static {
+        @apply font-[600] text-stone-700 border-2 border-stone-700 rounded-lg custom-shadow
     }
 
     .full-btn {
-        @apply px-6  text-sm font-[600] text-white hover:text-black bg-black hover:bg-white 
+        @apply px-6 text-sm font-[600] text-white hover:text-black bg-black hover:bg-white
     }
 
     .sidebar-text {
         @apply text-[.68rem] hover:text-teal-300 uppercase
     }
-    
+
     .custom-border {
         @apply border-2 border-stone-900
+    }
+
+    /* Style for language dropdown */
+    .dropdown-open {
+        @apply transition-all duration-200;
     }
 }

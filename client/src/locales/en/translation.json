@@ -1,0 +1,119 @@
+{
+    "common": {
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "add": "Add",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "update": "Update",
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "search": "Search...",
+        "home": "Home",
+        "products": "Products",
+        "recipes": "Recipes",
+        "settings": "Settings",
+        "users": "Users"
+    },
+    "auth": {
+        "login": "Login",
+        "logout": "Logout",
+        "register": "Register",
+        "forgotPassword": "Forgot Password",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "username": "Username",
+        "fullName": "Full Name",
+        "logoutConfirmTitle": "Confirm Logout",
+        "logoutConfirmMessage": "Are you sure you want to log out of your account?"
+    },
+    "inventory": {
+        "title": "Your Product List",
+        "addItem": "Add Product",
+        "addItemButton": "Add your products",
+        "itemName": "Product Name",
+        "expirationDate": "Expiration Date",
+        "category": "Category",
+        "quantity": "Quantity",
+        "addingItem": "Adding...",
+        "editingItem": "Edit your Product",
+        "updatingItem": "Updating...",
+        "deletingItem": "Deleting...",
+        "deleteConfirmTitle": "Confirm Deletion",
+        "deleteConfirmMessage": "Are you sure you want to delete this product?",
+        "noItems": "No products available",
+        "categories": {
+            "refrigerated": "Refrigerated",
+            "frozen": "Frozen",
+            "fresh": "Fresh",
+            "pantry": "Pantry"
+        }
+    },
+    "validations": {
+        "required": "Please complete all fields.",
+        "invalidEmail": "Please enter a valid email address.",
+        "passwordMismatch": "Passwords do not match.",
+        "minLength": "Must be at least {{count}} characters."
+    },
+    "notifications": {
+        "itemAdded": "Product added successfully",
+        "itemUpdated": "Product updated successfully",
+        "itemDeleted": "Product deleted",
+        "addError": "Error adding product.",
+        "updateError": "Error updating product.",
+        "deleteError": "Error deleting product.",
+        "loginSuccess": "Welcome, {{name}}!",
+        "loginError": "Login failed: {{message}}",
+        "registerSuccess": "Your account has been successfully registered. Please login to begin!",
+        "registerError": "Error registering user: {{message}}",
+        "unauthorized": "Unauthorized. Please login."
+    },
+    "table": {
+        "product": "Product",
+        "expiresIn": "Expires In",
+        "category": "Category",
+        "quantity": "Quantity",
+        "actions": "Actions"
+    },
+    "landing": {
+        "navbar": {
+            "globalImpact": "Global Impact",
+            "features": "Features",
+            "whyFoodSaver": "Why FoodSaver",
+            "contact": "Contact",
+            "registerAccount": "Register",
+            "accessHere": "Access Here"
+        },
+        "hero": {
+            "title1": "Say ",
+            "title2": "goodbye to ",
+            "title3": "food waste",
+            "description": "Optimize your shopping, extend the shelf life of your food, and contribute to caring for the planet, all from a single application."
+        },
+        "stats": {
+            "heading": "Global Impact",
+            "stat1": "of food produced globally goes to waste",
+            "stat2": "tonnes of food wasted annually",
+            "stat3": "of greenhouse gases from food waste"
+        },
+        "features": {
+            "heading": "Features",
+            "feature1Title": "Inventory Management",
+            "feature1Desc": "Keep track of your products with expiration dates.",
+            "feature2Title": "Recipe Suggestions",
+            "feature2Desc": "Get recipe ideas based on what you have in stock.",
+            "feature3Title": "Waste Reduction",
+            "feature3Desc": "Track your progress in reducing food waste."
+        },
+        "how": {
+            "heading": "Why FoodSaver",
+            "step1": "Register your products",
+            "step2": "Get notifications before they expire",
+            "step3": "Discover recipes using your ingredients",
+            "step4": "Reduce waste and save money"
+        }
+    }
+}

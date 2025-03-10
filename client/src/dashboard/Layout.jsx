@@ -1,7 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate, Outlet } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, Outlet } from 'react-router-dom';
 import { ContextGlobal } from '../utils/globalContext';
 import LogoutHandler from '../components/ui/LogoutHandler';
+import LanguageSwitcher from '../components/ui/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 // Icons
 import { GoHome } from "react-icons/go";
@@ -12,7 +14,7 @@ import { IoMdSearch } from "react-icons/io";
 import { TbUsers } from "react-icons/tb";
 
 const Dashboard = () => {
-
+    const { t } = useTranslation();
     // const navigate = useNavigate();
     const { user, loading,  } = useContext(ContextGlobal);
 
@@ -27,17 +29,17 @@ const Dashboard = () => {
 
 
     const userItems = user.role === 'user' ? [
-        { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: 'Inicio' },
-        { to: '/dashboard/meals-users', icon: <CiViewList className='text-[1.3rem]' />, label: 'Productos' },
-        { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recetas' },
-        { to: '/dashboard/config-users', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: 'Configuración' },
+        { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: t('common.home') },
+        { to: '/dashboard/meals-users', icon: <CiViewList className='text-[1.3rem]' />, label: t('common.products') },
+        { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: t('common.recipes') },
+        { to: '/dashboard/config-users', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: t('common.settings') },
         
     ] : [
-        { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: 'Inicio' },
-        { to: '/dashboard/meals-users', icon: <CiViewList className='text-[1.3rem]' />, label: 'Productos' },
-        { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: 'Recetas' },
-        { to: '/dashboard/users', icon: <TbUsers className='text-[1.3rem]' />, label: 'Usuarios' },
-        { to: '/dashboard/config-admin', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: 'Configuración' },
+        { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: t('common.home') },
+        { to: '/dashboard/meals-users', icon: <CiViewList className='text-[1.3rem]' />, label: t('common.products') },
+        { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: t('common.recipes') },
+        { to: '/dashboard/users', icon: <TbUsers className='text-[1.3rem]' />, label: t('common.users') },
+        { to: '/dashboard/config-admin', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: t('common.settings') },
 
     ];
 
@@ -88,11 +90,14 @@ const Dashboard = () => {
                     <div className="flex ml-8 relative">
                         <IoMdSearch className='text-2xl absolute top-2 left-2' />
                         <input type="text"
-                            placeholder="Buscar..."
+                            placeholder={t('common.search')}
                             className='w-64 pl-10 shadow-none'/>
                     </div>
                     
                     <div className="flex justify-center items-center gap-6 relative pr-8">
+                        {/* Language Switcher */}
+                        <LanguageSwitcher />
+
                         {/* Notifications */}
                         <div className="frame relative bg-stone-50 w-12 h-12 flex justify-center items-center
                             rounded-full border-2 border-stone-700 custom-shadow">
@@ -123,7 +128,7 @@ const Dashboard = () => {
                             </div>
                             <div className="flex flex-col">
                                 <h3 className="text-[.9rem]">{user?.fullName}</h3>
-                                <p className='text-[.65rem] uppercase -mt-2'>{ user?.role }</p>
+                                <p className='text-[.65rem] uppercase -mt-2'>{user?.role}</p>
                             </div>
                         </div>
                     </div>

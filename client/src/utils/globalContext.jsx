@@ -71,165 +71,7 @@ export const ContextProvider = ({ children }) => {
         }
     };
 
-    // Fetch all inventory items
-    // Update the getAllInventoryItems function to handle the correct response structure
-
-    const getAllInventoryItems = useCallback(async () => {
-        console.log('getAllInventoryItems called');
-
-        // Always set loading state to true, but don't wait to set it back to false
-        // if there's already data in the cache
-        const shouldShowLoading = allInventoryItems.length === 0;
-
-        if (shouldShowLoading) {
-            dispatch({ type: SET_LOADING, payload: true });
-        }
-
-        try {
-            // Remove conditional check for dashboard path that causes dependency issues
-            // and rely on component to decide when to call this function
-
-            console.log('Fetching inventory data from API...');
-            const response = await apiRequest('inventory');
-            console.log('Inventory API response:', response);
-
-            // Extract the items array from the response object
-            let items = [];
-
-            if (response && response.items && Array.isArray(response.items)) {
-                items = response.items;
-            } else if (Array.isArray(response)) {
-                items = response;
-            } else {
-                console.error('Could not extract items array from API response:', response);
-            }
-
-            console.log('Extracted items array:', items);
-            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: items });
-            console.log('Updated inventory state with', items.length, 'items');
-        } catch (error) {
-            console.error('Error fetching inventory items:', error);
-        } finally {
-            if (shouldShowLoading) {
-                dispatch({ type: SET_LOADING, payload: false });
-            }
-        }
-    }, [dispatch]);
-
-    // Also update the updateInventoryItem function
-    const updateInventoryItem = useCallback(async (id, updatedData) => {
-        dispatch({ type: SET_LOADING, payload: true });
-        try {
-            const response = await apiRequest(`inventory/${id}`, 'PUT', updatedData);
-            console.log('Update response:', response);
-
-            // Handle different response formats
-            let updatedItem = null;
-            if (response.item) {
-                updatedItem = response.item;
-            } else if (response.updatedItem) {
-                updatedItem = response.updatedItem;
-            } else {
-                updatedItem = response;
-            }
-
-            // Update the item locally instead of fetching all items
-            const updatedItems = allInventoryItems.map(item =>
-                item._id === id ? { ...item, ...updatedItem } : item
-            );
-
-            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: updatedItems });
-            return updatedItem;
-        } catch (error) {
-            console.error('Error updating inventory item:', error);
-            throw error;
-        } finally {
-            dispatch({ type: SET_LOADING, payload: false });
-        }
-    }, [dispatch, allInventoryItems]);
-
-    // Similarly update deleteInventoryItem
-    const deleteInventoryItem = useCallback(async (id) => {
-        dispatch({ type: SET_LOADING, payload: true });
-        try {
-            const response = await apiRequest(`inventory/${id}`, 'DELETE');
-            console.log('Delete response:', response);
-
-            // Update items locally by filtering out the deleted item
-            const filteredItems = allInventoryItems.filter(item => item._id !== id);
-            dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: filteredItems });
-
-            return response;
-        } catch (error) {
-            console.error('Error deleting inventory item:', error);
-            throw error;
-        } finally {
-            dispatch({ type: SET_LOADING, payload: false });
-        }
-    }, [dispatch, allInventoryItems]);
-
-    const createInventoryItem = useCallback(async (formData) => {
-        dispatch({ type: SET_LOADING, payload: true });
-        try {
-            const data = await apiRequest('inventory', 'POST', formData);
-            if (data.success && data.item) {
-                dispatch({
-                    type: SET_ALL_INVENTORY_ITEMS,
-                    payload: [...allInventoryItems, data.item],
-                });
-                toast.success('Producto registrado con éxito');
-            } else {
-                toast.error(`Error al registrar el producto: ${data.message}`);
-            }
-        } catch (error) {
-            console.error('Error creating inventory item:', error);
-            toast.error('Error agregando el producto.');
-        } finally {
-            dispatch({ type: SET_LOADING, payload: false });
-        }
-    }, [allInventoryItems, dispatch]);
-
-
-    // Update an inventory item
-    // const updateInventoryItem = useCallback(async (id, updatedData) => {
-    //     dispatch({ type: SET_LOADING, payload: true });
-    //     try {
-    //         const response = await apiRequest(`inventory/${id}`, 'PUT', updatedData);
-    //         const updatedItem = response.item || response; // Handle different API response formats
-
-    //         // Directly update the state with the correct format
-    //         const updatedItems = allInventoryItems.map((item) =>
-    //             item._id === id ? { ...item, ...updatedItem } : item
-    //         );
-
-    //         dispatch({
-    //             type: SET_ALL_INVENTORY_ITEMS,
-    //             payload: updatedItems,
-    //         });
-
-    //         return updatedItem;
-    //     } catch (error) {
-    //         console.error('Error updating inventory item:', error);
-    //         throw error; // Rethrow to handle in component
-    //     } finally {
-    //         dispatch({ type: SET_LOADING, payload: false });
-    //     }
-    // }, [allInventoryItems, dispatch]);
-
-
-    // // Delete an inventory item
-    // const deleteInventoryItem = async (id) => {
-    //     dispatch({ type: SET_LOADING, payload: true });
-    //     try {
-    //         await apiRequest(`inventory/${id}`, 'DELETE');
-    //         const filteredItems = allInventoryItems.filter((item) => item._id !== id);
-    //         dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: filteredItems });
-    //         toast.success('Producto eliminado.');
-    //     } finally {
-    //         dispatch({ type: SET_LOADING, payload: false });
-    //     }
-    // };
-
+   
     // === USERS ===
     // globalContext.jsx
     const registerUser = async (formData) => {
@@ -354,7 +196,6 @@ export const ContextProvider = ({ children }) => {
     useEffect(() => {
         if (window.location.pathname.includes('dashboard')) {
             console.log("Ejecutando useEffect en ContextGlobal...");
-            getAllInventoryItems();
             getAllUsers();
         }
     }, []);
@@ -378,13 +219,6 @@ export const ContextProvider = ({ children }) => {
         error,
         dispatch,
 
-        // Inventory Operations
-        allInventoryItems,
-        getAllInventoryItems,
-        createInventoryItem,
-        updateInventoryItem,
-        deleteInventoryItem,
-
         // Auth & User Operations
         registerUser,
         login,
@@ -393,7 +227,7 @@ export const ContextProvider = ({ children }) => {
         getUserInfo,
         updateUserProfile,
         deleteUser,
-    }), [state, loading, error, allInventoryItems, allUsers]);
+    }), [state, loading, error, allUsers]);
 
     return (
         <ContextGlobal.Provider value={contextValue}>
