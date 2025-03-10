@@ -1,42 +1,57 @@
 import { toast } from "react-hot-toast";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 export const confirmToast = ({ title, message, onConfirm }) => {
-    toast.custom((t) => (
-        <div
-            className={`${t.visible ? "animate-enter" : "animate-leave"
-                } fixed top-28 flex items-center justify-center z-50 pointer-events-auto`}
-        >
+    return toast.custom(
+        (t) => (
+            // Outer container with dark overlay for modal effect - matches ModalBackdrop
             <div
-                className={`max-w-lg w-full bg-white shadow-lg rounded-lg flex flex-col
-                    border-2 border-stone-700 relative`}
+                className={`${t.visible ? 'animate-enter' : 'animate-leave'
+                    } fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center`}
+                onClick={() => toast.dismiss(t.id)}
             >
-                <div className="absolute w-full h-8 bg-blue-100 border-b-2 border-stone-700 rounded-t-lg"></div>
-                <div className="p-4 mt-10">
-                    <h3 className="text-lg font-semibold">{ title }</h3>
-                    <p className="text-sm text-gray-700">{ message }</p>
-                    <div className="mt-4 flex justify-end space-x-2">
-                        <button
-                            onClick={() => toast.dismiss(t.id)} // Dismiss without action
-                            className="px-4 py-2 text-sm bg-yellow-100 rounded-lg border-2 
-                                border-stone-700"
-                        >
-                            Cancelar
-                        </button>
-                        <button
-                            onClick={() => {
-                                // Handle confirmation logic
-                                console.log("Confirmado");
-                                toast.dismiss(t.id);
-                                onConfirm();
-                            }}
-                            className="px-4 py-2 text-sm text-white bg-tahiti-700 border-2 
-                                border-stone-700 rounded-lg"
-                        >
-                            Confirmar
-                        </button>
+                {/* Modal container - matches the div inside ModalBackdrop */}
+                <div
+                    className="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-md relative"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <button
+                        onClick={() => toast.dismiss(t.id)}
+                        className="absolute top-2 right-2"
+                    >
+                        <IoCloseCircleOutline className="text-xl" />
+                    </button>
+
+                    <div className="flex flex-col justify-center">
+                        <h4 className="text-lg font-bold my-2">{title}</h4>
+                        <p className="text-sm text-gray-500 mb-6">{message}</p>
+
+                        <div className="flex justify-end space-x-3 mt-4">
+                            <button
+                                type="button"
+                                className="px-4 py-2 bg-gray-200 rounded mr-2"
+                                onClick={() => toast.dismiss(t.id)}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="button"
+                                className="shadow-btn px-8 py-2 bg-red-100 hover:bg-red-200 border-red-600 text-red-600 rounded"
+                                onClick={() => {
+                                    toast.dismiss(t.id);
+                                    onConfirm();
+                                }}
+                            >
+                                Confirmar
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    ));
+        ),
+        {
+            duration: Infinity,
+            id: 'confirm-toast',
+        }
+    );
 };
