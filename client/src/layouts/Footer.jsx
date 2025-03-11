@@ -1,146 +1,178 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from 'react-scroll';
 import { FaInstagram, FaTiktok } from "react-icons/fa";
 import { CiYoutube } from "react-icons/ci";
 import MotionText from '../components/ui/MotionText';
 import Logo from '../components/ui/Logo';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+
+    const { t } = useTranslation();
+    const [authModalOpen, setAuthModalOpen] = useState(false);
+        const [authModalMode, setAuthModalMode] = useState('login');
+    
+        const openLoginModal = () => {
+            setAuthModalMode('login');
+            setAuthModalOpen(true);
+        };
+    
+        const closeAuthModal = () => {
+            setAuthModalOpen(false);
+        };
+
     return (
         <footer id='contact'
             className='w-full min-h-screen bg-tahiti-700 flex flex-col justify-center items-center'>
             <MotionText/>
-            <div className="w-full grid grid-cols-12 grid-rows-6 gap-6 px-16 pt-[3.6rem]">
+            <div className="w-full grid grid-cols-12 grid-rows-6 gap-6 px-16 pt-[4rem]">
                 <section className="w-full flex flex-col h-full col-span-4 col-start-1 col-end-4 row-span-6 
-                    row-start-1 row-end-7 border-2 border-black rounded-lg px-6 pb-6 justify-between
-                    items-center bg-red-100">
+                    row-start-1 row-end-7 border-2 border-black custom-shadow px-6 pb-6 justify-between
+                    items-center text-white">
                     <Logo/> 
                     <div className='p-1 pb-6'>
-                        <h4>Contacto</h4>
+                        <h4>
+                            {t('landing.footer.contactTitle')}
+                        </h4>
                         <p className='text-sm'>
-                            Si tienes dudas o preguntas, escríbenos a
-                            <a href='mailto:foodsaver@gmail.com' className='text-blue-600 hover:text-blue-800 ml-1'>
-                                ayuda@foodsaver.com🡭
+                            {t('landing.footer.contactMessage')} <br/>
+                            <a href='mailto:foodsaver@gmail.com'
+                                className='text-yellow-100 hover:text-yellow-200'>
+                                help@foodsaver.com🡭
                             </a>
                         </p>
                     </div>
                 </section>
 
-                <section className="w-full flex h-full col-span-9 col-start-4 col-end-13 row-span-3 row-start-1 
-                    row-end-4 border-2 border-black rounded-lg p-12 bg-yellow-100">
-                    <div className="w-full flex justify-between items-center">
-                        <div className="flex flex-col">
-                            <h4>Suscríbete a la Newsletter</h4>
-                            <p className='w-[90%]'>
-                                ¿Quieres reducir el desperdicio de alimentos en casa? Descubre consejos prácticos
-                                de cocina, almacenamiento inteligente y deliciosas recetas. ¡Suscríbete a nuestra
-                                newsletter y transforma tu forma de aprovechar los alimentos!
-                            </p>
+                <div className="flex flex-col border-2 border-black custom-shadow col-span-9 col-start-4 col-end-13 row-span-3 
+                    row-start-1 row-end-7">
+                    <section className="w-full flex col-span-9 col-start-4 col-end-13 row-span-3 
+                        row-start-1 row-end-4 p-12 text-white">
+                        <div className="w-full flex justify-between items-center">
+                            <div className="flex flex-col">
+                                <h4>
+                                    {t('landing.footer.subscribe')}
+                                </h4>
+                                <p className='w-[90%]'>
+                                    {t('landing.footer.subcribeDescription')}
+                                </p>
+                            </div>
+                            
+                            <div className="flex flex-col gap-2">
+                                <input type="text"
+                                    className='w-80 h-12 border-2 border-black rounded-lg'
+                                    placeholder={t('landing.footer.inputPlaceholder')}
+
+                                />
+                                <button className='full-btn rounded-lg py-3 border-2 border-black'>
+                                    {t('landing.footer.SubscribeBtn')}
+                                </button>
+                                <p className='text-sm text-center'>
+                                    {t('landing.footer.unsubscribeText')}
+                                </p>
+                            </div>
+                            
                         </div>
-                        
-                        <div className="flex flex-col gap-2">
-                            <input type="text"
-                                className='w-80 h-12 border-2 border-black rounded-lg'
-                                placeholder='Ingresa tu correo'
-                            />
-                            <button className='full-btn rounded-lg py-3 border-2 border-black'>
-                                Suscríbete
+                    </section>
+
+                <hr className='border-t-2 border-black'/>
+                    <div className="flex col-span-6 col-start-4 col-end-13 row-span-3 row-start-4 row-end-7 ">
+                        <section className="w-full flex py-10 pl-10 ">
+                            <div className="w-[60%] flex ">
+                                <nav className='w-full flex justify-between text-sm'>
+                                    <div className="flex flex-col text-white">
+                                        <h4>
+                                            {t('landing.footer.product')}
+                                        </h4>
+                                        <ul className='flex flex-col gap-2 mt-2'>
+                                            <li>
+                                                <Link to="stats" className='text-white hover:text-gray-300'>
+                                                    {t('landing.navbar.globalImpact')}🡭
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link to="about" className='text-white hover:text-gray-300'>
+                                                    {t('landing.navbar.about')}🡭
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link to="features" className='text-white hover:text-gray-300'>
+                                                    {t('landing.navbar.features')}🡭
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <a href="#" className='text-white hover:text-gray-300'>
+                                                    Blog🡭
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="flex flex-col text-white">
+                                        <h4>
+                                            {t('landing.footer.more')}
+                                        </h4>
+                                        <ul className='flex flex-col gap-2 mt-2'>                                                                     
+                                            <li>
+                                                <a href="#" className='text-white hover:text-gray-300'>
+                                                    {t('landing.footer.roadmap')}🡭
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" className='text-white hover:text-gray-300'>
+                                                    {t('landing.footer.terms')}🡭
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" className='text-white hover:text-gray-300'>
+                                                    {t('landing.footer.privacy')}🡭
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" className='text-white hover:text-gray-300'>
+                                                    {t('landing.footer.details')}🡭
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </nav>
+                            </div>
+
+                        </section>
+
+                        <section className="flex flex-col col-span-3 col-start-10 col-end-13 row-span-3 
+                            row-start-4 row-end-7 place-content-between pr-12 pt-8">
+                            <div className="flex gap-4 text-white">
+                                <a href='http://instagram.com' target='_blank'
+                                    className="flex col-span-2 col-start-10 col-end-12 row-span-1 row-start-4 
+                                    row-end-5 p-3 border-2 border-white hover:border-black rounded-full 
+                                    hover:text-black">
+                                    <FaInstagram className='text-[2rem]'/>
+                                </a>
+                                <a href='http://youtube.com' target='_blank'
+                                    className="flex col-span-1 col-start-11 col-end-12 row-span-1 row-start-4 
+                                    row-end-5 p-3 border-2 border-white hover:border-black rounded-full 
+                                    hover:text-black">
+                                    <CiYoutube className='text-[2rem]' />
+                                </a>
+                                <a href='http://tiktok.com' target='_blank'
+                                    className="flex col-span-1 col-start-12 col-end-13 row-span-1 row-start-4 
+                                    row-end-5 p-3 px-4 border-2 border-white hover:border-black rounded-full 
+                                    hover:text-black">
+                                    <FaTiktok className='text-[1.6rem]' />
+                                </a>
+                            </div>
+                            <button
+                                className='border-2 border-white hover:border-black rounded-lg w-full px-4 py-2.5 mb-8 
+                                    text-white hover:text-black font-medium'
+                                onClick={openLoginModal}
+                                onClose={closeAuthModal}
+                            >
+                                {t('landing.navbar.accessHere')}
                             </button>
-                            <p className='text-sm'>
-                                Cancela cuando quieras, ¡sin dramas! ✌️
-                            </p>
-                        </div>
-                        
+                        </section>
                     </div>
-                </section>
-
-                <section className="w-full flex h-full col-span-6 col-start-4 col-end-10 row-span-3 row-start-4 
-                    row-end-7 border-2 border-black rounded-lg py-10 px-12 bg-blue-100">
-                    <div className="w-full flex">
-                        <nav className='w-full flex justify-between text-sm'>
-                            <div className="flex flex-col">
-                                <h4>Producto</h4>
-                                <ul className='flex flex-col gap-2 mt-2'>
-                                    <li>
-                                        <Link to="stats" className='text-black hover:text-gray-500'>
-                                            Impacto Global🡭
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="features" className='text-black hover:text-gray-500'>
-                                            Funcionalidades🡭
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="why" className='text-black hover:text-gray-500'>
-                                            Por qué FoodSaver🡭
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <a href="#" className='text-black hover:text-gray-500'>
-                                            Blog🡭
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div className="flex flex-col">
-                                <h4>Más</h4>
-                                <ul className='flex flex-col gap-2 mt-2'>                                                                     
-                                    <li>
-                                        <a href="#" className='text-black hover:text-gray-500'>
-                                            Nuestra Hoja de Ruta🡭
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className='text-black hover:text-gray-500'>
-                                            Terminos & Condiciones🡭
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className='text-black hover:text-gray-500'>
-                                            Política de Tratamiento de Datos🡭
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </nav>
-                    </div>
-
-                </section>
-
-                <section className="flex flex-col col-span-3 col-start-10 col-end-13 row-span-3 row-start-4 row-end-7
-                    gap-y-6">
-                    <div className="flex gap-4">
-                        <a href='http://instagram.com' target='_blank'
-                            className="flex col-span-2 col-start-10 col-end-12 row-span-1 row-start-4 row-end-5
-                            p-6 border-2 border-black rounded-lg bg-purple-200 hover:bg-purple-500">
-                            <FaInstagram className='text-[3rem]'/>
-                        </a>
-                        <a href='http://youtube.com' target='_blank'
-                            className="flex col-span-1 col-start-11 col-end-12 row-span-1 row-start-4 row-end-5
-                            p-6 border-2 border-black rounded-lg bg-purple-200 hover:bg-purple-500">
-                            <CiYoutube className='text-[3rem]' />
-                        </a>
-                        <a href='http://tiktok.com' target='_blank'
-                            className="flex col-span-1 col-start-12 col-end-13 row-span-1 row-start-4 row-end-5
-                            p-6 border-2 border-black rounded-lg bg-purple-200 hover:bg-purple-500">
-                            <FaTiktok className='text-[2.6rem]' />
-                        </a>
-                    </div>
-                    <div className="flex gap-6 font-medium">
-                        <a href='/login' className='flex col-span-1 col-start-10 col-end-12 row-span-2 row-start-5 row-end-7
-                            p-10 border-2 border-black rounded-lg bg-yellow-100 hover:bg-yellow-200'>
-                            Accede
-                        </a>
-                        <a href='/register' className='flex col-span-1 col-start-12 col-end-13 row-span-2 row-start-5 row-end-7
-                            p-10 border-2 border-black rounded-lg bg-yellow-100 hover:bg-yellow-200'>
-                            Regístrate
-                        </a>
-                    </div>
-                </section>
-
-
+                </div>
             </div>
 
             <aside className="flex w-full h-16 bg-black justify-between items-center mt-auto px-16">
@@ -148,15 +180,15 @@ const Footer = () => {
                     © {new Date().getFullYear()} FoodSaver
                 </p>
                 <p className='text-white'>
-                    Diseño y desarrollo por
+                    {t('landing.footer.credits')}
                     <a href="https://www.trishramos.com"
-                        className='ml-2 underline underline-offset-4 hover:text-gray-500'
+                        className='ml-2 underline underline-offset-4 hover:text-gray-300'
                     >
                         Trish Ramos
                     </a>
                 </p>
-                <Link to='hero' className='text-white underline underline-offset-4 hover:text-gray-500'>
-                    Volver Arriba🡭
+                <Link to='hero' className='text-white underline underline-offset-4 hover:text-gray-300'>
+                    {t('landing.footer.backToTop')}🡭
                 </Link>
             </aside>
         </footer>

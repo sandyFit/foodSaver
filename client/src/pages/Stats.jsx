@@ -62,9 +62,9 @@ const Stats = () => {
                 <h2 className="text-3xl font-semibold mt-16">
                     {t('landing.stats.intro')}
                 </h2>
-                <h1 className="text-5xl font-bold mt-8">
+                <h2 className="text-5xl font-bold mt-8 uppercase tracking-tighter">
                     {t('landing.stats.statsTitle')}
-                </h1>
+                </h2>
                 <h2 className="text-3xl font-semibold mt-8">
                     {t('landing.stats.statsSubtitle')}
                 </h2>

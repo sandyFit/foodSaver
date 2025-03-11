@@ -1,10 +1,23 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Navbar from '../layouts/Navbar'
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-scroll';
+import AuthModal from '../components/modals/AuthModal';
 
 const Hero = () => {
     const { t } = useTranslation();
+
+    const [authModalOpen, setAuthModalOpen] = useState(false);
+        const [authModalMode, setAuthModalMode] = useState('register');
+    
+        const openRegisterModal = () => {
+            setAuthModalMode('register');
+            setAuthModalOpen(true);
+        };
+    
+        const closeAuthModal = () => {
+            setAuthModalOpen(false);
+        };
 
     return (
         <section id='hero'>
@@ -45,11 +58,13 @@ const Hero = () => {
                     </div>
 
                     <div className="flex justify-center items-center w-full mt-12 space-x-6">                       
-                        <a href="/register"
-                            className='shadow-btn px-6 py-2.5 bg-red-100'
+                        <button
+                            className='shadow-btn bg-red-100 px-8 py-2.5'
+                            onClick={openRegisterModal}
                         >
                             {t('landing.hero.button1')}
-                        </a>
+                        </button>
+
 
                         <Link href="/stats"
                             className='shadow-btn px-20 py-2.5 bg-purple-100'
@@ -59,6 +74,11 @@ const Hero = () => {
                     </div>
                 </div>
             </main>
+            <AuthModal
+                isOpen={authModalOpen}
+                onClose={closeAuthModal}
+                initialMode={authModalMode}
+            />
         </section>
     )
 }

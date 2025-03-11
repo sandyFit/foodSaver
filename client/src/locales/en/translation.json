@@ -28,7 +28,19 @@
         "username": "Username",
         "fullName": "Full Name",
         "logoutConfirmTitle": "Confirm Logout",
-        "logoutConfirmMessage": "Are you sure you want to log out of your account?"
+        "logoutConfirmMessage": "Are you sure you want to log out of your account?",
+        "loginTitle": "Log in & manage your pantry efficiently 🥫✅",
+        "registerTitle": "Sing up to Save & Care for the Planet 🌍💚",
+        "loginButton": "ACCESS Now",
+        "registerButton": "CREATE Your Account",
+        "loggingIn": "Logging in...",
+        "registering": "Registering...",
+        "noAccount": "Don't have an account?",
+        "haveAccount": "Already have an account?",
+        "registerHere": "Register here",
+        "loginHere": "Login here",
+        "userRole": "User",
+        "adminRole": "Admin"
     },
     "inventory": {
         "title": "Your Product List",
@@ -97,15 +109,14 @@
         },
         "stats": {
             "intro": "Did you know that ....",
-            "statsTitle": "If food waste was a country, it would be the third largest emitter of greenhouse gases",
-            "statsSubtitle": "and its impact is enormous!",
+            "statsTitle": "If food waste was a country, it would be the third largest emitter of greenhouse gases —",
+            "statsSubtitle": "with a major impact on the environment!",
             "heading": "Global Impact",
             "stat1": "of food produced globally goes to waste.",
             "stat2": "of food waste happens at home.",
             "stat3": "dollars are lost every year due to food waste.",
             "stat4": "Fruits, vegetables, bread, dairy, and meat are the most wasted foods in households. 🍎🥦🥖🥛🥩",
             "billion": "Billion"
-            
         },
         "features": {
             "heading": "Features",
@@ -122,6 +133,27 @@
             "step2": "Get notifications before they expire",
             "step3": "Discover recipes using your ingredients",
             "step4": "Reduce waste and save money"
+        },
+        "footer": {
+            "slider": "JOIN US NOW AND START SAVING!",
+            "subscribe": "Subscribe to our Newsletter",
+            "subcribeDescription": "Want to cut down on food waste at home? Get practical cooking tips, smart storage hacks, and delicious recipes. Subscribe to our newsletter and make the most of your food!",
+            "inputPlaceholder": "Enter you email",
+            "SubscribeBtn": "Subscribe",
+            "unsubscribeText": "Cancel anytime, no hard feelings ✌️",
+            "contactTitle": "Contact",
+            "contactMessage": "We love hearing your feedback! Feel free to email us with any questions or comments at:",
+            "product": "Product",
+            "blog": "Blog",
+            "more": "More",
+            "roadmap": "Our Roadmap",
+            "terms": "Terms & Conditions",
+            "privacy": "Privacy Policy",
+            "details": "Tech Specs",
+            "credits": "Design & Development by",
+            "backToTop": "Back to Top",
+            "login": "Sign In",
+            "register": "Sign Up"
         }
     }
 }

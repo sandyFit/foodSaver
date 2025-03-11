@@ -28,7 +28,19 @@
         "username": "Nombre de Usuario",
         "fullName": "Nombre Completo",
         "logoutConfirmTitle": "Confirmar Cierre de Sesión",
-        "logoutConfirmMessage": "¿Estás seguro de que quieres cerrar sesión de tu cuenta?"
+        "logoutConfirmMessage": "¿Estás seguro de que quieres cerrar sesión de tu cuenta?",
+        "loginTitle": "Accede y Gestiona Eficientemente tu Despensa ",
+        "registerTitle": "Únete y Aprende a Ahorrar y Cuidar el Planeta",
+        "loginButton": "ACCEDE Ahora",
+        "registerButton": "CREA tu Cuenta",
+        "loggingIn": "Accediendo...",
+        "registering": "Registrando...",
+        "noAccount": "¿No tienes cuenta?",
+        "haveAccount": "¿Ya tienes una cuenta?",
+        "registerHere": "Regístrate aquí",
+        "loginHere": "Accede aquí",
+        "userRole": "Usuario",
+        "adminRole": "Admin"
     },
     "inventory": {
         "title": "Tu Lista de Productos",
@@ -97,8 +109,8 @@
         },
         "stats": {
             "intro": "Sabías que ...",
-            "statsTitle": "Si el desperdicio de alimentos fuera un país, sería el tercer mayor emisor de gases de efecto invernadero",
-            "statsSubtitle": "Y su impacto es enorme!",
+            "statsTitle": "Si el desperdicio fuera un país, sería el tercer mayor emisor de gases de efecto invernadero —",
+            "statsSubtitle": "¡con un gran impacto en el medio ambiente!",
             "heading": "Impacto Global",
             "stat1": "de los alimentos producidos globalmente se desperdician",
             "stat2": "del desperdicio de alimentos ocurre en casa.",
@@ -121,6 +133,26 @@
             "step2": "Recibe notificaciones antes de que caduquen",
             "step3": "Descubre recetas usando tus ingredientes",
             "step4": "Reduce el desperdicio y ahorra dinero"
+        },
+        "footer": {
+            "slider": "¡ÚNETE AHORA Y EMPIEZA A AHORRAR!",
+            "subscribe": "Subcríbete a la Newsletter",
+            "subcribeDescription": "¿Quieres reducir el desperdicio de alimentos en casa? Descubre consejos de cocina prácticos, almacenamiento inteligente y recetas deliciosas. ¡Suscríbete a nuestro boletín y aprovecha mejor tu comida!",
+            "inputPlaceholder": "Ingresa tu email",
+            "SubscribeBtn": "Subscríbete",
+            "unsubscribeText": "Cancela cuando quieras, ¡sin dramas! ✌️",
+            "contactTitle": "Contacto",
+            "contactMessage": "Nos encanta recibir tu opinión! Envíanos tus preguntas o comentarios al correo electrónico:",
+            "product": "Producto",
+            "more": "Mas",
+            "roadmap": "Nuestra Hoja de Ruta",
+            "terms": "Terminos & Condiciones",
+            "privacy": "Política de Tratamiento de Datos",
+            "details": "Especificaciones Técnicas",
+            "credits": "Diseño y desarrollo por",
+            "backToTop" : "Volver Arriba",
+            "login": "Accede",
+            "register": "Regístrate"
         }
     }
 }

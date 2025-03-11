@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { useTranslation } from 'react-i18next';
 
 const MotionText = () => {
     const containerRef = useRef(null);
     const textRef = useRef(null);
+    const { t } = useTranslation();
 
     const content = (
         <>
@@ -11,7 +13,7 @@ const MotionText = () => {
                 <img src="/img/watermelon.png" alt="watermelon" className="w-8 h-8" />
             </div>
             <p className='text-2xl text-white uppercase whitespace-nowrap'>
-                Únete ahora y empieza a ahorrar!
+                {t('landing.footer.slider')}
             </p>
         </>
     );
