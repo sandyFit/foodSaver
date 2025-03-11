@@ -47,8 +47,7 @@ const Landing = () => {
     }, []);
 
     return (
-        <main className="relative">
-            
+        <main className="relative">           
             <div ref={containerRef} className="overflow-hidden">
                 {[Hero, Stats, Features, How, Footer].map((Section, index) => (
                     <section

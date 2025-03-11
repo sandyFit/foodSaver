@@ -81,23 +81,31 @@
     "landing": {
         "navbar": {
             "globalImpact": "Global Impact",
+            "about": "About",
             "features": "Features",
-            "whyFoodSaver": "Why FoodSaver",
             "contact": "Contact",
             "registerAccount": "Register",
             "accessHere": "Access Here"
         },
         "hero": {
-            "title1": "Say ",
-            "title2": "goodbye to ",
-            "title3": "food waste",
-            "description": "Optimize your shopping, extend the shelf life of your food, and contribute to caring for the planet, all from a single application."
+            "title1": "Smart Food Management for a Waste-Free Home",
+            "description1": "Track, manage, and optimize household grocery purchases and usage to reduce waste efficiently. ",
+            "description2": "Use what's about to expire first with AI-generated recipe suggestions tailored to your pantry.",
+            "description3": "Extend the shelf life of your food, and contribute to caring for the planet.",
+            "button1": "JOIN US and start SAVING now!",
+            "button2": "Discover MORE..."
         },
         "stats": {
+            "intro": "Did you know that ....",
+            "statsTitle": "If food waste was a country, it would be the third largest emitter of greenhouse gases",
+            "statsSubtitle": "and its impact is enormous!",
             "heading": "Global Impact",
-            "stat1": "of food produced globally goes to waste",
-            "stat2": "tonnes of food wasted annually",
-            "stat3": "of greenhouse gases from food waste"
+            "stat1": "of food produced globally goes to waste.",
+            "stat2": "of food waste happens at home.",
+            "stat3": "dollars are lost every year due to food waste.",
+            "stat4": "Fruits, vegetables, bread, dairy, and meat are the most wasted foods in households. 🍎🥦🥖🥛🥩",
+            "billion": "Billion"
+            
         },
         "features": {
             "heading": "Features",

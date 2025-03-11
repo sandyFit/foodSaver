@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoLanguage } from 'react-icons/io5';
 import { IoIosArrowDown } from 'react-icons/io';
+import { TfiWorld } from "react-icons/tfi";
 
 // Language options - can be easily extended
 const LANGUAGES = [
-    { code: 'es', label: 'Español' },
-    { code: 'en', label: 'English' },
+    { code: 'es', label: 'ES' },
+    { code: 'en', label: 'EN' },
     // Add more languages here in the future
     // { code: 'fr', label: 'Français' },
     // { code: 'de', label: 'Deutsch' },
@@ -61,35 +62,35 @@ const LanguageSwitcher = () => {
     }, []);
 
     // Find current language label
-    const currentLanguageLabel = LANGUAGES.find(lang => lang.code === currentLanguage)?.label || 'Language';
+    const currentLanguageLabel = LANGUAGES.find(lang =>
+        lang.code === currentLanguage)?.label || 'Language';
 
     return (
         <div className="relative" ref={dropdownRef}>
-            {/* Button with shadow */}
             <button
-                className="shadow-btn-static px-6 py-2.5 flex items-center justify-between 
-                    bg-white rounded-lg"
+                className="flex items-center justify-between"
                 onClick={() => setIsOpen(!isOpen)}
                 aria-haspopup="true"
                 aria-expanded={isOpen}
             >
-                <div className="flex items-center">
-                    <IoLanguage className="mr-2" />
-                    <span className="font-[600] text-stone-700">{currentLanguageLabel}</span>
+                <div className="flex items-center text-white">
+                    {/* <IoLanguage className="mr-2" /> */}
+                    <TfiWorld className="mr-1" />
+                    <span className="font-[600]">{currentLanguageLabel}</span>
                 </div>
-                <IoIosArrowDown className={`ml-2 transition-transform ${isOpen ? 'rotate-180' : 'rotate-0'}`} />
+                <IoIosArrowDown className={`ml-2 transition-transform text-white
+                    ${isOpen ? 'rotate-180' : 'rotate-0'}`} />
             </button>
 
             {/* Dropdown menu - absolutely positioned */}
             {isOpen && (
-                <div className="absolute top-full left-0 mt-1 w-full shadow-btn-static  
-                    bg-white  z-50">
-                    <ul className="py-1 px-2">
+                <div className="absolute top-full left-0 mt-3 w-full z-50 border-2 border-white 
+                    rounded-lg bg-tahiti-700 text-white">
+                    <ul className="flex flex-col justify-center items-center">
                         {LANGUAGES.map((language) => (
                             <li key={language.code}>
                                 <button
-                                    className={`w-full text-left px-4 py-2.5 text-sm hover:border-2 
-                                        hover:border-zinc-700 rounded-lg
+                                    className={`w-full text-left px-4 py-2.5 text-sm hover:text-black
                                         ${currentLanguage === language.code ?
                                             'font-medium' : ''}`}
                                     onClick={() => changeLanguage(language.code)}

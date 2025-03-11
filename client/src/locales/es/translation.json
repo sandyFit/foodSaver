@@ -81,23 +81,30 @@
     "landing": {
         "navbar": {
             "globalImpact": "Impacto Global",
+            "about": "Acerca",
             "features": "Funcionalidades",
-            "whyFoodSaver": "Por qué FoodSaver",
             "contact": "Contacto",
             "registerAccount": "Regístrate",
             "accessHere": "Accede Aquí"
         },
         "hero": {
-            "title1": "Despídete",
-            "title2": "del desperdicio",
-            "title3": "de alimentos",
-            "description": "Optimiza tus compras, prolonga la vida útil de tus alimentos y contribuye al cuidado del planeta, todo desde una sola aplicación."
+            "title1": "Gestiona tus alimentos y dile adiós al desperdicio",
+            "description1": "Rastrea, gestiona y optimiza las compras y el uso de tus alimentos.",
+            "description2": "Usa primero lo que está por vencer con recetas generadas por IA adaptadas a tu despensa.",
+            "description3": "Extiende la vida útil de tus alimentos y contribuye al cuidado del planeta.",
+            "button1": "ÚNETE y empieza a AHORRAR ya!",
+            "button2": "Descubre MAS..."
         },
         "stats": {
+            "intro": "Sabías que ...",
+            "statsTitle": "Si el desperdicio de alimentos fuera un país, sería el tercer mayor emisor de gases de efecto invernadero",
+            "statsSubtitle": "Y su impacto es enorme!",
             "heading": "Impacto Global",
             "stat1": "de los alimentos producidos globalmente se desperdician",
-            "stat2": "toneladas de alimentos desperdiciados anualmente",
-            "stat3": "de gases de efecto invernadero provienen del desperdicio de alimentos"
+            "stat2": "del desperdicio de alimentos ocurre en casa.",
+            "stat3": "de dólares se pierden cada año debido al desperdicio de alimentos.",
+            "stat4": "Frutas, vegetales, lácteos y carnes son los alimentos que más se desperdician en los hogares. 🍎🥦🥖🥛🥩",
+            "billion": "Billón"
         },
         "features": {
             "heading": "Funcionalidades",

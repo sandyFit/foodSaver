@@ -102,7 +102,7 @@ const Login = () => {
 
                         <button
                             type="submit"
-                            className='shadow-btn bg-blue-200 hover:bg-blue-400 py-2.5'
+                            className='shadow-btn bg-blue-200 py-2.5'
                             disabled={loading}
                         >
                             {loading ? (

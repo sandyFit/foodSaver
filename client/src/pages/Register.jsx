@@ -167,7 +167,7 @@ const Register = () => {
 
                         <button
                             type="submit"
-                            className='shadow-btn bg-red-200 hover:bg-red-300 py-2.5'
+                            className='shadow-btn bg-red-200 py-2.5'
                             disabled={loading}
                         >
                             {loading ? (

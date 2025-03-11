@@ -18,14 +18,10 @@ export default {
             400: '#147995',
           }
         },
-        fontFamily: {
-          sans: ['Quicksand', 'sans-serif'],
-          bai: ['Bai Jamjuree', 'sans-serif'],
-          cursive: ['WindSong', 'cursive'],
-          anybody: ['Anybody', 'sans-serif'],
-          inter: ["Inter", 'sans-serif'],
-          montserrat: ["Montserrat", 'serif']
-        },
+      },
+      fontFamily: {
+        condensed: ["Roboto Condensed", 'sans-serif'],
+        monserrat: ["montserrat", 'sans-serif']
       },
     },
   },

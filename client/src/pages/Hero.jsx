@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from '../layouts/Navbar'
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-scroll';
 
 const Hero = () => {
     const { t } = useTranslation();
@@ -8,43 +9,53 @@ const Hero = () => {
     return (
         <section id='hero'>
             <Navbar className="fixed top-0 left-0 w-full z-20" />
-            <main className='w-full h-screen bg-tahiti-700 flex px-16 pt-32'>
-                <div className="w-full flex flex-col gap-6">
-                    <div className="w-full h-full flex flex-col relative">
-                        <div className="w-28 h-28 absolute top-16 left-10 rounded-full bg-blue-100 flex 
-                            justify-center items-center">
-                            <img src="/img/strawberry.png" alt="strawberry" className="w-24 h-24" />
-                        </div>
-                        <div className="w-28 h-28 absolute top-16 left-36 rounded-full bg-red-600 flex 
-                            justify-center items-center">
-                            <img src="/img/bananas.png" alt="bananas" className="w-24 h-24" />
-                        </div>
-                        <h1 className='w-full text-yellow-100 text-[8rem] font-medium mt-10
-                            tracking-tight leading-[150px] text-center'>
-                            <span className='-ml-52'>
-                                {t('landing.hero.title1')} <br />
-                            </span>
-                            <span className='ml-6 pr-[28rem] text-white'>
-                                {t('landing.hero.title2')}<br />
-                            </span>
-                            <span className='ml-[28rem]'>{t('landing.hero.title3')}</span>
-                        </h1>
-                        <div className="w-28 h-28 absolute bottom-32 right-[40rem] rounded-full bg-blue-100 flex 
-                            justify-center items-center">
-                            <img src="/img/watermelon.png" alt="watermelon" className="w-24 h-24" />
+            <main className='flex w-full h-screen bg-tahiti-700 px-16 pt-36'>
+                <div className="w-full flex flex-col">
+                    <div className="w-full h-full flex flex-col">
+                        <div className="w-full flex items-center justify-center border-2 border-zinc-700 
+                            px-10 py-10 custom-shadow">
+                            <h1 className='text-yellow-100 text-center'>
+                                {t('landing.hero.title1')}
+                            </h1>
                         </div>
                     </div>
-                    <div className="w-[28vw] flex items-end custom-border pt-12 pb-6 px-10 rounded-lg
-                        bg-white absolute bottom-28 left-16">
-                        <div className="absolute inset-0 w-full h-8 bg-purple-200 rounded-t-lg border-b-2 border-stone-900"></div>
-                        <p className="font-[500] text-sm text-black text-justify">
-                            {t('landing.hero.description')}
-                        </p>
+                    <div className="flex justify-between mt-[-16rem]">
+                        <div className="w-[28vw] flex items-end border-2 border-zinc-700 p-8
+                            custom-shadow ">
+
+                            <p className="font-[500] text-sm text-white">
+                                {t('landing.hero.description1')}
+                            </p>
+                        </div>
+
+                        <div className="w-[28vw] flex items-end border-2 border-zinc-700 p-8
+                            custom-shadow">
+
+                            <p className="font-[500] text-sm text-white">
+                                {t('landing.hero.description2')}
+                            </p>
+                        </div>
+                        <div className="w-[28vw] flex items-end border-2 border-zinc-700 p-8
+                            custom-shadow">
+
+                            <p className="font-[500] text-sm text-white">
+                                {t('landing.hero.description3')}
+                            </p>
+                        </div>
                     </div>
 
-                    <div className="w-[28vw] h-64 flex items-end custom-border pt-12 pb-6 px-10 rounded-lg
-                        absolute top-48 right-16 bg-white">
+                    <div className="flex justify-center items-center w-full mt-12 space-x-6">                       
+                        <a href="/register"
+                            className='shadow-btn px-6 py-2.5 bg-red-100'
+                        >
+                            {t('landing.hero.button1')}
+                        </a>
 
+                        <Link href="/stats"
+                            className='shadow-btn px-20 py-2.5 bg-purple-100'
+                        >
+                            {t('landing.hero.button2')}
+                        </Link>
                     </div>
                 </div>
             </main>
