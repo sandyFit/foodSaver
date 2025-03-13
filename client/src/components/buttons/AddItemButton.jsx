@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import AddItemModal from '../modals/AddItemModal';
+import { useTranslation } from 'react-i18next';
 
 const AddMealForm = React.memo(() => {
+    const { t } = useTranslation();
+
     // State to track whether the modal is open
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -31,7 +34,7 @@ const AddMealForm = React.memo(() => {
                         clipRule="evenodd"
                     />
                 </svg>
-                Agrega tus productos
+                {t('inventory.addItemButton')}
             </button>
 
             {/* Render the modal when isModalOpen is true */}

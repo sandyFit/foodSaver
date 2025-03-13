@@ -30,7 +30,7 @@
         "logoutConfirmTitle": "Confirm Logout",
         "logoutConfirmMessage": "Are you sure you want to log out of your account?",
         "loginTitle": "Log in & manage your pantry efficiently 🥫✅",
-        "registerTitle": "Sing up to Save & Care for the Planet 🌍💚",
+        "registerTitle": "Sign up to Save & Care for the Planet 🌍💚",
         "loginButton": "ACCESS Now",
         "registerButton": "CREATE Your Account",
         "loggingIn": "Logging in...",
@@ -40,7 +40,16 @@
         "registerHere": "Register here",
         "loginHere": "Login here",
         "userRole": "User",
-        "adminRole": "Admin"
+        "adminRole": "Admin",
+        "loginError": "Login failed: {{message}}",
+        "registerError": "Registration failed: {{message}}",
+        "switchToRegister": "Need an account?",
+        "switchToLogin": "Already registered?",
+        "welcomeBack": "Welcome back!",
+        "createAccount": "Create a new account"
+    },
+    "dashboard": {
+        "layout": {}
     },
     "inventory": {
         "title": "Your Product List",
@@ -97,7 +106,8 @@
             "features": "Features",
             "contact": "Contact",
             "registerAccount": "Register",
-            "accessHere": "Access Here"
+            "accessHere": "Access Here",
+            "registerHere": "Register Here"
         },
         "hero": {
             "title1": "Smart Food Management for a Waste-Free Home",

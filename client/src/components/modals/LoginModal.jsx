@@ -98,7 +98,7 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
                 </button>
 
                 <h2 className='text-zinc-700 text-center text-xl font-bold pt-8 mb-6'>
-                    {t('auth.loginTitle', 'Accede Ahora y Gestiona tu Despensa de Manera Inteligente')}
+                    {t('auth.loginTitle')}
                 </h2>
 
                 <form onSubmit={handleSubmit} className="flex w-full flex-col space-y-4 mb-6">
@@ -127,14 +127,14 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
                     </div>
 
                     <p className='text-center text-black'>
-                        {t('auth.noAccount', '¿No tienes cuenta?')}
+                        {t('auth.noAccount')}
                         <button
                             type="button"
                             onClick={onSwitchToRegister}
 
                         >
                             <span className='text-tahiti-700 hover:text-blue-700 underline underline-offset-4 ml-2'>
-                                {t('auth.registerHere', 'Regístrate aquí')}
+                                {t('auth.registerHere')}
                             </span>
                         </button>
                     </p>
@@ -148,10 +148,10 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
                             {loading ? (
                                 <div className="flex items-center justify-center">
                                     <div className="w-5 h-5 border-t-2 border-tahiti-700 rounded-full animate-spin"></div>
-                                    <span className="ml-2">{t('auth.loggingIn', 'Accediendo...')}</span>
+                                    <span className="ml-2">{t('auth.loggingIn')}</span>
                                 </div>
                             ) : (
-                                t('auth.loginButton', 'ACCEDE Ahora')
+                                t('auth.loginButton')
                             )}
                         </button>
                     </div>

@@ -59,7 +59,13 @@ const Navbar = () => {
                     <LanguageSwitcher />
 
                     <div className="flex">
-                        
+                        <button
+                            className='full-btn-secondary px-4 py-2.5'
+                            onClick={openRegisterModal}
+                        >
+                            {t('landing.navbar.registerHere')}
+                        </button>
+
                         <button
                             className='full-btn rounded-r-lg px-4 py-2.5 ml-2'
                             onClick={openLoginModal}

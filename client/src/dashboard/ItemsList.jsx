@@ -4,6 +4,7 @@ import TableTest from '../components/tables/TableTest';
 import UpdateFormModal from '../components/modals/UpdateFormModal';
 import { toast } from 'react-hot-toast';
 import AddItemButton from '../components/buttons/AddItemButton';
+import { useTranslation } from 'react-i18next';
 
 // Render counter for tracking re-renders
 let renderCount = 0;
@@ -29,6 +30,8 @@ class RenderTracker extends React.Component {
 
 // Simplified ListTest component with minimal state
 const ItemsList = () => {
+
+    const { t } = useTranslation();
     // Increment render counter to track re-renders
     renderCount++;
     if (renderCount % 10 === 0) {
@@ -58,17 +61,17 @@ const ItemsList = () => {
 
     // Delete button handler
     const handleDeleteBtn = useCallback((itemId) => {
-        if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+        if (window.confirm(t('inventory.deleteConfirmMessage'))) {
             deleteInventoryItem(itemId)
                 .then(() => {
-                    toast.success('Producto eliminado');
+                    toast.success(t('notifications.itemDeleted'));
                 })
                 .catch((error) => {
                     console.error('Error eliminando el producto:', error);
-                    toast.error('Error al eliminar el producto.');
+                    toast.error(t('notifications.deleteError'));
                 });
         }
-    }, [deleteInventoryItem]);
+    }, [deleteInventoryItem, t]);
 
     // Fetch data on mount only
     useEffect(() => {
@@ -83,7 +86,7 @@ const ItemsList = () => {
                 <div className="w-full col-span-12 flex flex-col items-center ">
                     <AddItemButton />
 
-                    <h4 className="text-lg font-bold mt-8 mb-3">Tu Lista de Productos</h4>
+                    <h4 className="text-lg font-bold mt-8 mb-3">{t('inventory.title')}</h4>
 
                     <TableTest
                         items={allInventoryItems || []}

@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { formatDate } from '../../utils/functions';
+import { useTranslation } from 'react-i18next';
 
 // Render counter for tracking renders
 let renderCounts = {
@@ -23,6 +24,7 @@ TableCell.displayName = 'TableCell';
 // Memoized action buttons
 const ActionButtons = React.memo(({ item, loading, onEditBtn, onDeleteBtn }) => {
     renderCounts.ActionButtons++;
+    const { t } = useTranslation();
 
     // Memoize handlers to prevent recreation on render
     const handleEdit = useCallback(() => onEditBtn(item), [onEditBtn, item]);
@@ -36,7 +38,7 @@ const ActionButtons = React.memo(({ item, loading, onEditBtn, onDeleteBtn }) => 
                 className="table-btn bg-yellow-100 hover:bg-yellow-200 border-yellow-600 text-yellow-600"
                 disabled={loading}
             >
-                {loading ? 'Cargando...' : 'Editar'}
+                {loading ? t('common.loading') : t('common.edit')}
             </button>
             <button
                 aria-label={`Delete ${item.itemName}`}
@@ -44,7 +46,7 @@ const ActionButtons = React.memo(({ item, loading, onEditBtn, onDeleteBtn }) => 
                 className="table-btn bg-red-100 hover:bg-red-200 border-red-600 text-red-600"
                 disabled={loading}
             >
-                {loading ? 'Eliminando...' : 'Eliminar'}
+                {loading ? t('inventory.deletingItem') : t('common.delete')}
             </button>
         </td>
     );
@@ -88,14 +90,16 @@ TableRow.displayName = 'TableRow';
 // Static header component - only renders once
 const TableHeader = React.memo(() => {
     renderCounts.TableHeader++;
+    const { t } = useTranslation();
+
     return (
         <thead className="bg-blue-100">
             <tr>
-                <th className="table-th">Producto</th>
-                <th className="table-th">Expira en</th>
-                <th className="table-th">Categoría</th>
-                <th className="table-th">Cantidad</th>
-                <th className="table-th">Acciones</th>
+                <th className="table-th">{t('table.product')}</th>
+                <th className="table-th">{t('table.expiresIn')}</th>
+                <th className="table-th">{t('table.category')}</th>
+                <th className="table-th">{t('table.quantity')}</th>
+                <th className="table-th">{t('table.actions')}</th>
             </tr>
         </thead>
     );
@@ -106,6 +110,7 @@ TableHeader.displayName = 'TableHeader';
 // Main table component with optimized rendering
 const MealsTable = ({ items, loading, onEditBtn, onDeleteBtn }) => {
     renderCounts.MealsTable++;
+    const { t } = useTranslation();
 
     // Deep memoize the items array to prevent unnecessary re-renders
     const memoizedItems = useMemo(() => items, [items]);
@@ -121,7 +126,7 @@ const MealsTable = ({ items, loading, onEditBtn, onDeleteBtn }) => {
             return (
                 <tr>
                     <td colSpan="5" className="table-td text-center">
-                        No hay productos disponibles
+                        {t('inventory.noItems')}
                     </td>
                 </tr>
             );
@@ -136,7 +141,7 @@ const MealsTable = ({ items, loading, onEditBtn, onDeleteBtn }) => {
                 onDeleteBtn={onDeleteBtn}
             />
         ));
-    }, [memoizedItems, loading, onEditBtn, onDeleteBtn]);
+    }, [memoizedItems, loading, onEditBtn, onDeleteBtn, t]);
 
     // Memoize the entire tbody to prevent unnecessary recreations
     const memoizedTableBody = useMemo(() => renderTableRows(), [renderTableRows]);

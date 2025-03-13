@@ -115,7 +115,7 @@ const RegisterModal = memo(({ onClose, onSwitchToLogin }) => {
                 </button>
 
                 <h2 className='text-zinc-700 text-center text-xl font-bold py-8'>
-                    {t('auth.registerTitle', '¡Únete y Aprende a Ahorrar Mientras Cuidas el Planeta!')}
+                    {t('auth.registerTitle')}
                 </h2>
 
                 <form onSubmit={handleSubmit} className="flex w-full flex-col space-y-4 mb-6">
@@ -182,7 +182,7 @@ const RegisterModal = memo(({ onClose, onSwitchToLogin }) => {
                                     className="shadow-none"
                                 />
                                 <label htmlFor="userRole" className="text-black">
-                                    {t('auth.userRole', 'Usuario')}
+                                    {t('auth.userRole')}
                                 </label>
                             </div>
 
@@ -197,20 +197,20 @@ const RegisterModal = memo(({ onClose, onSwitchToLogin }) => {
                                     className="shadow-none"
                                 />
                                 <label htmlFor="adminRole" className="text-black">
-                                    {t('auth.adminRole', 'Admin')}
+                                    {t('auth.adminRole')}
                                 </label>
                             </div>
                         </div>
 
                         <p className='text-right text-black'>
-                            {t('auth.haveAccount', '¿Ya tienes una cuenta?')}
+                            {t('auth.haveAccount')}
                             <button
                                 type="button"
                                 onClick={onSwitchToLogin}                               
                             >
                                 <span className='text-tahiti-700 hover:text-blue-700 underline 
                                     underline-offset-4 ml-2'>
-                                    {t('auth.loginHere', 'Accede aquí')}
+                                    {t('auth.loginHere')}
                                 </span>
                             </button>
                         </p>
@@ -225,10 +225,10 @@ const RegisterModal = memo(({ onClose, onSwitchToLogin }) => {
                             {loading ? (
                                 <div className="flex items-center justify-center">
                                     <div className="w-5 h-5 border-t-2 border-tahiti-700 rounded-full animate-spin"></div>
-                                    <span className="ml-2">{t('auth.registering', 'Registrando...')}</span>
+                                    <span className="ml-2">{t('auth.registering')}</span>
                                 </div>
                             ) : (
-                                t('auth.registerButton', 'CREA tu Cuenta')
+                                t('auth.registerButton')
                             )}
                         </button>
                     </div>

@@ -40,7 +40,13 @@
         "registerHere": "Regístrate aquí",
         "loginHere": "Accede aquí",
         "userRole": "Usuario",
-        "adminRole": "Admin"
+        "adminRole": "Admin",
+        "loginError": "Error al iniciar sesión: {{message}}",
+        "registerError": "Error al registrarse: {{message}}",
+        "switchToRegister": "¿Necesitas una cuenta?",
+        "switchToLogin": "¿Ya estás registrado?",
+        "welcomeBack": "¡Bienvenido de nuevo!",
+        "createAccount": "Crea una nueva cuenta"
     },
     "inventory": {
         "title": "Tu Lista de Productos",
@@ -97,7 +103,8 @@
             "features": "Funcionalidades",
             "contact": "Contacto",
             "registerAccount": "Regístrate",
-            "accessHere": "Accede Aquí"
+            "accessHere": "Accede Aquí",
+            "registerHere": "Regístrate Aquí"
         },
         "hero": {
             "title1": "Gestiona tus alimentos y dile adiós al desperdicio",
@@ -150,7 +157,7 @@
             "privacy": "Política de Tratamiento de Datos",
             "details": "Especificaciones Técnicas",
             "credits": "Diseño y desarrollo por",
-            "backToTop" : "Volver Arriba",
+            "backToTop": "Volver Arriba",
             "login": "Accede",
             "register": "Regístrate"
         }
