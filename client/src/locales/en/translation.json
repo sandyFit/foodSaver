@@ -49,7 +49,15 @@
         "createAccount": "Create a new account"
     },
     "dashboard": {
-        "layout": {}
+        "layout": {},
+        "recipeCard": {
+            "btn": "View Recipe",
+            "noContent": "No recipes available"
+        },
+        "ingredients": "Available Ingredients",
+        "recommendedRecipes": "Recommended Recipes",
+        "expiringProducts": "Products Expiring Soon",
+        "suggestedRecipes": "Suggested Recipes"
     },
     "inventory": {
         "title": "Your Product List",
@@ -70,7 +78,88 @@
             "refrigerated": "Refrigerated",
             "frozen": "Frozen",
             "fresh": "Fresh",
-            "pantry": "Pantry"
+            "pantry": "Pantry",
+            "lacteos": "Dairy",
+            "carnes": "Meat",
+            "vegetales": "Vegetables",
+            "frutas": "Fruits",
+            "granos": "Grains",
+            "otros": "Others"
+        },
+        "errors": {
+            "itemNotFound": "Product not found"
+        },
+        "messages": {
+            "itemDeleted": "Product deleted"
+        }
+    },
+    "models": {
+        "inventory": {
+            "itemName": "Product Name",
+            "quantity": "Quantity",
+            "expirationDate": "Expiration Date",
+            "category": "Category",
+            "addedDate": "Date Added",
+            "validation": {
+                "itemNameRequired": "Please enter the product name"
+            },
+            "categories": {
+                "lacteos": "Dairy",
+                "carnes": "Meat",
+                "vegetales": "Vegetables",
+                "frutas": "Fruits",
+                "granos": "Grains",
+                "otros": "Others"
+            }
+        },
+        "recipes": {
+            "name": "Recipe Name",
+            "description": "Description",
+            "category": "Category",
+            "ingredients": "Ingredients",
+            "ingredientName": "Ingredient Name",
+            "ingredientQuantity": "Quantity",
+            "steps": "Steps",
+            "prep_time": "Preparation Time",
+            "cook_time": "Cooking Time",
+            "total_time": "Total Time",
+            "servings": "Servings",
+            "tags": "Tags",
+            "image_url": "Image URL",
+            "ratings": "Ratings",
+            "created_at": "Created At",
+            "updated_at": "Updated At"
+        },
+        "users": {
+            "fullName": "Full Name",
+            "email": "Email",
+            "password": "Password",
+            "avatar": "Avatar",
+            "role": "Role",
+            "inventory": "Inventory",
+            "validation": {
+                "fullNameRequired": "Please enter your full name",
+                "fullNameLength": "Maximum 80 characters",
+                "emailRequired": "Example: username@mail.com",
+                "emailValid": "Please enter a valid email address",
+                "passwordRequired": "Please enter your password",
+                "passwordLength": "Password must contain at least 6 characters"
+            },
+            "roles": {
+                "usuario": "User",
+                "admin": "Admin"
+            }
+        },
+        "notifications": {
+            "type": "Type",
+            "message": "Message",
+            "item": "Item",
+            "read": "Read",
+            "types": {
+                "caducado": "Expired",
+                "pocas existencias": "Low Stock",
+                "sistema": "System"
+            }
         }
     },
     "validations": {
@@ -90,7 +179,13 @@
         "loginError": "Login failed: {{message}}",
         "registerSuccess": "Your account has been successfully registered. Please login to begin!",
         "registerError": "Error registering user: {{message}}",
-        "unauthorized": "Unauthorized. Please login."
+        "unauthorized": "Unauthorized. Please login.",
+        "expiring": {
+            "message": "{{itemName}} expires in {{days}} days"
+        },
+        "lowStock": {
+            "message": "{{itemName}}: only {{quantity}} left"
+        }
     },
     "table": {
         "product": "Product",

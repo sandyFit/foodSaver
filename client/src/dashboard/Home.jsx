@@ -3,11 +3,13 @@ import MealCard from '../components/cards/MealCard';
 import axios from 'axios';
 import RecipeCardHome from '../components/cards/RecipeCardHome';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 const Home = () => {
+    const { t } = useTranslation();
 
     const [expiringMeals, setExpiringMeals] = useState([]);
-    const [suggestedRecipes, setSuggestedRecipes] = useState([]);
+    const [suggestedRecipes, setSuggestedRecipes] = useState(null);
     const [loading, setLoading] = useState(false);
     const BASE_URL = 'http://localhost:5555/api';
 
@@ -40,11 +42,10 @@ const Home = () => {
 
         try {
             const response = await axios.get(`${BASE_URL}/recipes-suggest`);
-            // console.log(`Response data from axios:`);
-            // console.log(response.data)
+            console.log('Recipe suggestion response:', response.data);
             setSuggestedRecipes(response.data);
         } catch (error) {
-            // console.error('Error al obtener las recetas.', error);
+            console.error('Error al obtener las recetas:', error);
             toast.error('No se pudieron obtener las recetas. Inténtalo nuevamente.');
         } finally {
             setLoading(false);
@@ -57,18 +58,72 @@ const Home = () => {
     }, []);
 
     useEffect(() => {
-        console.log(`suggested recipes from useEffect: ${suggestedRecipes}`);
+        console.log('Suggested recipes updated:', suggestedRecipes);
     }, [suggestedRecipes]);
+
+    // Function to render recipe content based on the structure of suggestedRecipes
+    const renderRecipeContent = () => {
+        if (!suggestedRecipes) {
+            return (
+                <RecipeCardHome
+                    name={t('dashboard.recipeCard.noContent')}                   
+                    bgColor="bg-gray-100"
+                />
+            );
+        }
+
+        // If suggestedRecipes is an array
+        if (Array.isArray(suggestedRecipes)) {
+            return (
+                <ul className="grid grid-cols-1">
+                    {suggestedRecipes.map((recipe, index) => (
+                        <li key={index}>
+                            <RecipeCardHome
+                                id={recipe.id}
+                                name={recipe.name}
+                                image_url={recipe.image_url}
+                                description={recipe.description}
+                                bgColor={bgColors[index % bgColors.length]}
+                            />
+                        </li>
+                    ))}
+                </ul>
+            );
+        }
+
+        // If suggestedRecipes is a single object
+        return (
+            <div >
+
+                {suggestedRecipes.recipes && suggestedRecipes.recipes.length > 0 && (
+                    <div className="mb-4">                   
+                        <ul className="list-disc pl-5">
+                            {suggestedRecipes.recipes.map((recipe, idx) => (
+                                <li key={idx}>{recipe}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
+                {suggestedRecipes.message && (
+                    <p className="italic text-gray-700">{suggestedRecipes.message}</p>
+                )}
+            </div>
+        );
+    };
 
     return (
         <section className=''>
             <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
-                    <h4 className='mb-2 font-bold text-lg'>Productos próximos a caducar</h4>
+                    <h4 className='mb-2 font-bold text-lg'>
+                        {t('dashboard.expiringProducts')}
+                    </h4>
                     {loading ? (
                         <div className="text-center">
-                            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
-                                <span className="sr-only">Cargando...</span>
+                            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 
+                                rounded-full" role="status">
+                                <span className="sr-only">{t('common.loading')}</span>
                             </div>
                         </div>
                     ) : (
@@ -87,27 +142,18 @@ const Home = () => {
                     )}
                 </div>
                 <div className="flex flex-col">
-                    <h4 className='mb-2 font-bold text-lg'>Recetas sugeridas</h4>
+                    <h4 className='mb-2 font-bold text-lg'>
+                        {t('dashboard.suggestedRecipes')}
+                    </h4>
                     {loading ? (
                         <div className="text-center">
-                            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
-                                <span className="sr-only">Cargando...</span>
+                            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 
+                                rounded-full" role="status">
+                                <span className="sr-only">{t('common.loading')}</span>
                             </div>
                         </div>
                     ) : (
-                        <ul className="grid grid-cols-1">
-                            {suggestedRecipes.map((recipe, index) => (
-                                <li key={index}>
-                                    <RecipeCardHome
-                                        id={recipe.id}
-                                        name={recipe.name}
-                                        image_url={recipe.image_url}
-                                        description={recipe.description}
-                                        bgColor={bgColors[index % bgColors.length]}
-                                    />
-                                </li>
-                            ))}
-                        </ul>
+                        renderRecipeContent()
                     )}
                 </div>
             </div>

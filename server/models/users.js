@@ -8,25 +8,25 @@ const userSchema = new mongoose.Schema(
     {
         fullName: {
             type: String,
-            required: [true, 'Ingrese nombre y apellido'],
+            required: [true, 'models.users.validation.fullNameRequired'],
             trim: true,
             minlength: 3,
-            maxlength: [80, 'Maximo 80 caracteres'],
+            maxlength: [80, 'models.users.validation.fullNameLength'],
         },
         email: {
             type: String,
-            required: [true, 'Ej: username@mail.com'],
+            required: [true, 'models.users.validation.emailRequired'],
             unique: true,
             lowercase: true,
-            validate: [validator.isEmail, 'Ingrese un correo electrónico válido'], 
+            validate: [validator.isEmail, 'models.users.validation.emailValid'],
         },
         password: {
             type: String,
-            required: [true, 'Ingrese su contraseña'],
-            minlength: [6, 'La contraseña debe contener al menos 6 caracteres'],
+            required: [true, 'models.users.validation.passwordRequired'],
+            minlength: [6, 'models.users.validation.passwordLength'],
             select: false, // Ensures password isn't returned by default
         },
-        
+
         avatar: {
             public_id: {
                 type: String,
@@ -125,7 +125,7 @@ userSchema.methods.getResetPasswordToken = function () {
 userSchema.methods.notifyExpiringMeals = function () {
     const expiringMeals = this.inventory.filter((item) => {
         const daysToExpire = Math.ceil((item.expirationDate - Date.now()) / (1000 * 60 * 60 * 24));
-        return daysToExpire > 0 && daysToExpire <= 8; 
+        return daysToExpire > 0 && daysToExpire <= 8;
     });
 
     expiringMeals.forEach((meal) => {

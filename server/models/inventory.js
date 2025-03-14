@@ -9,7 +9,7 @@ const inventoryItemSchema = new mongoose.Schema(
         },
         itemName: {
             type: String,
-            required: [true, 'Ingrese el nombre del producto'],
+            required: [true, 'models.inventory.validation.itemNameRequired'],
             trim: true
         },
         quantity: {

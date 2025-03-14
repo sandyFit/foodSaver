@@ -48,6 +48,17 @@
         "welcomeBack": "¡Bienvenido de nuevo!",
         "createAccount": "Crea una nueva cuenta"
     },
+    "dashboard": {
+        "layout": {},
+        "recipeCard": {
+            "btn": "Ver Receta",
+            "noContent": "No hay recetas disponibles"
+        },
+        "ingredients": "Ingredientes disponibles",
+        "recommendedRecipes": "Recetas recomendadas",
+        "expiringProducts": "Productos próximos a caducar",
+        "suggestedRecipes": "Recetas sugeridas"
+    },
     "inventory": {
         "title": "Tu Lista de Productos",
         "addItem": "Agregar Producto",
@@ -67,7 +78,88 @@
             "refrigerated": "Refrigerados",
             "frozen": "Congelados",
             "fresh": "Frescos",
-            "pantry": "Alacena"
+            "pantry": "Alacena",
+            "lacteos": "Lácteos",
+            "carnes": "Carnes",
+            "vegetales": "Vegetales",
+            "frutas": "Frutas",
+            "granos": "Granos",
+            "otros": "Otros"
+        },
+        "errors": {
+            "itemNotFound": "Producto no encontrado"
+        },
+        "messages": {
+            "itemDeleted": "Producto eliminado"
+        }
+    },
+    "models": {
+        "inventory": {
+            "itemName": "Nombre del Producto",
+            "quantity": "Cantidad",
+            "expirationDate": "Fecha de Caducidad",
+            "category": "Categoría",
+            "addedDate": "Fecha de Agregado",
+            "validation": {
+                "itemNameRequired": "Ingrese el nombre del producto"
+            },
+            "categories": {
+                "lacteos": "Lácteos",
+                "carnes": "Carnes",
+                "vegetales": "Vegetales",
+                "frutas": "Frutas",
+                "granos": "Granos",
+                "otros": "Otros"
+            }
+        },
+        "recipes": {
+            "name": "Nombre de la Receta",
+            "description": "Descripción",
+            "category": "Categoría",
+            "ingredients": "Ingredientes",
+            "ingredientName": "Nombre del Ingrediente",
+            "ingredientQuantity": "Cantidad",
+            "steps": "Pasos",
+            "prep_time": "Tiempo de Preparación",
+            "cook_time": "Tiempo de Cocción",
+            "total_time": "Tiempo Total",
+            "servings": "Porciones",
+            "tags": "Etiquetas",
+            "image_url": "URL de la Imagen",
+            "ratings": "Calificaciones",
+            "created_at": "Creado el",
+            "updated_at": "Actualizado el"
+        },
+        "users": {
+            "fullName": "Nombre Completo",
+            "email": "Correo Electrónico",
+            "password": "Contraseña",
+            "avatar": "Avatar",
+            "role": "Rol",
+            "inventory": "Inventario",
+            "validation": {
+                "fullNameRequired": "Ingrese nombre y apellido",
+                "fullNameLength": "Máximo 80 caracteres",
+                "emailRequired": "Ej: username@mail.com",
+                "emailValid": "Ingrese un correo electrónico válido",
+                "passwordRequired": "Ingrese su contraseña",
+                "passwordLength": "La contraseña debe contener al menos 6 caracteres"
+            },
+            "roles": {
+                "usuario": "Usuario",
+                "admin": "Administrador"
+            }
+        },
+        "notifications": {
+            "type": "Tipo",
+            "message": "Mensaje",
+            "item": "Producto",
+            "read": "Leído",
+            "types": {
+                "caducado": "Caducado",
+                "pocas existencias": "Pocas Existencias",
+                "sistema": "Sistema"
+            }
         }
     },
     "validations": {
@@ -87,7 +179,13 @@
         "loginError": "Error al iniciar sesión: {{message}}",
         "registerSuccess": "Tu cuenta ha sido registrada correctamente. ¡Inicia sesión para comenzar!",
         "registerError": "Error al registrar el usuario: {{message}}",
-        "unauthorized": "No autorizado. Por favor inicia sesión."
+        "unauthorized": "No autorizado. Por favor inicia sesión.",
+        "expiring": {
+            "message": "{{itemName}} expira en {{days}} días"
+        },
+        "lowStock": {
+            "message": "{{itemName}}: solo quedan {{quantity}}"
+        }
     },
     "table": {
         "product": "Producto",

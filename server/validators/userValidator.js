@@ -2,11 +2,24 @@ import Joi from 'joi';
 
 // Register validation schema
 const registerSchema = Joi.object({
-    fullName: Joi.string().required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().min(6).required(),
+    fullName: Joi.string().required().messages({
+        'any.required': 'models.users.validation.fullNameRequired',
+        'string.empty': 'models.users.validation.fullNameRequired'
+    }),
+    email: Joi.string().email().required().messages({
+        'any.required': 'models.users.validation.emailRequired',
+        'string.empty': 'models.users.validation.emailRequired',
+        'string.email': 'models.users.validation.emailValid'
+    }),
+    password: Joi.string().min(6).required().messages({
+        'any.required': 'models.users.validation.passwordRequired',
+        'string.empty': 'models.users.validation.passwordRequired',
+        'string.min': 'models.users.validation.passwordLength'
+    }),
     confirmPass: Joi.string().valid(Joi.ref('password')).required().messages({
-        'any.only': 'Las contraseñas no coinciden',
+        'any.only': 'validations.passwordMismatch',
+        'any.required': 'validations.required',
+        'string.empty': 'validations.required'
     }),
     role: Joi.string().default('user'),
 });
@@ -23,8 +36,16 @@ export const validateRegisterUser = (req, res, next) => {
 
 // Login validation schema
 const loginSchema = Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().min(6).required(),
+    email: Joi.string().email().required().messages({
+        'any.required': 'models.users.validation.emailRequired',
+        'string.empty': 'models.users.validation.emailRequired',
+        'string.email': 'models.users.validation.emailValid'
+    }),
+    password: Joi.string().min(6).required().messages({
+        'any.required': 'models.users.validation.passwordRequired',
+        'string.empty': 'models.users.validation.passwordRequired',
+        'string.min': 'models.users.validation.passwordLength'
+    }),
 });
 
 export const validateLogin = (req, res, next) => {

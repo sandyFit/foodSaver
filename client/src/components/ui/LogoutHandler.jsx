@@ -11,7 +11,7 @@ const LogoutHandler = () => {
             title: '¿Estás seguro de que quieres cerrar la sesión?',
             message: `Al cerrar sesión, tus datos personales estarán protegidos y ocultos temporalmente. 
                       Para acceder a ellos nuevamente, solo inicia sesión.`,
-            onConfirm: () => navigate('/login'),
+            onConfirm: () => navigate('/'),
         });
     };
 

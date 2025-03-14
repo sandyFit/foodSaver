@@ -39,13 +39,14 @@ export const ContextProvider = ({ children }) => {
                 'Content-Type': 'application/json'
             };
 
-            // Only add token for protected routes
-            if (url.includes('dashboard') || url.includes('user')) {
+            // Add token for all protected routes except register and login
+            if (!url.includes('register') && !url.includes('login')) {
                 const token = localStorage.getItem('token');
                 if (token) {
                     headers.Authorization = `Bearer ${token}`;
                 }
             }
+
             const config = {
                 method,
                 url: `${BASE_URL}/${url}`,
@@ -71,20 +72,24 @@ export const ContextProvider = ({ children }) => {
         }
     };
 
-   
+
     // === USERS ===
     // globalContext.jsx
     const registerUser = async (formData) => {
         // console.log('FormData enviado:', formData);
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const data = await apiRequest('users-register', 'POST', formData);
+            const data = await apiRequest('register', 'POST', formData);
             if (data.message === 'Cuenta registrada correctamente') {
                 toast.success('Tu cuenta ha sido registrada correctamente. ¡Inicia sesión para comenzar!');
                 await getAllUsers();
             } else {
                 toast.error(`Error al registrar el usuario: ${data.message}`);
             }
+            return data; // Return the data for the component to use
+        } catch (error) {
+            console.error('Error registering user:', error);
+            throw error; // Rethrow the error for the component to handle
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
@@ -94,7 +99,7 @@ export const ContextProvider = ({ children }) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             console.log('Sending login request with data:', formData); // Debugging
-            const response = await apiRequest('users-login', 'POST', formData);
+            const response = await apiRequest('login', 'POST', formData);
             console.log('Login response:', response); // Debugging
 
             if (response && response.message === 'Login Correcto' && response.token) {
@@ -115,9 +120,9 @@ export const ContextProvider = ({ children }) => {
                 return null;
             }
         } catch (error) {
-            console.error('Login failed:', error); // Debugging
-            toast.error('Login failed: ' + (error.message || 'Error desconocido'));
-            return null;
+            console.error('Error logging in:', error);
+            toast.error(`Error al iniciar sesión: ${error.response?.data?.message || error.message || 'Error desconocido'}`);
+            throw error; // Rethrow the error for the component to handle
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
@@ -130,7 +135,7 @@ export const ContextProvider = ({ children }) => {
             if (user?.role !== 'admin') {
                 throw new Error('Unauthorized access');
             }
-            const data = await apiRequest('users-getAll');
+            const data = await apiRequest('users');
             dispatch({ type: SET_ALL_USERS, payload: data });
         } catch (error) {
             toast.error(error.message);
@@ -142,8 +147,7 @@ export const ContextProvider = ({ children }) => {
     const getUserInfo = async (id) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            // Fix token retrieval
-            const data = await apiRequest(`users-getUserInfo/${id}`);
+            const data = await apiRequest(`users/${id}`);
 
             if (data.success) { // Match your actual response structure
                 dispatch({ type: SET_USER, payload: data.user });
@@ -151,7 +155,7 @@ export const ContextProvider = ({ children }) => {
                 toast.error(data.message || 'Error al obtener el usuario');
             }
         } catch (error) {
-            // Handle error
+            toast.error(`Error al obtener información del usuario: ${error.message || 'Error desconocido'}`);
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
@@ -161,7 +165,7 @@ export const ContextProvider = ({ children }) => {
     const updateUserProfile = async (id, updatedData) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const updatedUser = await apiRequest(`users-updateProfile/${id}`, 'PUT', updatedData);
+            const updatedUser = await apiRequest(`profile`, 'PUT', updatedData);
             dispatch({
                 type: SET_ALL_USERS,
                 payload: allUsers.map((user) =>
@@ -171,6 +175,8 @@ export const ContextProvider = ({ children }) => {
 
             getAllUsers();
             toast.success('Usuario actualizado correctamente.');
+        } catch (error) {
+            toast.error(`Error al actualizar el perfil: ${error.message || 'Error desconocido'}`);
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
@@ -179,13 +185,20 @@ export const ContextProvider = ({ children }) => {
     const deleteUser = async (id) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            await apiRequest(`users-delete/${id}`, 'DELETE');
+            if (id) {
+                // Delete specific user (admin)
+                await apiRequest(`users/${id}`, 'DELETE');
+            } else {
+                // Delete own account
+                await apiRequest('users', 'DELETE');
+            }
+
             const filteredUsers = allUsers.filter((user) => user._id !== id);
             dispatch({ type: SET_ALL_USERS, payload: filteredUsers });
             toast.success('Usuario eliminado.');
             getAllUsers();
         } catch (error) {
-            toast.error(error.message);
+            toast.error(`Error al eliminar el usuario: ${error.message || 'Error desconocido'}`);
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }

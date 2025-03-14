@@ -2,7 +2,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 import connectToMongoDB from './config/db.js';
 import swaggerDocs from './docs/swaggerDocs.js';
-import itemRoutes from './routes/itemRoutes.js';
 import recipeRoutes from './routes/recipeRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import inventoryRoutes from './routes/inventoryRoutes.js';
@@ -28,7 +27,6 @@ app.use(cors({
 connectToMongoDB();
 
 // Routes
-app.use('/api', itemRoutes);
 app.use('/api', recipeRoutes);
 app.use('/api', userRoutes);
 app.use('/api', inventoryRoutes);

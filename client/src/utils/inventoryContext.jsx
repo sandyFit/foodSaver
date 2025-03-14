@@ -29,11 +29,11 @@ export const InventoryContext = createContext(undefined);
 
 // Custom hook for safely accessing inventory context
 export const useInventory = () => {
-  const context = useContext(InventoryContext);
-  if (context === undefined) {
-    throw new Error('useInventory must be used within an InventoryProvider');
-  }
-  return context;
+    const context = useContext(InventoryContext);
+    if (context === undefined) {
+        throw new Error('useInventory must be used within an InventoryProvider');
+    }
+    return context;
 };
 
 // Base URL for API requests
@@ -167,21 +167,25 @@ export const InventoryProvider = ({ children }) => {
         dispatch({ type: SET_LOADING, payload: true });
 
         try {
+            console.log('Creating inventory item with data:', formData);
             const data = await apiRequest('inventory', 'POST', formData);
+            console.log('Server response:', data);
 
-            if (data.success && data.item) {
+            if (data && data.success && data.item) {
                 // Update locally without refetching
                 dispatch({
                     type: SET_INVENTORY_ITEMS,
                     payload: [...state.items, data.item],
                 });
-                toast.success('Producto registrado con éxito');
+                return data;
             } else {
-                toast.error(`Error al registrar el producto: ${data.message}`);
+                const errorMessage = data?.message || 'Unknown error';
+                console.error('Error in server response:', errorMessage);
+                throw new Error(errorMessage);
             }
         } catch (error) {
             console.error('Error creating inventory item:', error);
-            toast.error('Error agregando el producto.');
+            throw error;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }

@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useInventory } from '../../utils/inventoryContext';
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 // Render counter for debugging
 let renderCount = 0;
@@ -24,6 +25,8 @@ ModalBackdrop.displayName = 'ModalBackdrop';
 
 // Main modal component for adding a new inventory item
 const AddItemModal = memo(({ onClose }) => {
+    const { t } = useTranslation();
+
     // Track renders for debugging
     renderCount++;
     if (renderCount % 10 === 0) {
@@ -37,7 +40,7 @@ const AddItemModal = memo(({ onClose }) => {
     const [formData, setFormData] = useState({
         itemName: '',
         expirationDate: '',
-        category: 'Refrigerados',
+        category: 'lacteos',
         quantity: 1
     });
 
@@ -55,20 +58,25 @@ const AddItemModal = memo(({ onClose }) => {
         e.preventDefault();
 
         if (!formData.itemName || !formData.category || !formData.expirationDate) {
-            toast.error('Por favor, complete todos los campos.');
+            toast.error(t('validations.required'));
             return;
         }
 
+        // Log the data being sent to the server
+        console.log('Sending data to server:', formData);
+
         createInventoryItem(formData)
-            .then(() => {
-                toast.success('Producto agregado correctamente');
+            .then((response) => {
+                console.log('Server response:', response);
+                toast.success(t('notifications.itemAdded'));
                 onClose(); // Close the modal after successful submission
             })
             .catch((error) => {
-                console.error('Error agregando el producto:', error);
-                toast.error('Error al agregar el producto.');
+                console.error('Error adding product:', error);
+                const errorMessage = error.response?.data?.message || error.message || 'Unknown error';
+                toast.error(`${t('notifications.addError')} ${errorMessage}`);
             });
-    }, [formData, createInventoryItem, onClose]);
+    }, [formData, createInventoryItem, onClose, t]);
 
     // Create a portal to render outside the main component tree
     return createPortal(
@@ -80,11 +88,11 @@ const AddItemModal = memo(({ onClose }) => {
                     <IoCloseCircleOutline className='text-xl' />
                 </button>
 
-                <h4 className="text-lg font-bold my-2">Agregar Nuevo Producto</h4>
+                <h4 className="text-lg font-bold my-2">{t('inventory.addItem')}</h4>
                 <form onSubmit={handleSubmit} className="flex w-full flex-col space-y-4 mb-6">
                     <div className="flex space-x-4">
                         <div className="flex flex-col flex-1">
-                            <label htmlFor="itemName" className="text-sm font-medium mb-1">Nombre del Producto</label>
+                            <label htmlFor="itemName" className="text-sm font-medium mb-1">{t('inventory.itemName')}</label>
                             <input
                                 id="itemName"
                                 type="text"
@@ -97,7 +105,7 @@ const AddItemModal = memo(({ onClose }) => {
                         </div>
 
                         <div className="flex flex-col flex-1">
-                            <label htmlFor="expirationDate" className="text-sm font-medium mb-1">Fecha de Expiración</label>
+                            <label htmlFor="expirationDate" className="text-sm font-medium mb-1">{t('inventory.expirationDate')}</label>
                             <input
                                 id="expirationDate"
                                 type="date"
@@ -112,7 +120,7 @@ const AddItemModal = memo(({ onClose }) => {
 
                     <div className="flex space-x-4">
                         <div className="flex flex-col flex-1">
-                            <label htmlFor="category" className="text-sm font-medium mb-1">Categoría</label>
+                            <label htmlFor="category" className="text-sm font-medium mb-1">{t('inventory.category')}</label>
                             <select
                                 id="category"
                                 name="category"
@@ -121,15 +129,17 @@ const AddItemModal = memo(({ onClose }) => {
                                 className="border p-2 rounded"
                                 required
                             >
-                                <option value="Refrigerados">Refrigerados</option>
-                                <option value="Congelados">Congelados</option>
-                                <option value="Frescos">Frescos</option>
-                                <option value="Alacena">Alacena</option>
+                                <option value="lacteos">{t('inventory.categories.lacteos')}</option>
+                                <option value="carnes">{t('inventory.categories.carnes')}</option>
+                                <option value="vegetales">{t('inventory.categories.vegetales')}</option>
+                                <option value="frutas">{t('inventory.categories.frutas')}</option>
+                                <option value="granos">{t('inventory.categories.granos')}</option>
+                                <option value="otros">{t('inventory.categories.otros')}</option>
                             </select>
                         </div>
 
                         <div className="flex flex-col w-1/4">
-                            <label htmlFor="quantity" className="text-sm font-medium mb-1">Cantidad</label>
+                            <label htmlFor="quantity" className="text-sm font-medium mb-1">{t('inventory.quantity')}</label>
                             <input
                                 id="quantity"
                                 type="number"
@@ -149,14 +159,14 @@ const AddItemModal = memo(({ onClose }) => {
                             onClick={onClose}
                             className="px-4 py-2 bg-gray-200 rounded mr-2"
                         >
-                            Cancelar
+                            {t('common.cancel')}
                         </button>
                         <button
                             type="submit"
                             disabled={loading}
                             className="shadow-btn px-8 py-2 bg-green-100 hover:bg-green-200 border-green-600 text-green-600 rounded"
                         >
-                            {loading ? 'Agregando...' : 'Agregar Producto'}
+                            {loading ? t('inventory.addingItem') : t('common.add')}
                         </button>
                     </div>
                 </form>

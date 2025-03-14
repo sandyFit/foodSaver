@@ -19,7 +19,7 @@ const checkExpiringItems = async (userId) => {
         await Notification.create({
             user: userId,
             type: 'caducado',
-            message: `${item.itemName} expira en ${daysToExpire} días`,
+            message: `notifications.expiring.message|${item.itemName}|${daysToExpire}`,
             relatedItem: item._id
         });
     }
@@ -35,7 +35,7 @@ const checkLowStock = async (userId, threshold = 3) => {
         await Notification.create({
             user: userId,
             type: 'pocas existencias',
-            message: `${item.itemName}: solo quedan (${item.quantity})`,
+            message: `notifications.lowStock.message|${item.itemName}|${item.quantity}`,
             relatedItem: item._id
         });
     }
@@ -87,7 +87,7 @@ export const getItem = async (req, res, next) => {
         if (!item) {
             return res.status(404).json({
                 success: false,
-                message: 'Producto no encontrado'
+                message: 'inventory.errors.itemNotFound'
             });
         }
 
@@ -108,7 +108,7 @@ export const updateItem = async (req, res, next) => {
         if (!item) {
             return res.status(404).json({
                 success: false,
-                message: 'Producto no encontrado'
+                message: 'inventory.errors.itemNotFound'
             });
         }
 
@@ -132,7 +132,7 @@ export const deleteItem = async (req, res, next) => {
         if (!item) {
             return res.status(404).json({
                 success: false,
-                message: 'Producto no encontrado'
+                message: 'inventory.errors.itemNotFound'
             });
         }
 
@@ -142,7 +142,7 @@ export const deleteItem = async (req, res, next) => {
 
         res.json({
             success: true,
-            message: 'Producto eliminado'
+            message: 'inventory.messages.itemDeleted'
         });
     } catch (error) {
         next(error);

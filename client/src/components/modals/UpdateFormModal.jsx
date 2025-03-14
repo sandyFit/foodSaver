@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useInventory } from '../../utils/inventoryContext'; // Use the custom hook
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 // Render counter for debugging
 let renderCount = 0;
@@ -24,6 +25,8 @@ ModalBackdrop.displayName = 'ModalBackdrop';
 
 // Isolated Modal Form
 const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
+    const { t } = useTranslation();
+
     // Track renders for debugging
     renderCount++;
     if (renderCount % 10 === 0) {
@@ -36,7 +39,7 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
     const [formData, setFormData] = useState({
         itemName: itemToEdit?.itemName || '',
         expirationDate: itemToEdit?.expirationDate || '',
-        category: itemToEdit?.category || 'Refrigerados',
+        category: itemToEdit?.category || 'lacteos',
         quantity: itemToEdit?.quantity || 1
     });
 
@@ -54,20 +57,25 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
         e.preventDefault();
 
         if (!formData.itemName || !formData.category || !formData.expirationDate) {
-            toast.error('Por favor, complete todos los campos.');
+            toast.error(t('validations.required'));
             return;
         }
 
+        // Log the data being sent to the server
+        console.log('Updating item with data:', formData);
+
         updateInventoryItem(itemToEdit._id, formData)
-            .then(() => {
-                toast.success('Producto actualizado correctamente');
+            .then((response) => {
+                console.log('Server response:', response);
+                toast.success(t('notifications.itemUpdated'));
                 onClose();
             })
             .catch((error) => {
-                console.error('Error actualizando el producto:', error);
-                toast.error('Error al actualizar el producto.');
+                console.error('Error updating product:', error);
+                const errorMessage = error.response?.data?.message || error.message || 'Unknown error';
+                toast.error(`${t('notifications.updateError')} ${errorMessage}`);
             });
-    }, [formData, itemToEdit?._id, updateInventoryItem, onClose]);
+    }, [formData, itemToEdit?._id, updateInventoryItem, onClose, t]);
 
     // Return null if no item to edit
     if (!itemToEdit) return null;
@@ -82,11 +90,11 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
                     <IoCloseCircleOutline className='text-xl' />
                 </button>
 
-                <h4 className="text-lg font-bold my-2">Edita tu Producto</h4>
+                <h4 className="text-lg font-bold my-2">{t('inventory.editingItem')}</h4>
                 <form onSubmit={handleSubmit} className="flex w-full flex-col space-y-4 mb-6">
                     <div className="flex space-x-4">
                         <div className="flex flex-col flex-1">
-                            <label htmlFor="itemName" className="text-sm font-medium mb-1">Nombre del Producto</label>
+                            <label htmlFor="itemName" className="text-sm font-medium mb-1">{t('inventory.itemName')}</label>
                             <input
                                 id="itemName"
                                 type="text"
@@ -99,7 +107,7 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
                         </div>
 
                         <div className="flex flex-col flex-1">
-                            <label htmlFor="expirationDate" className="text-sm font-medium mb-1">Fecha de Expiración</label>
+                            <label htmlFor="expirationDate" className="text-sm font-medium mb-1">{t('inventory.expirationDate')}</label>
                             <input
                                 id="expirationDate"
                                 type="date"
@@ -114,7 +122,7 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
 
                     <div className="flex space-x-4">
                         <div className="flex flex-col flex-1">
-                            <label htmlFor="category" className="text-sm font-medium mb-1">Categoría</label>
+                            <label htmlFor="category" className="text-sm font-medium mb-1">{t('inventory.category')}</label>
                             <select
                                 id="category"
                                 name="category"
@@ -123,15 +131,17 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
                                 className="border p-2 rounded"
                                 required
                             >
-                                <option value="Refrigerados">Refrigerados</option>
-                                <option value="Congelados">Congelados</option>
-                                <option value="Frescos">Frescos</option>
-                                <option value="Alacena">Alacena</option>
+                                <option value="lacteos">{t('inventory.categories.lacteos')}</option>
+                                <option value="carnes">{t('inventory.categories.carnes')}</option>
+                                <option value="vegetales">{t('inventory.categories.vegetales')}</option>
+                                <option value="frutas">{t('inventory.categories.frutas')}</option>
+                                <option value="granos">{t('inventory.categories.granos')}</option>
+                                <option value="otros">{t('inventory.categories.otros')}</option>
                             </select>
                         </div>
 
                         <div className="flex flex-col w-1/4">
-                            <label htmlFor="quantity" className="text-sm font-medium mb-1">Cantidad</label>
+                            <label htmlFor="quantity" className="text-sm font-medium mb-1">{t('inventory.quantity')}</label>
                             <input
                                 id="quantity"
                                 type="number"
@@ -151,14 +161,14 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
                             onClick={onClose}
                             className="px-4 py-2 bg-gray-200 rounded mr-2"
                         >
-                            Cancelar
+                            {t('common.cancel')}
                         </button>
                         <button
                             type="submit"
                             disabled={loading}
                             className="shadow-btn px-8 py-2 bg-purple-100 rounded"
                         >
-                            {loading ? 'Actualizando...' : 'Actualizar'}
+                            {loading ? t('inventory.updatingItem') : t('common.update')}
                         </button>
                     </div>
                 </form>
