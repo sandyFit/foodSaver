@@ -46,7 +46,11 @@
         "switchToRegister": "¿Necesitas una cuenta?",
         "switchToLogin": "¿Ya estás registrado?",
         "welcomeBack": "¡Bienvenido de nuevo!",
-        "createAccount": "Crea una nueva cuenta"
+        "createAccount": "Crea una nueva cuenta",
+        "errors": {
+            "unauthorized": "Debes iniciar sesión para realizar esta acción",
+            "userNotFound": "Usuario no encontrado"
+        }
     },
     "dashboard": {
         "layout": {},
@@ -87,7 +91,8 @@
             "other": "Otros"
         },
         "errors": {
-            "itemNotFound": "Producto no encontrado"
+            "itemNotFound": "Producto no encontrado",
+            "createFailed": "Error al crear el producto. Por favor, inténtalo de nuevo."
         },
         "messages": {
             "itemDeleted": "Producto eliminado"
@@ -101,7 +106,13 @@
             "category": "Categoría",
             "addedDate": "Fecha de Agregado",
             "validation": {
-                "itemNameRequired": "Ingrese el nombre del producto"
+                "itemNameRequired": "Ingrese el nombre del producto",
+                "quantityRequired": "Ingrese la cantidad",
+                "quantityMin": "La cantidad debe ser al menos 1",
+                "expirationDateRequired": "Ingrese la fecha de caducidad",
+                "categoryRequired": "Seleccione una categoría",
+                "categoryInvalid": "Categoría seleccionada no válida",
+                "userRequired": "Usuario es requerido"
             },
             "categories": {
                 "diary": "Lácteos",

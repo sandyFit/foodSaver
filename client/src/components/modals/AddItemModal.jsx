@@ -40,7 +40,7 @@ const AddItemModal = memo(({ onClose }) => {
     const [formData, setFormData] = useState({
         itemName: '',
         expirationDate: '',
-        category: 'lacteos',
+        category: 'diary',
         quantity: 1
     });
 
@@ -129,12 +129,12 @@ const AddItemModal = memo(({ onClose }) => {
                                 className="border p-2 rounded"
                                 required
                             >
-                                <option value="lacteos">{t('inventory.categories.diary')}</option>
-                                <option value="carnes">{t('inventory.categories.meat')}</option>
-                                <option value="vegetales">{t('inventory.categories.vegetables')}</option>
-                                <option value="frutas">{t('inventory.categories.fruits')}</option>
-                                <option value="granos">{t('inventory.categories.grains')}</option>
-                                <option value="otros">{t('inventory.categories.other')}</option>
+                                <option value="diary">{t('inventory.categories.diary')}</option>
+                                <option value="meat">{t('inventory.categories.meat')}</option>
+                                <option value="vegetables">{t('inventory.categories.vegetables')}</option>
+                                <option value="fruits">{t('inventory.categories.fruits')}</option>
+                                <option value="grains">{t('inventory.categories.grains')}</option>
+                                <option value="other">{t('inventory.categories.other')}</option>
                             </select>
                         </div>
 

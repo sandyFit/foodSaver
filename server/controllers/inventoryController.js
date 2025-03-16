@@ -43,10 +43,38 @@ const checkLowStock = async (userId, threshold = 3) => {
 
 export const createItem = async (req, res, next) => {
     try {
+        // Validate that we have a user
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({
+                success: false,
+                message: 'auth.errors.unauthorized'
+            });
+        }
+
+        // Validate required fields
+        const { itemName, quantity, expirationDate, category } = req.body;
+        if (!itemName || !quantity || !expirationDate || !category) {
+            return res.status(400).json({
+                success: false,
+                message: 'validations.required'
+            });
+        }
+
+        // Create the item
         const item = await InventoryItem.create({
             ...req.body,
             user: req.user.id
         });
+
+        // Add item to user's inventory
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            await InventoryItem.findByIdAndDelete(item._id);
+            return res.status(404).json({
+                success: false,
+                message: 'auth.errors.userNotFound'
+            });
+        }
 
         await User.findByIdAndUpdate(req.user.id, {
             $push: { inventory: item._id }
@@ -61,7 +89,22 @@ export const createItem = async (req, res, next) => {
             item
         });
     } catch (error) {
-        next(error);
+        console.error('Error creating inventory item:', error);
+
+        // Handle validation errors
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map(err => err.message);
+            return res.status(400).json({
+                success: false,
+                message: messages[0]
+            });
+        }
+
+        // Handle other errors
+        res.status(500).json({
+            success: false,
+            message: 'inventory.errors.createFailed'
+        });
     }
 };
 

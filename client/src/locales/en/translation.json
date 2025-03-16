@@ -46,7 +46,11 @@
         "switchToRegister": "Need an account?",
         "switchToLogin": "Already registered?",
         "welcomeBack": "Welcome back!",
-        "createAccount": "Create a new account"
+        "createAccount": "Create a new account",
+        "errors": {
+            "unauthorized": "You must be logged in to perform this action",
+            "userNotFound": "User not found"
+        }
     },
     "dashboard": {
         "layout": {},
@@ -87,7 +91,8 @@
             "other": "Other"
         },
         "errors": {
-            "itemNotFound": "Product not found"
+            "itemNotFound": "Product not found",
+            "createFailed": "Failed to create product. Please try again."
         },
         "messages": {
             "itemDeleted": "Product deleted"
@@ -101,7 +106,13 @@
             "category": "Category",
             "addedDate": "Date Added",
             "validation": {
-                "itemNameRequired": "Please enter the product name"
+                "itemNameRequired": "Please enter the product name",
+                "quantityRequired": "Please enter the quantity",
+                "quantityMin": "Quantity must be at least 1",
+                "expirationDateRequired": "Please enter the expiration date",
+                "categoryRequired": "Please select a category",
+                "categoryInvalid": "Invalid category selected",
+                "userRequired": "User is required"
             },
             "categories": {
                 "diary": "Dairy",

@@ -5,7 +5,7 @@ const inventoryItemSchema = new mongoose.Schema(
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
-            required: true
+            required: [true, 'models.inventory.validation.userRequired']
         },
         itemName: {
             type: String,
@@ -14,16 +14,20 @@ const inventoryItemSchema = new mongoose.Schema(
         },
         quantity: {
             type: Number,
-            required: true,
-            min: 1
+            required: [true, 'models.inventory.validation.quantityRequired'],
+            min: [1, 'models.inventory.validation.quantityMin']
         },
         expirationDate: {
             type: Date,
-            required: true
+            required: [true, 'models.inventory.validation.expirationDateRequired']
         },
         category: {
             type: String,
-            enum: ['diary', 'meat', 'vegetables', 'fruits', 'grains', 'other'],
+            enum: {
+                values: ['diary', 'meat', 'vegetables', 'fruits', 'grains', 'other'],
+                message: 'models.inventory.validation.categoryInvalid'
+            },
+            required: [true, 'models.inventory.validation.categoryRequired'],
             default: 'other'
         },
         addedDate: {
