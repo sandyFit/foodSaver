@@ -79,12 +79,12 @@
             "frozen": "Frozen",
             "fresh": "Fresh",
             "pantry": "Pantry",
-            "lacteos": "Dairy",
-            "carnes": "Meat",
-            "vegetales": "Vegetables",
-            "frutas": "Fruits",
-            "granos": "Grains",
-            "otros": "Others"
+            "diary": "Dairy",
+            "meat": "Meat",
+            "vegetables": "Vegetables",
+            "fruits": "Fruits",
+            "grains": "Grains",
+            "other": "Other"
         },
         "errors": {
             "itemNotFound": "Product not found"
@@ -104,12 +104,12 @@
                 "itemNameRequired": "Please enter the product name"
             },
             "categories": {
-                "lacteos": "Dairy",
-                "carnes": "Meat",
-                "vegetales": "Vegetables",
-                "frutas": "Fruits",
-                "granos": "Grains",
-                "otros": "Others"
+                "diary": "Dairy",
+                "meat": "Meat",
+                "vegetables": "Vegetables",
+                "fruits": "Fruits",
+                "grains": "Grains",
+                "other": "Other"
             }
         },
         "recipes": {
@@ -146,7 +146,7 @@
                 "passwordLength": "Password must contain at least 6 characters"
             },
             "roles": {
-                "usuario": "User",
+                "user": "User",
                 "admin": "Admin"
             }
         },
@@ -156,9 +156,9 @@
             "item": "Item",
             "read": "Read",
             "types": {
-                "caducado": "Expired",
-                "pocas existencias": "Low Stock",
-                "sistema": "System"
+                "expired": "Expired",
+                "lowStock": "Low Stock",
+                "system": "System"
             }
         }
     },

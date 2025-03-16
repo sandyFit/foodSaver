@@ -18,7 +18,7 @@ const checkExpiringItems = async (userId) => {
 
         await Notification.create({
             user: userId,
-            type: 'caducado',
+            type: 'expired',
             message: `notifications.expiring.message|${item.itemName}|${daysToExpire}`,
             relatedItem: item._id
         });
@@ -34,7 +34,7 @@ const checkLowStock = async (userId, threshold = 3) => {
     for (const item of lowStockItems) {
         await Notification.create({
             user: userId,
-            type: 'pocas existencias',
+            type: 'lowStock',
             message: `notifications.lowStock.message|${item.itemName}|${item.quantity}`,
             relatedItem: item._id
         });

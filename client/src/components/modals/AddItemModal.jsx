@@ -129,17 +129,19 @@ const AddItemModal = memo(({ onClose }) => {
                                 className="border p-2 rounded"
                                 required
                             >
-                                <option value="lacteos">{t('inventory.categories.lacteos')}</option>
-                                <option value="carnes">{t('inventory.categories.carnes')}</option>
-                                <option value="vegetales">{t('inventory.categories.vegetales')}</option>
-                                <option value="frutas">{t('inventory.categories.frutas')}</option>
-                                <option value="granos">{t('inventory.categories.granos')}</option>
-                                <option value="otros">{t('inventory.categories.otros')}</option>
+                                <option value="lacteos">{t('inventory.categories.diary')}</option>
+                                <option value="carnes">{t('inventory.categories.meat')}</option>
+                                <option value="vegetales">{t('inventory.categories.vegetables')}</option>
+                                <option value="frutas">{t('inventory.categories.fruits')}</option>
+                                <option value="granos">{t('inventory.categories.grains')}</option>
+                                <option value="otros">{t('inventory.categories.other')}</option>
                             </select>
                         </div>
 
                         <div className="flex flex-col w-1/4">
-                            <label htmlFor="quantity" className="text-sm font-medium mb-1">{t('inventory.quantity')}</label>
+                            <label htmlFor="quantity" className="text-sm font-medium mb-1">
+                                {t('inventory.quantity')}
+                            </label>
                             <input
                                 id="quantity"
                                 type="number"
@@ -164,7 +166,8 @@ const AddItemModal = memo(({ onClose }) => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="shadow-btn px-8 py-2 bg-green-100 hover:bg-green-200 border-green-600 text-green-600 rounded"
+                            className="shadow-btn px-8 py-2 bg-green-100 hover:bg-green-200 
+                                border-green-600 text-green-600 rounded"
                         >
                             {loading ? t('inventory.addingItem') : t('common.add')}
                         </button>

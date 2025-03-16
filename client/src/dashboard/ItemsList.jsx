@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useInventory } from '../utils/inventoryContext'; // Use the custom hook
 import TableTest from '../components/tables/TableTest';
+import MealsTable from '../components/tables/MealsTable';
 import UpdateFormModal from '../components/modals/UpdateFormModal';
 import { toast } from 'react-hot-toast';
 import AddItemButton from '../components/buttons/AddItemButton';
@@ -88,12 +89,12 @@ const ItemsList = () => {
 
                     <h4 className="text-lg font-bold mt-8 mb-3">{t('inventory.title')}</h4>
 
-                    <TableTest
+                    <MealsTable
                         items={allInventoryItems || []}
                         loading={loading}
                         onDeleteBtn={handleDeleteBtn}
                         onEditBtn={handleEditBtn}
-                    />
+                    />            
                 </div>
 
                 {editingItem && (

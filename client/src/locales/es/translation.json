@@ -79,12 +79,12 @@
             "frozen": "Congelados",
             "fresh": "Frescos",
             "pantry": "Alacena",
-            "lacteos": "Lácteos",
-            "carnes": "Carnes",
-            "vegetales": "Vegetales",
-            "frutas": "Frutas",
-            "granos": "Granos",
-            "otros": "Otros"
+            "diary": "Lácteos",
+            "meat": "Carnes",
+            "vegetables": "Vegetales",
+            "fruits": "Frutas",
+            "grains": "Granos",
+            "other": "Otros"
         },
         "errors": {
             "itemNotFound": "Producto no encontrado"
@@ -104,12 +104,12 @@
                 "itemNameRequired": "Ingrese el nombre del producto"
             },
             "categories": {
-                "lacteos": "Lácteos",
-                "carnes": "Carnes",
-                "vegetales": "Vegetales",
-                "frutas": "Frutas",
-                "granos": "Granos",
-                "otros": "Otros"
+                "diary": "Lácteos",
+                "meat": "Carnes",
+                "vegetables": "Vegetales",
+                "fruits": "Frutas",
+                "grains": "Granos",
+                "other": "Otros"
             }
         },
         "recipes": {
@@ -146,7 +146,7 @@
                 "passwordLength": "La contraseña debe contener al menos 6 caracteres"
             },
             "roles": {
-                "usuario": "Usuario",
+                "user": "Usuario",
                 "admin": "Administrador"
             }
         },
@@ -156,9 +156,9 @@
             "item": "Producto",
             "read": "Leído",
             "types": {
-                "caducado": "Caducado",
-                "pocas existencias": "Pocas Existencias",
-                "sistema": "Sistema"
+                "expired": "Caducado",
+                "lowStock": "Pocas Existencias",
+                "system": "Sistema"
             }
         }
     },

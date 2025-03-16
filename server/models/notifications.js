@@ -8,7 +8,7 @@ const notificationSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['caducado', 'pocas existencias', 'sistema'],
+        enum: ['expired', 'lowStock', 'system'],
         required: true
     },
     message: {

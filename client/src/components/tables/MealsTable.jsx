@@ -1,28 +1,26 @@
-import React, { useContext, useEffect } from 'react';
-import { ContextGlobal } from '../../utils/globalContext';
+import React from 'react';
 import { formatDate } from '../../utils/functions';
+import { useTranslation } from 'react-i18next';
 
-const MealsTable = React.memo(({ items, onEditBtn, onDeleteBtn }) => {
-    const { loading } = useContext(ContextGlobal);   
+const MealsTable = React.memo(({ items, loading, onEditBtn, onDeleteBtn }) => {
+
+    const { t } = useTranslation();
     
     if (!Array.isArray(items)) {
         console.error('Items prop must be an array');
         return null;
     }
-
-    if (loading) return <div>Loading...</div>;
-    console.log('Rendering MealsTable with items:', items);
-    
+   
     return (
         <article className="min-w-full flex flex-col justify-center items-center">
             <table border="1">
                 <thead className="bg-blue-100">
                     <tr>
-                        <th className="table-th">Producto</th>
-                        <th className="table-th">Expira en</th>
-                        <th className="table-th">Categoría</th>
-                        <th className="table-th">Cantidad</th>
-                        <th className="table-th">Acciones</th>
+                        <th className="table-th">{t('table.product')}</th>
+                        <th className="table-th">{t('table.expiresIn')}</th>
+                        <th className="table-th">{t('table.category')}</th>
+                        <th className="table-th">{t('table.quantity')}</th>
+                        <th className="table-th">{t('table.actions')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,16 +37,18 @@ const MealsTable = React.memo(({ items, onEditBtn, onDeleteBtn }) => {
                                         onClick={() => onEditBtn(item)}
                                         className={`table-btn bg-yellow-100 hover:bg-yellow-200 border-yellow-600 
                                             text-yellow-600 ${loading ? 'opacity-40' : ''}`}
+                                        disabled={loading}
                                     >
-                                        {loading ? 'Cargando...' : 'Editar'}
+                                        {loading ? t('common.loading') : t('common.edit')}
                                     </button>
                                     <button
                                         aria-label={`Delete ${item.itemName}`}
                                         onClick={() => onDeleteBtn(item._id)}
                                         className={`table-btn bg-red-100 hover:bg-red-200 border-red-600 
                                             text-red-600 ${loading ? 'opacity-40' : ''}`}
+                                        disabled={loading}
                                     >
-                                        { loading ? 'Eliminando...' : 'Eliminar' }
+                                        {loading ? t('inventory.deletingItem') : t('common.delete')}
                                     </button>
                                 </td>
                             </tr>
@@ -56,7 +56,7 @@ const MealsTable = React.memo(({ items, onEditBtn, onDeleteBtn }) => {
                     ) : (
                         <tr>
                             <td colSpan="5" className="table-td text-center">
-                                No hay productos disponibles
+                                {t('inventory.noItems')}
                             </td>
                         </tr>
                     )}
