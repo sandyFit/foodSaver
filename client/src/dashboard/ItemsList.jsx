@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useInventory } from '../utils/inventoryContext'; // Use the custom hook
-import TableTest from '../components/tables/TableTest';
 import MealsTable from '../components/tables/MealsTable';
 import UpdateFormModal from '../components/modals/UpdateFormModal';
 import { toast } from 'react-hot-toast';
@@ -33,22 +32,24 @@ class RenderTracker extends React.Component {
 const ItemsList = () => {
 
     const { t } = useTranslation();
-    // Increment render counter to track re-renders
-    renderCount++;
-    if (renderCount % 10 === 0) {
-        console.log('🔄 ItemsList render count:', renderCount);
-    }
-
-    // Use a single state value to track the edited item
     const [editingItem, setEditingItem] = useState(null);
 
-    // Reference the inventory context using our custom hook
+    // Use the specialized inventory hook
     const {
         loading,
+        error,
         allInventoryItems,
         getAllInventoryItems,
         deleteInventoryItem
-    } = useInventory(); // Changed to use our custom hook
+    } = useInventory();
+
+    // Track renders in development
+    if (process.env.NODE_ENV === 'development') {
+        renderCount++;
+        if (renderCount % 10 === 0) {
+            console.log('🔄 ItemsList render count:', renderCount);
+        }
+    }
 
     // Simple function to edit an item - sets it for the modal
     const handleEditBtn = useCallback((item) => {
@@ -76,10 +77,12 @@ const ItemsList = () => {
 
     // Fetch data on mount only
     useEffect(() => {
-        console.log('ItemsList - Fetching inventory items on mount');
-        getAllInventoryItems();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // Execute only on mount
+        getAllInventoryItems().catch(error => {
+            console.error('Error fetching inventory:', error);
+            toast.error(t('notifications.fetchError'));
+        });
+    }, []); 
+    
 
     return (
         <RenderTracker componentName="ItemsList">
