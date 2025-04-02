@@ -1,10 +1,9 @@
 import React, { useState, useCallback, memo, useContext } from 'react';
 import { createPortal } from 'react-dom';
-import { ContextGlobal } from '../../utils/globalContext';
+import { useUser } from '../../context/UserContext';
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import Logo from '../ui/Logo';
 import { useTranslation } from 'react-i18next';
 
 // Render counter for debugging
@@ -38,7 +37,7 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
     }
 
     // Use global context
-    const { login, loading } = useContext(ContextGlobal);
+    const { login, loading } = useUser();
 
     // Form state
     const [formData, setFormData] = useState({
@@ -63,26 +62,16 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
             const data = await login(formData);
 
             if (data && data.token) {
-                // Clear the form
-                setFormData({
-                    email: '',
-                    password: ''
-                });
-
-                // Store the token in localStorage
-                localStorage.setItem('token', data.token);
-
-                // Close the modal
+                setFormData({ email: '', password: '' });
                 onClose();
-
-                // Navigate to the dashboard
                 navigate('/dashboard');
-            } else {
-                toast.error(t('auth.loginError', { message: 'No se pudo obtener el token' }));
+                toast.success(t('auth.loginSuccess'));
             }
         } catch (error) {
-            console.error('Error al iniciar sesión:', error);
-            toast.error(t('auth.loginError', { message: error.message || 'Error desconocido' }));
+            console.error('Login error:', error);
+            toast.error(t('auth.loginError', {
+                message: error.message || t('auth.unknownError')
+            }));
         }
     }, [formData, login, navigate, onClose, t]);
 

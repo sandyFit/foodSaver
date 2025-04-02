@@ -18,39 +18,33 @@
         "users": "Users"
     },
     "auth": {
-        "login": "Login",
-        "logout": "Logout",
-        "register": "Register",
-        "forgotPassword": "Forgot Password",
+        "loginTitle": "Login",
+        "registerTitle": "Register",
         "email": "Email",
         "password": "Password",
-        "confirmPassword": "Confirm Password",
-        "username": "Username",
         "fullName": "Full Name",
-        "logoutConfirmTitle": "Confirm Logout",
-        "logoutConfirmMessage": "Are you sure you want to log out of your account?",
-        "loginTitle": "Log in & manage your pantry efficiently 🥫✅",
-        "registerTitle": "Sign up to Save & Care for the Planet 🌍💚",
-        "loginButton": "ACCESS Now",
-        "registerButton": "CREATE Your Account",
-        "loggingIn": "Logging in...",
-        "registering": "Registering...",
-        "noAccount": "Don't have an account?",
-        "haveAccount": "Already have an account?",
-        "registerHere": "Register here",
-        "loginHere": "Login here",
+        "confirmPassword": "Confirm Password",
         "userRole": "User",
         "adminRole": "Admin",
+        "haveAccount": "Already have an account?",
+        "noAccount": "Don't have an account?",
+        "loginHere": "Login here",
+        "registerHere": "Register here",
+        "loginButton": "Login",
+        "registerButton": "Register",
+        "loggingIn": "Logging in...",
+        "registering": "Registering...",
+        "loginSuccess": "Successfully logged in!",
+        "registerSuccess": "Successfully registered!",
         "loginError": "Login failed: {{message}}",
         "registerError": "Registration failed: {{message}}",
-        "switchToRegister": "Need an account?",
-        "switchToLogin": "Already registered?",
-        "welcomeBack": "Welcome back!",
-        "createAccount": "Create a new account",
-        "errors": {
-            "unauthorized": "You must be logged in to perform this action",
-            "userNotFound": "User not found"
-        }
+        "sessionExpired": "Session expired. Please log in again."
+    },
+    "errors": {
+        "unknown": "An unknown error occurred",
+        "publicRouteError": "Error in public operation",
+        "operationFailed": "Operation failed",
+        "networkError": "Server connection error"
     },
     "dashboard": {
         "layout": {},
@@ -177,6 +171,8 @@
         "required": "Please complete all fields.",
         "invalidEmail": "Please enter a valid email address.",
         "passwordMismatch": "Passwords do not match.",
+        "passwordLength": "Password must be at least 6 characters long",
+        "allFieldsRequired": "All fields are required",
         "minLength": "Must be at least {{count}} characters."
     },
     "notifications": {

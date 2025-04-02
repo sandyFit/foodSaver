@@ -1,10 +1,9 @@
 import React, { useState, useCallback, memo, useContext } from 'react';
 import { createPortal } from 'react-dom';
-import { ContextGlobal } from '../../utils/globalContext';
+import { useUser } from '../../context/UserContext';
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import Logo from '../ui/Logo';
 import { useTranslation } from 'react-i18next';
 
 // Render counter for debugging
@@ -27,29 +26,21 @@ const ModalBackdrop = memo(({ children, onClose }) => {
 ModalBackdrop.displayName = 'ModalBackdrop';
 
 // Main modal component for registration
+// ...existing imports...
+
 const RegisterModal = memo(({ onClose, onSwitchToLogin }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { registerUser, loading } = useUser();
 
-    // Track renders for debugging
-    renderCount++;
-    if (renderCount % 10 === 0) {
-        console.log('🔄 RegisterModal render count:', renderCount);
-    }
-
-    // Use global context
-    const { registerUser, loading } = useContext(ContextGlobal);
-
-    // Form state
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
         password: '',
         confirmPass: '',
-        role: 'user'
+        role: 'user' // Default to user role
     });
 
-    // Handle input changes
     const handleChange = useCallback((e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -58,50 +49,83 @@ const RegisterModal = memo(({ onClose, onSwitchToLogin }) => {
         }));
     }, []);
 
-    // Handle form submission
-    const handleSubmit = useCallback(async (e) => {
-        e.preventDefault();
+    const validateForm = useCallback(() => {
+        // Check for empty fields
+        if (!formData.fullName || !formData.email || !formData.password || !formData.confirmPass) {
+            toast.error(t('validations.allFieldsRequired'));
+            return false;
+        }
 
-        // Validate password match
-        if (formData.password !== formData.confirmPass) {
-            toast.error(t('validations.passwordMismatch'));
-            return;
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            toast.error(t('validations.invalidEmail'));
+            return false;
         }
 
         // Validate password length
         if (formData.password.length < 6) {
-            toast.error(t('validations.minLength', { count: 6 }));
+            toast.error(t('validations.passwordLength'));
+            return false;
+        }
+
+        // Check password match
+        if (formData.password !== formData.confirmPass) {
+            toast.error(t('validations.passwordMismatch'));
+            return false;
+        }
+
+        return true;
+    }, [formData, t]);
+
+    const handleSubmit = useCallback(async (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) {
             return;
         }
 
         try {
-            await registerUser(formData);
+            // Prepare registration data without confirmPass
+            const { confirmPass, ...registrationData } = formData;
 
-            // Clear the form
-            setFormData({
-                fullName: '',
-                email: '',
-                password: '',
-                confirmPass: '',
-                role: 'user'
-            });
+            console.log('Sending registration data:', registrationData);
 
-            // Close the modal
-            onClose();
+            const response = await registerUser(registrationData);
+            console.log('Registration response:', response);
 
-            // Switch to login modal or navigate to login page
-            if (onSwitchToLogin) {
+            if (response && response.success) {
+                toast.success(t('notifications.registerSuccess'));
+                setFormData({
+                    fullName: '',
+                    email: '',
+                    password: '',
+                    confirmPass: '',
+                    role: 'user'
+                });
                 onSwitchToLogin();
             } else {
-                navigate('/login');
+                throw new Error(response?.message || t('errors.unknown'));
             }
-
-            toast.success(t('notifications.registerSuccess'));
         } catch (error) {
-            console.error('Error registrando el usuario:', error);
-            toast.error(t('notifications.registerError', { message: error.message || 'Error desconocido' }));
+            console.error('Registration error:', error);
+
+            // Handle specific errors
+            const errorMessage = error.message?.toLowerCase() || '';
+            if (errorMessage.includes('already exists') || errorMessage.includes('ya existe')) {
+                toast.error(t('notifications.emailExists'));
+            } else if (errorMessage.includes('unauthorized')) {
+                // This shouldn't happen during registration
+                console.error('Unexpected auth error during registration');
+                toast.error(t('notifications.registerError'));
+            } else {
+                toast.error(t('notifications.registerError', {
+                    message: error.message || t('errors.unknown')
+                }));
+            }
         }
-    }, [formData, registerUser, navigate, onClose, onSwitchToLogin, t]);
+    }, [formData, registerUser, validateForm, onSwitchToLogin, t]);
+
 
     // Create a portal to render outside the main component tree
     return createPortal(

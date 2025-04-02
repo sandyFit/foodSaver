@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { ContextGlobal } from '../utils/globalContext';
+import { useUser } from '../context/UserContext';
 import LogoutHandler from '../components/ui/LogoutHandler';
 import LanguageSwitcher from '../components/ui/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 // Icons
 import { GoHome } from "react-icons/go";
@@ -15,43 +16,84 @@ import { TbUsers } from "react-icons/tb";
 
 const Dashboard = () => {
     const { t } = useTranslation();
-    // const navigate = useNavigate();
-    const { user, loading,  } = useContext(ContextGlobal);
+    const navigate = useNavigate();
+    const { user, loading, getUserInfo } = useUser();
+    const [isInitialized, setIsInitialized] = useState(false);
+    const [localUser, setLocalUser] = useState(null);
+    const activeUser = localUser || user;
+
+    useEffect(() => {
+        const initDashboard = async () => {
+            const token = localStorage.getItem('token');
+            const storedUser = localStorage.getItem('user');
+
+            if (!token || !storedUser) {
+                navigate('/', { state: { showLogin: true } });
+                return;
+            }
+
+            try {
+                const parsedUser = JSON.parse(storedUser);
+                console.log('Stored user data:', parsedUser);
+                setLocalUser(parsedUser); // Set local user immediately from storage
+
+                if (!isInitialized) {
+                    await getUserInfo(parsedUser.id); // Update context but don't wait for it
+                    setIsInitialized(true);
+                }
+            } catch (error) {
+                console.error('Dashboard initialization error:', error);
+                navigate('/', { state: { showLogin: true } });
+            }
+        };
+
+        initDashboard();
+    }, [navigate, getUserInfo, isInitialized]);
 
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    // Use activeUser in your render methods
+    const menuItems = React.useMemo(() =>
+        activeUser?.role === 'user' ? [
+            { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: t('common.home') },
+            { to: '/dashboard/meals-users', icon: <CiViewList className='text-[1.3rem]' />, label: t('common.products') },
+            { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: t('common.recipes') },
+            { to: '/dashboard/config-users', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: t('common.settings') },
 
-    if (!user) {
-        return <div>Please log in to access dashboard</div>;
-    }
+        ] : [
+            { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: t('common.home') },
+            { to: '/dashboard/meals-users', icon: <CiViewList className='text-[1.3rem]' />, label: t('common.products') },
+            { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: t('common.recipes') },
+            { to: '/dashboard/users', icon: <TbUsers className='text-[1.3rem]' />, label: t('common.users') },
+            { to: '/dashboard/config-admin', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: t('common.settings') },
 
+        ], [activeUser?.role, t]);
 
-    const userItems = user.role === 'user' ? [
-        { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: t('common.home') },
-        { to: '/dashboard/meals-users', icon: <CiViewList className='text-[1.3rem]' />, label: t('common.products') },
-        { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: t('common.recipes') },
-        { to: '/dashboard/config-users', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: t('common.settings') },
-        
-    ] : [
-        { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: t('common.home') },
-        { to: '/dashboard/meals-users', icon: <CiViewList className='text-[1.3rem]' />, label: t('common.products') },
-        { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: t('common.recipes') },
-        { to: '/dashboard/users', icon: <TbUsers className='text-[1.3rem]' />, label: t('common.users') },
-        { to: '/dashboard/config-admin', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: t('common.settings') },
+   
 
-    ];
-
-    // const menuToBeRendered = user?.user.role === 'admin' ? adminItems : userItems;
-
-    const renderMenuItem = ({ to, icon, label }) => (
+    // Memoize render function
+    const renderMenuItem = React.useCallback(({ to, icon, label }) => (
         <Link to={to} key={label}
             className='flex flex-col items-center gap-1 sidebar-text text-teal-50'>
             <span>{icon}</span>
-            <span >{label}</span>
+            <span>{label}</span>
         </Link>
-    );
+    ), []);
+
+    // Remove the second loading check - it's redundant
+    if (loading || !isInitialized) {
+        return (
+            <div className="w-full h-screen flex justify-center items-center bg-stone-200">
+                <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-tahiti-700"></div>
+            </div>
+        );
+    }
+
+    // Use the activeUser variable consistently
+    if (!activeUser) {
+        console.log('No active user data');
+        navigate('/', { state: { showLogin: true } });
+        return null;
+    }
 
     return (
         <section className="w-full h-screen flex justify-center items-center p-8 bg-stone-200">
@@ -73,7 +115,7 @@ const Dashboard = () => {
                         </div>
                         <ul className={`w-full`}>
                             <span className='gap-8 mt-36 flex flex-col justify-center items-center text-center'>
-                                {userItems.map(renderMenuItem)}
+                                {menuItems.map(renderMenuItem)}
                             </span>
                         </ul>
                     </div>
@@ -127,8 +169,8 @@ const Dashboard = () => {
                                 
                             </div>
                             <div className="flex flex-col">
-                                <h3 className="text-[.9rem]">{user?.fullName}</h3>
-                                <p className='text-[.65rem] uppercase -mt-2'>{user?.role}</p>
+                                <h3 className="text-[.9rem]">{activeUser?.fullName || 'User'}</h3>
+                                <p className='text-[.65rem] uppercase -mt-2'>{activeUser?.role || 'guest'}</p>
                             </div>
                         </div>
                     </div>

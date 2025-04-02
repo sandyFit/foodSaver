@@ -10,20 +10,39 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
 dotenv.config();
-
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Middleware para datos codificados en URL
-app.use(cookieParser());
 
-// Configuración de CORS
+// CORS Configuration
 app.use(cors({
-    origin: 'http://localhost:5173', // URL del frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-    credentials: true // Permitir cookies
+    origin: 'http://localhost:5173',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 
-// Connect to the database
+// Request logging middleware
+app.use((req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.url}`);
+    console.log('Headers:', req.headers);
+    console.log('Body:', req.body);
+    next();
+});
+
+// Body parsing configuration
+app.use(express.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+    if (req.method === 'DELETE') {
+        // Skip body parsing for DELETE requests
+        next();
+    } else {
+        // Parse JSON for other methods
+        express.json()(req, res, next);
+    }
+});
+
+app.use(cookieParser());
+
+// DB Connection
 connectToMongoDB();
 
 // Routes
@@ -32,12 +51,12 @@ app.use('/api', userRoutes);
 app.use('/api', inventoryRoutes);
 app.use('/api', notificationRoutes);
 
+// Route logging (for debugging)
 app._router.stack.forEach((middleware) => {
     if (middleware.route) {
-        console.log(`Ruta registrada: ${middleware.route.path}`);
+        console.log(`Registered route: ${middleware.route.path}`);
     }
 });
-
 
 // Swagger Docs
 swaggerDocs(app, process.env.PORT || 5555);
@@ -45,5 +64,5 @@ swaggerDocs(app, process.env.PORT || 5555);
 // Server setup
 const PORT = process.env.PORT || 5555;
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT} in mode: ${process.env.NODE_ENV }`);
+    console.log(`Server is running on http://localhost:${PORT} in mode: ${process.env.NODE_ENV}`);
 });

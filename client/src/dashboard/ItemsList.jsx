@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { useInventory } from '../utils/inventoryContext'; // Use the custom hook
+import { useInventory } from '../context/InventoryContext.jsx';
 import MealsTable from '../components/tables/MealsTable';
 import UpdateFormModal from '../components/modals/UpdateFormModal';
 import { toast } from 'react-hot-toast';
@@ -33,8 +33,8 @@ const ItemsList = () => {
 
     const { t } = useTranslation();
     const [editingItem, setEditingItem] = useState(null);
+    const [deletingItemId, setDeletingItemId] = useState(null);
 
-    // Use the specialized inventory hook
     const {
         loading,
         error,
@@ -62,16 +62,18 @@ const ItemsList = () => {
     }, []);
 
     // Delete button handler
-    const handleDeleteBtn = useCallback((itemId) => {
+    const handleDeleteBtn = useCallback(async (itemId) => {
         if (window.confirm(t('inventory.deleteConfirmMessage'))) {
-            deleteInventoryItem(itemId)
-                .then(() => {
-                    toast.success(t('notifications.itemDeleted'));
-                })
-                .catch((error) => {
-                    console.error('Error eliminando el producto:', error);
-                    toast.error(t('notifications.deleteError'));
-                });
+            try {
+                setDeletingItemId(itemId);
+                await deleteInventoryItem(itemId);
+                toast.success(t('notifications.itemDeleted'));
+                // No need to call getAllInventoryItems() here since deleteInventoryItem already updates the state
+            } catch (error) {
+                toast.error(error.message || t('notifications.deleteError'));
+            } finally {
+                setDeletingItemId(null);
+            }
         }
     }, [deleteInventoryItem, t]);
 
@@ -94,11 +96,12 @@ const ItemsList = () => {
 
                     <MealsTable
                         items={allInventoryItems || []}
-                        loading={loading}
+                        loading={loading} // Initial table loading
+                        deletingItemId={deletingItemId} // Pass the ID of the item being deleted
                         onDeleteBtn={handleDeleteBtn}
                         onEditBtn={handleEditBtn}
-                    />            
-                </div>
+                    />
+                </div>            
 
                 {editingItem && (
                     <UpdateFormModal

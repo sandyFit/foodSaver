@@ -32,12 +32,19 @@ export const reducer = (state, action) => {
 
             return { ...state, expiringMeals: action.payload }; 
         case REGISTER_USER:
-            return { ...state, allUsers: [...state.allUsers, action.payload] };
+            return {
+                ...state,
+                allUsers: state.allUsers ? [...state.allUsers, action.payload] : [action.payload]
+            };
         case SET_ALL_USERS:
             return { ...state, allUsers: action.payload };
         case SET_USER:
-            console.log("SET_USER action payload:", action.payload); 
-            return { ...state, user: action.payload };
+            return {
+                ...state,
+                user: action.payload,
+                loading: false,
+                error: null
+            };
             
         case SET_ALL_RECIPES:
             return { ...state, allRecipes: action.payload };

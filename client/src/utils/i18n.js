@@ -25,7 +25,7 @@ i18n
     // Initialize i18next
     .init({
         resources,
-        fallbackLng: 'es', // Default language is Spanish
+        fallbackLng: 'en', 
         debug: process.env.NODE_ENV === 'development', // Enable debug in development
 
         interpolation: {

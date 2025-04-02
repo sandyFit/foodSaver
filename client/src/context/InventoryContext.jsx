@@ -78,17 +78,41 @@ export const InventoryProvider = ({ children }) => {
 
 
     const deleteInventoryItem = useCallback(async (id) => {
+        console.log('🗑️ Deleting item:', id);
         dispatch({ type: SET_LOADING, payload: true });
+
         try {
-            await apiClient.request(`inventory/${id}`, 'DELETE');
-            await getAllInventoryItems(); // Refresh list after delete
-            toast.success('Item deleted successfully');
+            console.log('Current token:', localStorage.getItem('token')); // Add this line
+            const response = await apiClient.request(`inventory/${id}`, 'DELETE');
+            console.log('Delete response:', response);
+
+            if (response.success) {
+                // Optimistic update instead of refetching
+                dispatch({
+                    type: SET_ALL_INVENTORY_ITEMS,
+                    payload: state.allInventoryItems.filter(item => item._id !== id)
+                });
+                toast.success(response.message || 'Item deleted successfully');
+                return true;
+            }
+            throw new Error(response.message || 'Failed to delete item');
         } catch (error) {
-            dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error('Error deleting inventory item');
+            console.error('❌ Detailed delete error:', {
+                message: error.message,
+                response: error.response?.data,
+                status: error.response?.status
+            });
+            dispatch({
+                type: SET_ERROR,
+                payload: error.response?.data?.message || error.message || 'Error deleting item'
+            });
+            toast.error(error.response?.data?.message || error.message || 'Error deleting item');
             throw error;
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
         }
-    }, [getAllInventoryItems]);
+    }, [state.allInventoryItems]);
+
 
     const value = useMemo(() => ({
         // State

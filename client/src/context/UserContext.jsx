@@ -1,10 +1,20 @@
-import React, { useReducer, useEffect } from 'react';
+import React, {
+    createContext,
+    useReducer,
+    useEffect,
+    useContext,
+    useMemo,
+    useCallback
+} from 'react';
+import { toast } from 'react-hot-toast';
+import { apiClient } from '../utils/ApiClient';
 
 import {
     reducer,
     SET_LOADING,
     SET_ALL_USERS,
     SET_USER,
+    REGISTER_USER,
     SET_ERROR
 } from "../utils/reducer";
 
@@ -15,23 +25,43 @@ export const initialState = {
     loading: false,
 }
 
-export const UserContext = createContext();
+export const UserContext = createContext(undefined);
+
+export const useUser = () => {
+    const context = useContext(UserContext);
+    if (context === undefined) {
+        throw new Error('useUser must be used within an UserProvider');
+    }
+    return context;
+};
 
 export const UserProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const { allUsers, loading, error } = state;
 
     const registerUser = async (formData) => {
-        // console.log('FormData enviado:', formData);
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const data = await apiRequest('users-register', 'POST', formData);
-            if (data.message === 'Cuenta registrada correctamente') {
-                toast.success('Tu cuenta ha sido registrada correctamente. ¡Inicia sesión para comenzar!');
-                await getAllUsers();
-            } else {
-                toast.error(`Error al registrar el usuario: ${data.message}`);
+            // Remove confirmPass before sending
+            const { confirmPass, ...registrationData } = formData;
+
+            console.log('Sending registration data:', registrationData);
+
+            const response = await apiClient.request(
+                'register',
+                'POST',
+                registrationData
+            );
+
+            if (response.success) {
+                dispatch({ type: REGISTER_USER, payload: response.user });
+                return response;
             }
+
+            throw new Error(response.message || 'Error al registrar el usuario');
+        } catch (error) {
+            console.error('Registration error:', error);
+            throw error;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
@@ -41,7 +71,7 @@ export const UserProvider = ({ children }) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             console.log('Sending login request with data:', formData); // Debugging
-            const response = await apiRequest('users-login', 'POST', formData);
+            const response = await apiClient.request('login', 'POST', formData);
             console.log('Login response:', response); // Debugging
 
             if (response && response.message === 'Login Correcto' && response.token) {
@@ -77,7 +107,7 @@ export const UserProvider = ({ children }) => {
             if (user?.role !== 'admin') {
                 throw new Error('Unauthorized access');
             }
-            const data = await apiRequest('users-getAll');
+            const data = await apiClient.request('users-getAll');
             dispatch({ type: SET_ALL_USERS, payload: data });
         } catch (error) {
             toast.error(error.message);
@@ -86,29 +116,40 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    const getUserInfo = async (id) => {
+    const getUserInfo = useCallback(async (userId) => {
+        if (!userId) return;
+
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            // Fix token retrieval
-            const data = await apiRequest(`users-getUserInfo/${id}`);
+            const response = await apiClient.request(`users/${userId}`);
 
-            if (data.success) { // Match your actual response structure
-                dispatch({ type: SET_USER, payload: data.user });
-            } else {
-                toast.error(data.message || 'Error al obtener el usuario');
-            }
+            // Transform API response to match component expectations
+            const transformedUser = {
+                id: response._id,
+                fullName: response.fullName,
+                email: response.email,
+                role: response.role,
+                avatar: response.avatar,
+                inventory: response.inventory || [],
+                notifications: response.notifications || []
+            };
+
+            console.log('Transformed user data:', transformedUser);
+            dispatch({ type: SET_USER, payload: transformedUser });
+
         } catch (error) {
-            // Handle error
+            console.error('Error fetching user info:', error);
+            dispatch({ type: SET_ERROR, payload: error.message });
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    };
+    }, []);
 
 
     const updateUserProfile = async (id, updatedData) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const updatedUser = await apiRequest(`users-updateProfile/${id}`, 'PUT', updatedData);
+            const updatedUser = await apiClient.request(`users-updateProfile/${id}`, 'PUT', updatedData);
             dispatch({
                 type: SET_ALL_USERS,
                 payload: allUsers.map((user) =>
@@ -126,7 +167,7 @@ export const UserProvider = ({ children }) => {
     const deleteUser = async (id) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            await apiRequest(`users-delete/${id}`, 'DELETE');
+            await apiClient.request(`users-delete/${id}`, 'DELETE');
             const filteredUsers = allUsers.filter((user) => user._id !== id);
             dispatch({ type: SET_ALL_USERS, payload: filteredUsers });
             toast.success('Usuario eliminado.');

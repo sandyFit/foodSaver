@@ -1,6 +1,6 @@
 import React, { useState, useCallback, memo } from 'react';
 import { createPortal } from 'react-dom';
-import { useInventory } from '../../utils/inventoryContext'; // Use the custom hook
+import { useInventory } from '../../context/InventoryContext';
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
