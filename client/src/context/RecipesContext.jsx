@@ -1,6 +1,5 @@
-import { createContext, useContext, useReducer, useMemo } from "react";
+import { createContext, useContext, useReducer, useMemo, useCallback } from "react";
 import { apiClient } from '../utils/ApiClient';
-import { toast } from 'react-hot-toast';
 import {
     SET_LOADING,
     SET_ERROR,
@@ -10,7 +9,7 @@ import {
     SET_EXPIRING_MEALS,
     reducer
 } from '../utils/reducer';
-import { all } from "axios";
+
 
 const initialState = {
     allRecipes: [],
@@ -33,57 +32,53 @@ export const useRecipes = () => {
 export const RecipesProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const getAllRecipes = async () => {
+    const getAllRecipes = useCallback(async () => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             const response = await apiClient.request('recipes');
             dispatch({ type: SET_ALL_RECIPES, payload: response });
         } catch (error) {
             dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error('Error fetching recipes');
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    };
+    }, []);
 
-    const getRecipeDetails = async (id) => {
+    const getRecipeDetails = useCallback(async (id) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             const response = await apiClient.request(`recipes/${id}`);
             dispatch({ type: SET_RECIPE, payload: response });
         } catch (error) {
             dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error('Error fetching recipe details');
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    };
+    }, []);
 
-    const getSuggestedRecipes = async (id) => {
+    const getSuggestedRecipes = useCallback(async (id) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {                         
             const response = await apiClient.request(`recipes/suggested/${id}`);            
             dispatch({ type: SET_SUGGESTED_RECIPES, payload: response });
         } catch (error) {            
-            dispatch({ type: SET_ERROR, payload: error.message });            
-            toast.error('Error fetching suggested recipes');            
+            dispatch({ type: SET_ERROR, payload: error.message });                     
         } finally {
             dispatch({ type: SET_LOADING, payload: false });                            
         }
-    };
+    }, []);
 
-    const getExpiringMeals = async () => {
+    const getExpiringMeals = useCallback(async () => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             const response = await apiClient.request(`recipes/expiring-meals`);
             dispatch({ type: SET_EXPIRING_MEALS, payload: response });
         } catch (error) {
             dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error('Error fetching expiring meals');
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    };
+    }, []);
 
     const value = useMemo(() => ({
         allRecipes: state.allRecipes,

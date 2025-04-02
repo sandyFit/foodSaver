@@ -95,12 +95,37 @@
         },
         "errors": {
             "itemNotFound": "Producto no encontrado",
-            "createFailed": "Error al crear el producto. Por favor, inténtalo de nuevo."
+            "createFailed": "Error al crear el producto. Por favor, inténtalo de nuevo.",
+            "fecthFailed": "Error al obtener la lista de productos.",
+            "updateFailed": "Error al editar el producto. Por favor, inténtalo de nuevo.",
+            "deleteFailed": "Error al eliminar el producto. Por favor, inténtalo de nuevo."
         },
         "messages": {
-            "itemDeleted": "Producto eliminado"
+            "itemDeleted": "Producto eliminado",
+            "itemUpdated": "Producto modificado correctamente",
+            "itemAdded": "Producto agregado correctamente",
+            "itemNotFound": "Producto no encontrado"
         }
     },
+
+    "recipes": {
+        "errors": {
+            "fetchFailed": "No se pudo obtener la lista de recetas. Por favor, inténtalo de nuevo.",
+            "fetchRecipeFailed": "No se pudo obtener la receta. Por favor, inténtalo de nuevo.",
+            "detailFailed": "No se pudo obtener los detalles de la receta. Por favor, inténtalo de nuevo.",
+            "suggestedFailed": "No se pudo obtener la receta sugerida. Por favor, inténtalo de nuevo.",
+            "invalidId": "El id proporcionado no es válido. Por favor, inténtalo de nuevo."
+        },
+        "messages": {
+            "suggestedRecipeFound": "Receta basada en tus ingredientes próximos a vencer.",
+            "noSuggestedRecipes": "No se pudo encontrar una receta sugerida basada en los ingredientes cercanos a vencer.",
+            "noRecipesFound": "No se encontraron recetas en el sistema.",
+            "noRecipeFound": "No se encontró la receta solicitada.",
+            "noRecipeDetailsFound": "No se encontraron detalles de la receta.",
+            "suggestOtherRecipe": "No encontramos una receta basada en tus ingredientes, pero aquí tienes una opción rápida."
+        }
+    },
+
     "models": {
         "inventory": {
             "itemName": "Nombre del Producto",

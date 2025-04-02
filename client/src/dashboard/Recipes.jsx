@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import RecipeCard from '../components/cards/RecipeCard';
-import { toast } from 'react-hot-toast';
+import { useRecipes } from '../context/RecipesContext';
 
 const Recipes = () => {
-    
-    const [recipesList, setRecipesList] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const BASE_URL = 'http://localhost:5555/api';
+
+    const { allRecipes, getAllRecipes, loading, error } = useRecipes();
 
     const bgColors = [
         'bg-red-100',
@@ -19,24 +16,12 @@ const Recipes = () => {
     ];
 
     // Obtener todas las recetas
-    const getAllRecipes = async () => {
-        setLoading(true);
-
-        try {
-            const response = await axios.get(`${BASE_URL}/recipes`);
-            // console.log("Response Data:", response.data); 
-            setRecipesList(response.data);
-        } catch (error) {
-            // console.error('Error al obtener las recetas.', error);
-            toast.error('No se pudieron obtener las recetas. Inténtalo nuevamente.');
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
-        getAllRecipes();
-    }, []);
+        getAllRecipes().catch(error => {
+            console.error('Error fetching inventory:', error);
+            toast.error(t('notifications.fetchError'));
+        });
+    }, []); 
 
 
     return (
@@ -49,7 +34,7 @@ const Recipes = () => {
                         Tus Mejores Recetas
                     </h3>
                     <div className="flex flex-wrap gap-4">                       
-                        {recipesList.map((recipe, index) => (
+                        {allRecipes.map((recipe, index) => (
                             <RecipeCard
                                 key={recipe._id}
                                 id={recipe._id}

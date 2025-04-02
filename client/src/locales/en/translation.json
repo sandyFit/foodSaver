@@ -95,12 +95,39 @@
         },
         "errors": {
             "itemNotFound": "Product not found",
-            "createFailed": "Failed to create product. Please try again."
+            "createFailed": "Failed to create product. Please try again.",
+            "fecthFailed": "Failed to fetch products. Please try again.",
+            "updateFailed": "Failed to update product. Please try again.",
+            "deleteFailed": "Failed to delete product. Please try again."
         },
         "messages": {
-            "itemDeleted": "Product deleted"
+            "itemDeleted": "Product deleted successfully",
+            "itemUpdated": "Product updated successfully",
+            "itemAdded": "Product added successfully",
+            "itemNotFound": "Product not found"
         }
     },
+
+    "recipes": {
+        "suggestedRecipes": "Suggested Recipes",
+        "recipeDetails": "Recipe Details",
+        "errors": {
+            "fetchFailed": "Failed to fetch the recipes' list. Please try again.",
+            "fetchRecipeFailed": "Failed to fetch the recipe. Please try again.",
+            "detailFailed": "Failed to fetch recipe details. Please try again.",
+            "suggestedFailed": "Failed to fetch suggested recipes. Please try again.",
+            "invalidId": "The id provided is invalid. Please check and try again."
+        },
+        "messages": {
+            "suggestedRecipeFound": "Recipe based on your soon-to-expire ingredients",
+            "noSuggestedRecipes": "No recipe found for expiring ingredients. Try other ingredients?",
+            "noRecipesFound": "No recipes available in the system.",    
+            "noRecipeFound": "Recipe not found.",
+            "noRecipeDetailsFound": "No recipe details available in the system. ",
+            "suggestOtherRecipe": "No suggested recipe available but here's a fast option"
+        }
+    },
+
     "models": {
         "inventory": {
             "itemName": "Product Name",

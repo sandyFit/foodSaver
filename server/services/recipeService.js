@@ -1,45 +1,47 @@
 import InventoryItem from '../models/inventory.js';
 import Recipe from '../models/recipes.js';
+import {useTranslation} from 'react-i18next';
 
+const { t } = useTranslation();
 export const suggestRecipe = async () => {
     try {
         const today = new Date();
         const threshold = new Date();
-        threshold.setDate(today.getDate() + 3); // Alimentos cercanos a vencer
+        threshold.setDate(today.getDate() + 7); // 7 days to expiration
 
-        // Buscar alimentos que están por vencer
+        // Find soon-to-expire ingredients
         const ingredients = await InventoryItem.find({
             expirationDate: { $lte: threshold }
-        }).select('name quantity'); // Obtener nombre y cantidad
+        }).select('name quantity'); // get only name and quantity
 
-        // Si tienes recetas que usan esos ingredientes, puedes buscar coincidencias
+        // Match ingredients with recipes
         const recipes = await Recipe.find({
             'ingredients.name': { $in: ingredients.map(item => item.name) }
         });
 
         if (recipes.length > 0) {
-            // Si existen recetas que usan esos ingredientes cercanos a vencer
+            // If there are recipes that can be made with the expiring ingredients
             return {
-                name: `Receta sugerida basada en lo que tienes`,
+                name: `recipes.messages.suggestedRecipeFound`,
                 ingredients: ingredients.map(item => ({
                     name: item.name,
                     quantity: item.quantity,
                 })),
-                recipes: recipes.map(recipe => recipe.name), // Recetas disponibles que usan estos ingredientes
+                recipes: recipes.map(recipe => recipe.name), 
             };
         } else {
-            // Si no hay recetas previas, puedes sugerir una receta básica
+            // Suggest another recipe
             return {
-                name: `Receta sugerida`,
+                name: `recipes.suggestedRecipes`,
                 ingredients: ingredients.map(item => ({
                     name: item.name,
                     quantity: item.quantity,
                 })),
-                message: "No hay recetas disponibles, pero puedes usar estos ingredientes.",
+                message: "recipes.messages.suggestOtherRecipe",
             };
         }
     } catch (error) {
-        throw new Error('Error al sugerir receta: ' + error.message);
+        throw new Error(t('recipes.errors.suggestedFailed') + error.message);
     }
 };
 
@@ -47,7 +49,7 @@ export const getAllRecipes = async () => {
     try {
         return await Recipe.find();
     } catch (error) {
-        throw new Error('Error encontrando recetas: ' + error.message);
+        throw new Error(t('recipes.errors.fetchFailed') + error.message);
     }
 }
 
@@ -55,11 +57,11 @@ export const getRecipeById = async (id) => {
     try {
         const recipe = await Recipe.findById(id);
         if (!recipe) {
-            throw new Error('Receta no encontradad', 404);
+            throw new Error(t('recipes.messages.noRecipeFound'), 404);
         }
         return recipe;
     } catch (error) {
-        throw new Error('Error encontrando receta: ' + error.message);
+        throw new Error(t('recipes.errors.fetchRecipeFailed') + error.message);
     }
 };
 

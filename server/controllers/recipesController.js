@@ -1,3 +1,4 @@
+import recipes from '../models/recipes.js';
 import recipeService from '../services/recipeService.js';
 
 
@@ -7,13 +8,13 @@ export const suggestRecipe = async (req, res) => {
         // Si no hay receta sugerida, retornar un mensaje adecuado
         if (!recipe) {
             return res.status(404).json({
-                message: 'No se pudo encontrar una receta sugerida basada en los ingredientes cercanos a vencer.'
+                message: 'recipes.messages.noSuggestedRecipes'
             });
         }
         res.status(200).json(recipe);
     } catch (error) {
         res.status(400).json({
-            error: 'Error al obtener receta sugerida',
+            error: 'recipes.errors.suggestedFailed',
             details: error.message
         });
     }
@@ -26,13 +27,13 @@ export const getAllRecipes = async (req, res) => {
         // Si no hay recetas, retorna un mensaje adecuado
         if (!recipes || recipes.length === 0) {
             return res.status(404).json({
-                message: 'No hay recetas disponibles en el sistema.'
+                message: 'recipes.messages.noRecipesFound'
             });
         }
         res.status(200).json(recipes);
     } catch (error) {
         res.status(400).json({
-            error: 'Error al obtener la lista de recetas',
+            error: 'recipes.errors.fetchFailed',
             details: error.message
         });
     }
@@ -44,7 +45,7 @@ export const getRecipeById = async (req, res) => {
     // Verificar si el id proporcionado es válido
     if (!id) {
         return res.status(400).json({
-            error: 'El parámetro id es necesario para obtener la receta.'
+            error: 'recipes.errors.invalidId'
         });
     }
 
@@ -53,13 +54,13 @@ export const getRecipeById = async (req, res) => {
         // Si no se encuentra la receta con el id proporcionado
         if (!recipe) {
             return res.status(404).json({
-                message: 'Receta no encontrada.'
+                message: 'recipes.messages.noRecipeFound'
             });
         }
         res.status(200).json(recipe);
     } catch (error) {
         res.status(400).json({
-            error: 'Error al obtener la receta',
+            error: 'recipes.errors.fetchRecipeFailed',
             details: error.message
         });
     }

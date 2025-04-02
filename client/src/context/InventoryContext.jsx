@@ -1,6 +1,7 @@
 import { createContext, useContext, useReducer, useCallback, useMemo } from 'react';
 import { apiClient } from '../utils/ApiClient';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import {
     SET_LOADING,
     SET_ERROR,
@@ -30,8 +31,9 @@ export const useInventory = () => {
 // Inventory provider component
 export const InventoryProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+    const { t } = useTranslation();
 
-    // Get all inventory items
+    // Fetch all inventory items
     const getAllInventoryItems = useCallback(async () => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
@@ -40,7 +42,7 @@ export const InventoryProvider = ({ children }) => {
             dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: items });
         } catch (error) {
             dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error('Error fetching inventory items');
+            toast.error(t('inventory.errors.fecthFailed'));
         }
     }, []);
 
@@ -55,7 +57,7 @@ export const InventoryProvider = ({ children }) => {
             throw new Error(data?.message || 'Error creating item');
         } catch (error) {
             dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error('Error creating inventory item');
+            toast.error(t('inventory.errors.createFailed'));
             throw error;
         }
     }, []);
@@ -67,11 +69,11 @@ export const InventoryProvider = ({ children }) => {
             const data = await apiClient.request(`inventory/${id}`, 'PUT', updatedData);
             const updatedItem = data.item || data.updatedItem || data;
             dispatch({ type: SET_INVENTORY_ITEM, payload: updatedItem });
-            await getAllInventoryItems(); // Refresh list after update
+            await getAllInventoryItems(); 
             return data;
         } catch (error) {
             dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error('Error updating inventory item');
+            toast.error(t('inventory.errors.updateFailed'));
             throw error;
         }
     }, [getAllInventoryItems]);
@@ -82,9 +84,9 @@ export const InventoryProvider = ({ children }) => {
         dispatch({ type: SET_LOADING, payload: true });
 
         try {
-            console.log('Current token:', localStorage.getItem('token')); // Add this line
+            // console.log('Current token:', localStorage.getItem('token')); 
             const response = await apiClient.request(`inventory/${id}`, 'DELETE');
-            console.log('Delete response:', response);
+            // console.log('Delete response:', response);
 
             if (response.success) {
                 // Optimistic update instead of refetching
@@ -92,21 +94,19 @@ export const InventoryProvider = ({ children }) => {
                     type: SET_ALL_INVENTORY_ITEMS,
                     payload: state.allInventoryItems.filter(item => item._id !== id)
                 });
-                toast.success(response.message || 'Item deleted successfully');
                 return true;
             }
-            throw new Error(response.message || 'Failed to delete item');
+            throw new Error(response.message || t('inventory.errors.deleteFailed'));
         } catch (error) {
-            console.error('❌ Detailed delete error:', {
+            /* console.error('❌ Detailed delete error:', {
                 message: error.message,
                 response: error.response?.data,
                 status: error.response?.status
-            });
+            }); */
             dispatch({
                 type: SET_ERROR,
-                payload: error.response?.data?.message || error.message || 'Error deleting item'
-            });
-            toast.error(error.response?.data?.message || error.message || 'Error deleting item');
+                payload: error.response?.data?.message || error.message || t('inventory.errors.deleteFailed')
+            });            
             throw error;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
