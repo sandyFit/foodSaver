@@ -98,7 +98,8 @@
             "createFailed": "Error al crear el producto. Por favor, inténtalo de nuevo.",
             "fecthFailed": "Error al obtener la lista de productos.",
             "updateFailed": "Error al editar el producto. Por favor, inténtalo de nuevo.",
-            "deleteFailed": "Error al eliminar el producto. Por favor, inténtalo de nuevo."
+            "deleteFailed": "Error al eliminar el producto. Por favor, inténtalo de nuevo.",
+            "fetchExpiredFailed": "Error al obtener la lista de productos próximos a caducar."
         },
         "messages": {
             "itemDeleted": "Producto eliminado",
@@ -109,6 +110,9 @@
     },
 
     "recipes": {
+        "suggestedRecipes": "Recetas Sugeridas",
+        "recipeDetails": "Detalles de la Receta",
+        "noSuggestedRecipes": "No se encontraron recetas sugeridas",
         "errors": {
             "fetchFailed": "No se pudo obtener la lista de recetas. Por favor, inténtalo de nuevo.",
             "fetchRecipeFailed": "No se pudo obtener la receta. Por favor, inténtalo de nuevo.",

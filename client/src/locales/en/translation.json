@@ -98,7 +98,8 @@
             "createFailed": "Failed to create product. Please try again.",
             "fecthFailed": "Failed to fetch products. Please try again.",
             "updateFailed": "Failed to update product. Please try again.",
-            "deleteFailed": "Failed to delete product. Please try again."
+            "deleteFailed": "Failed to delete product. Please try again.",
+            "fetchExpiredFailed": "Failed to fetch expired products. Please try again."
         },
         "messages": {
             "itemDeleted": "Product deleted successfully",
@@ -111,6 +112,7 @@
     "recipes": {
         "suggestedRecipes": "Suggested Recipes",
         "recipeDetails": "Recipe Details",
+        "noSuggestedRecipes": "No suggested recipes available",
         "errors": {
             "fetchFailed": "Failed to fetch the recipes' list. Please try again.",
             "fetchRecipeFailed": "Failed to fetch the recipe. Please try again.",
@@ -120,7 +122,7 @@
         },
         "messages": {
             "suggestedRecipeFound": "Recipe based on your soon-to-expire ingredients",
-            "noSuggestedRecipes": "No recipe found for expiring ingredients. Try other ingredients?",
+            "noSuggestedRecipes": "No suitable recipes found with your expiring ingredients. Try other ingredients?",
             "noRecipesFound": "No recipes available in the system.",    
             "noRecipeFound": "Recipe not found.",
             "noRecipeDetailsFound": "No recipe details available in the system. ",

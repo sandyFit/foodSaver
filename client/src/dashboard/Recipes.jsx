@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import RecipeCard from '../components/cards/RecipeCard';
 import { useRecipes } from '../context/RecipesContext';
+import LoaderComponent from '../components/ui/LoaderComponent';
 
 const Recipes = () => {
 
@@ -26,27 +27,25 @@ const Recipes = () => {
 
     return (
         <section className='w-full grid grid-cols-12'>
-            {loading ? (
-                <p>Cargando...</p>           
-            ) : (
-                <div className="flex col-span-12 justify-center items-center flex-wrap">
-                    <h3 className="w-full text-center text-xl font-semibold mb-4">
-                        Tus Mejores Recetas
-                    </h3>
-                    <div className="flex flex-wrap gap-4">                       
-                        {allRecipes.map((recipe, index) => (
-                            <RecipeCard
-                                key={recipe._id}
-                                id={recipe._id}
-                                name={recipe.name}
-                                image_url={recipe.image_url}
-                                description={recipe.description}
-                                bgColor={bgColors[index % bgColors.length]}
-                            />
-                        ))}
-                    </div>
+            <LoaderComponent isLoading={loading} />
+
+            <div className="flex col-span-12 justify-center items-center flex-wrap">
+                <h3 className="w-full text-center text-xl font-semibold mb-4">
+                    Tus Mejores Recetas
+                </h3>
+                <div className="flex flex-wrap gap-4">
+                    {allRecipes.map((recipe, index) => (
+                        <RecipeCard
+                            key={recipe._id}
+                            id={recipe._id}
+                            name={recipe.name}
+                            image_url={recipe.image_url}
+                            description={recipe.description}
+                            bgColor={bgColors[index % bgColors.length]}
+                        />
+                    ))}
                 </div>
-            )}
+            </div>
         </section>
     );
 };
