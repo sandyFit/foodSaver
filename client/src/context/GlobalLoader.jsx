@@ -1,5 +1,5 @@
 import React from 'react';
-import LoaderComponent from './LoaderComponent';
+import LoaderComponent from '../components/ui/LoaderComponent';
 import { useInventory } from './InventoryContext';
 import { useRecipes } from './RecipesContext';
 import { useUser } from './UserContext';

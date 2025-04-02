@@ -15,9 +15,9 @@ import { InventoryProvider } from './context/InventoryContext.jsx';
 import { RecipesProvider } from './context/RecipesContext.jsx';
 import { UserProvider } from './context/UserContext.jsx';
 import Users from './dashboard/Users.jsx';
-import Loader from './components/ui/Loader.jsx';
 import PrivateRoute from './dashboard/PrivateRoute.jsx';
 import ItemsList from './dashboard/ItemsList.jsx';
+import GlobalLoader from './context/GlobalLoader.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -26,7 +26,7 @@ createRoot(document.getElementById('root')).render(
         <InventoryProvider>
           <RecipesProvider>
             <Toaster containerClassName='toast-container-custom' position="top-center" reverseOrder={false} />
-            <Loader />
+            <GlobalLoader />
             <Routes>
               {/* Public routes */}
               <Route path="/" element={<Landing />} />
