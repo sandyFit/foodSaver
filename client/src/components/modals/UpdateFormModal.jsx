@@ -26,14 +26,15 @@ ModalBackdrop.displayName = 'ModalBackdrop';
 // Isolated Modal Form
 const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
     const { t } = useTranslation();
+    const { updateInventoryItem } = useInventory();
+    // Local loading state for the form
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Track renders for debugging
     renderCount++;
     if (renderCount % 10 === 0) {
         console.log('🔄 UpdateFormModal render count:', renderCount);
     }
-
-    const { loading, updateInventoryItem } = useInventory();
 
     // Create local state for the form instead of using parent state
     const [formData, setFormData] = useState({
@@ -53,7 +54,7 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
     }, []);
 
     // Handle form submission
-    const handleSubmit = useCallback((e) => {
+    const handleSubmit = useCallback( async(e) => {
         e.preventDefault();
 
         if (!formData.itemName || !formData.category || !formData.expirationDate) {
@@ -64,17 +65,25 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
         // Log the data being sent to the server
         console.log('Updating item with data:', formData);
 
-        updateInventoryItem(itemToEdit._id, formData)
-            .then((response) => {
-                console.log('Server response:', response);
-                toast.success(t('notifications.itemUpdated'));
-                onClose();
-            })
-            .catch((error) => {
-                console.error('Error updating product:', error);
-                const errorMessage = error.response?.data?.message || error.message || 'Unknown error';
-                toast.error(`${t('notifications.updateError')} ${errorMessage}`);
-            });
+        try {
+            // Format the date properly before sending
+            const dataToSend = {
+                ...formData,
+                expirationDate: new Date(formData.expirationDate).toISOString()
+            };
+
+            console.log('Updating item with data:', dataToSend);
+            await updateInventoryItem(itemToEdit._id, dataToSend);
+
+            toast.success(t('notifications.itemUpdated'));
+            onClose();
+        } catch (error) {
+            console.error('Error updating product:', error);
+            const errorMessage = error.response?.data?.message || error.message || t('notifications.updateError');
+            toast.error(errorMessage);
+        } finally {
+            setIsSubmitting(false);
+        }
     }, [formData, itemToEdit?._id, updateInventoryItem, onClose, t]);
 
     // Return null if no item to edit
@@ -164,15 +173,19 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
                             type="button"
                             onClick={onClose}
                             className="px-4 py-2 bg-gray-200 rounded mr-2"
+                            disabled={isSubmitting}
                         >
                             {t('common.cancel')}
                         </button>
                         <button
                             type="submit"
-                            disabled={loading}
-                            className="shadow-btn px-8 py-2 bg-purple-100 rounded"
+                            disabled={isSubmitting}
+                            className={`shadow-btn px-8 py-2 rounded ${isSubmitting
+                                    ? 'bg-gray-300'
+                                    : 'bg-purple-100 hover:bg-purple-200'
+                                }`}
                         >
-                            {loading ? t('inventory.updatingItem') : t('common.update')}
+                            {isSubmitting ? t('inventory.updatingItem') : t('common.update')}
                         </button>
                     </div>
                 </form>

@@ -34,6 +34,8 @@ const ItemsList = () => {
     const { t } = useTranslation();
     const [editingItem, setEditingItem] = useState(null);
     const [deletingItemId, setDeletingItemId] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
     const {
         loading,
@@ -77,6 +79,20 @@ const ItemsList = () => {
         }
     }, [deleteInventoryItem, t]);
 
+    // Pagination functions
+    const handlePageChange = (newPage, newItemsPerPage = itemsPerPage) => {
+        setCurrentPage(newPage);
+        if (newItemsPerPage !== itemsPerPage) {
+            setItemsPerPage(newItemsPerPage);
+        }
+    };
+
+    // Calculate paginated items (or do this in your API call)
+    const paginatedItems = allInventoryItems.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
     // Fetch data on mount only
     useEffect(() => {
         getAllInventoryItems().catch(error => {
@@ -95,11 +111,15 @@ const ItemsList = () => {
                     <h4 className="text-lg font-bold mt-8 mb-3">{t('inventory.title')}</h4>
 
                     <MealsTable
-                        items={allInventoryItems || []}
+                        items={paginatedItems || []}
                         loading={loading} // Initial table loading
                         deletingItemId={deletingItemId} // Pass the ID of the item being deleted
                         onDeleteBtn={handleDeleteBtn}
                         onEditBtn={handleEditBtn}
+                        currentPage={currentPage}
+                        itemsPerPage={itemsPerPage}
+                        totalItems={allInventoryItems.length}
+                        onPageChange={handlePageChange}
                     />
                 </div>            
 

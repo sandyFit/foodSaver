@@ -38,7 +38,16 @@
         "registerSuccess": "Successfully registered!",
         "loginError": "Login failed: {{message}}",
         "registerError": "Registration failed: {{message}}",
-        "sessionExpired": "Session expired. Please log in again."
+        "sessionExpired": "Session expired. Please log in again.",
+        "logout": "Log out",
+        "logoutSuccess": "Successfully logged out!",
+        "cancel": "Cancel",
+        "confirm": "Yes, log out",
+        "handleLogout": {
+            "title": "Are you sure you want to log out?",
+            "message": "We'll keep your data safe while you're away. Just log back in when you're ready!"
+
+        }
     },
     "errors": {
         "unknown": "An unknown error occurred",
@@ -199,7 +208,16 @@
         "expiresIn": "Expires In",
         "category": "Category",
         "quantity": "Quantity",
-        "actions": "Actions"
+        "actions": "Actions",
+        
+        "pagination": {
+            "first": "First",
+            "previous": "Previous",
+            "next": "Next",
+            "last": "Last",
+            "itemsPerPage": "Items per page"
+        }
+    
     },
     "landing": {
         "navbar": {

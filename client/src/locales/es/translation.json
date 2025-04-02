@@ -38,7 +38,16 @@
         "registerSuccess": "¡Registro exitoso!",
         "loginError": "Error al iniciar sesión: {{message}}",
         "registerError": "Error al registrarse: {{message}}",
-        "sessionExpired": "Sesión expirada. Por favor inicie sesión nuevamente."
+        "sessionExpired": "Sesión expirada. Por favor inicie sesión nuevamente.",
+        "logout": "Cerrar Sesión",
+        "logoutSuccess": "Ha cerrado Sesión correctamente.",
+        "confirm": "Confirmar",
+        "cancel": "Cancelar",
+        "handleLogout": {
+            "title": "¿Estás seguro de que quieres cerrar la sesión?",
+            "message": "Al cerrar sesión, tus datos personales estarán protegidos y ocultos temporalmente. Para acceder a ellos nuevamente, solo inicia sesión."
+            
+        }
     },
     "errors": {
         "unknown": "Ocurrió un error desconocido",
@@ -199,7 +208,14 @@
         "expiresIn": "Expira en",
         "category": "Categoría",
         "quantity": "Cantidad",
-        "actions": "Acciones"
+        "actions": "Acciones",
+        "pagination": {
+            "first": "Primera",
+            "previous": "Anterior",
+            "next": "Siguiente",
+            "last": "Última",
+            "itemsPerPage": "Items por página"
+        }
     },
     "landing": {
         "navbar": {
