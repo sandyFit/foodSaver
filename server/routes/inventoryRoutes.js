@@ -67,7 +67,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /inventory:
+ * /:
  *   get:
  *     summary: Get all inventory items
  *     description: Retrieves a list of all inventory items.
@@ -102,13 +102,13 @@ const router = express.Router();
  *         description: Internal Server Error.
  */
 
-router.route('/inventory')
+router.route('/')
     .post(authenticateUser, createItem)
     .get(authenticateUser, getItems);
 
 /**
  * @swagger
- * /inventory/{id}:
+ * //{id}:
  *   get:
  *     summary: Get a specific inventory item
  *     description: Retrieves details of a specific inventory item by its ID.
@@ -153,7 +153,7 @@ router.route('/inventory')
 
 /**
  * @swagger
- * /inventory/{id}:
+ * /{id}:
  *   put:
  *     summary: Update an inventory item
  *     description: Updates the details of an existing inventory item by its ID.
@@ -210,7 +210,7 @@ router.route('/inventory')
 
 /**
  * @swagger
- * /inventory/{id}:
+ * /{id}:
  *   delete:
  *     summary: Delete an inventory item
  *     description: Deletes an inventory item by its ID.
@@ -245,7 +245,7 @@ router.route('/inventory')
  */
 
 
-router.route('/inventory/:id')
+router.route('/:id')
     .get(authenticateUser, getItem)
     .put(authenticateUser, updateItem)
     .delete(authenticateUser, deleteItem);

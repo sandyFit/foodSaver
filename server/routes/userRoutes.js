@@ -91,7 +91,7 @@ router.post('/login', loginUser);
  *       401:
  *         description: Unauthorized
  */
-router.get('/profile', authenticateUser, getUserProfile);
+router.get('/profile/:id', authenticateUser, getUserProfile);
 
 /**
  * @swagger
@@ -119,7 +119,7 @@ router.get('/profile', authenticateUser, getUserProfile);
  *       401:
  *         description: Unauthorized
  */
-router.put('/profile', authenticateUser, updateProfile);
+router.put('/profile/:id', authenticateUser, updateProfile);
 
 /**
  * @swagger
@@ -138,7 +138,7 @@ router.put('/profile', authenticateUser, updateProfile);
  *       403:
  *         description: Forbidden
  */
-router.get('/users', authenticateUser, authorizeRoles(['admin']), getAllUsers);
+router.get('/', authenticateUser, authorizeRoles(['admin']), getAllUsers);
 
 /**
  * @swagger
@@ -165,7 +165,7 @@ router.get('/users', authenticateUser, authorizeRoles(['admin']), getAllUsers);
  *       404:
  *         description: User not found
  */
-router.get('/users/:id', authenticateUser, getUserInfo);
+router.get('/:id', authenticateUser, getUserInfo);
 
 /**
  * @swagger
@@ -182,7 +182,7 @@ router.get('/users/:id', authenticateUser, getUserInfo);
  *       401:
  *         description: Unauthorized
  */
-router.delete('/users', authenticateUser, deleteUser);
+router.delete('/:id', authenticateUser, deleteUser);
 
 /**
  * @swagger
@@ -209,7 +209,7 @@ router.delete('/users', authenticateUser, deleteUser);
  *       404:
  *         description: User not found
  */
-router.delete('/users/:id', authenticateUser, authorizeRoles(['admin']), deleteUserAdmin);
+router.delete('/:id', authenticateUser, authorizeRoles(['admin']), deleteUserAdmin);
 
 /**
  * @swagger
@@ -264,5 +264,7 @@ router.post('/forgot-password', requestPasswordReset);
  *         description: Invalid or expired token
  */
 router.post('/reset-password/:token', resetPassword);
+// User self-management
+router.delete('/me', authenticateUser, deleteUser);
 
 export default router; 

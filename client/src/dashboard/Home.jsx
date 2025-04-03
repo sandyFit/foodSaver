@@ -33,20 +33,37 @@ const Home = () => {
         const fetchData = async () => {
             try {
                 setFetchError(null);
-                await getExpiringMeals();
-                await getSuggestedRecipes();
+                const userStr = localStorage.getItem('user');
+                console.log('Raw user data:', userStr); // Debug log
+
+                if (!userStr) {
+                    throw new Error(t('errors.userNotFound'));
+                }
+
+                const user = JSON.parse(userStr);
+                console.log('Parsed user:', user); // Debug log
+
+                // Try both id and _id, with null coalescing
+                const userId = user?.id ?? user?._id;
+
+                if (!userId) {
+                    console.error('No user ID found:', user);
+                    throw new Error(t('errors.userNotFound'));
+                }
+
+                console.log('Using user ID:', userId); // Debug log
+
+                await Promise.all([
+                    getExpiringMeals(userId),
+                    getSuggestedRecipes(userId)
+                ]);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setFetchError(t('errors.fetchFailed'));
             }
         };
 
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user?._id) {
-            fetchData();
-        } else {
-            setFetchError(t('errors.userNotFound'));
-        }
+        fetchData();
     }, [getExpiringMeals, getSuggestedRecipes, t]);
 
     // Function to render recipe content based on the structure of suggestedRecipes
@@ -115,10 +132,18 @@ const Home = () => {
     };
 
     const renderExpiringItems = () => {
+        if (fetchError) {
+            return (
+                <div className="text-red-600 p-4 bg-red-100 rounded">
+                    {fetchError}
+                </div>
+            );
+        }
+
         if (!expiringMeals || !expiringMeals.expiringItems || expiringMeals.expiringItems.length === 0) {
             return (
                 <div className="text-gray-600 p-4 bg-gray-100 rounded">
-                    {t('inventory.errors.fetchExpiredFailed')}
+                    {t('inventory.messages.noExpiringItems')}
                 </div>
             );
         }

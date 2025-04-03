@@ -3,14 +3,33 @@ import InventoryItem from '../models/inventory.js';
 
 export const suggestRecipe = async (req, res) => {
     try {
+        // Extract userId from query parameters
+        const { userId } = req.query;
+
+        if (!userId) {
+            return res.status(400).json({
+                error: 'recipes.errors.userIdRequired',
+                details: 'User ID is required for this operation'
+            });
+        }
+
         const today = new Date();
         const threshold = new Date();
         threshold.setDate(today.getDate() + 7); // 7 days to expiration
 
-        // Find soon-to-expire ingredients
+        // Find soon-to-expire ingredients for this specific user
         const ingredients = await InventoryItem.find({
+            user: userId,
             expirationDate: { $lte: threshold }
-        }).select('name quantity');
+        }).select('name quantity expirationDate category');
+
+        if (ingredients.length === 0) {
+            return res.status(200).json({
+                success: true,
+                name: 'recipes.noExpiringIngredients',
+                message: "recipes.messages.noExpiringIngredients",
+            });
+        }
 
         // Match ingredients with recipes
         const recipes = await Recipe.find({
@@ -20,20 +39,26 @@ export const suggestRecipe = async (req, res) => {
         if (recipes.length > 0) {
             // If there are recipes that can be made with the expiring ingredients
             return res.status(200).json({
+                success: true,
                 name: 'recipes.messages.suggestedRecipeFound',
                 ingredients: ingredients.map(item => ({
                     name: item.name,
                     quantity: item.quantity,
+                    expirationDate: item.expirationDate,
+                    category: item.category,
                 })),
                 recipes: recipes.map(recipe => recipe.name),
             });
         } else {
             // No suitable recipes found
             return res.status(200).json({
+                success: true,
                 name: 'recipes.noSuggestedRecipes',
                 ingredients: ingredients.map(item => ({
                     name: item.name,
                     quantity: item.quantity,
+                    expirationDate: item.expirationDate,
+                    category: item.category,
                 })),
                 message: "recipes.messages.noSuggestedRecipes",
             });
@@ -128,14 +153,32 @@ export const getSuggestedRecipes = async (req, res) => {
 
 export const getExpiringMeals = async (req, res) => {
     try {
+        // Extract userId from query parameters
+        const { userId } = req.query;
+
+        if (!userId) {
+            return res.status(400).json({
+                error: 'inventory.errors.userIdRequired',
+                details: 'User ID is required for this operation'
+            });
+        }
+
         const today = new Date();
         const threshold = new Date();
         threshold.setDate(today.getDate() + 7); // 7 days to expiration
 
-        // Find soon-to-expire ingredients
+        // Find soon-to-expire ingredients for this specific user
         const expiringItems = await InventoryItem.find({
+            user: userId,
             expirationDate: { $lte: threshold }
-        }).select('name quantity expirationDate');
+        }).select('name quantity expirationDate category');
+
+        if (expiringItems.length === 0) {
+            return res.status(200).json({
+                expiringItems: [],
+                message: 'inventory.messages.noExpiringItems'
+            });
+        }
 
         // Find recipes using these ingredients
         const recipes = await Recipe.find({

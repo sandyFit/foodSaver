@@ -42,7 +42,7 @@ const router = express.Router();
  *       500:
  *         description: Internal Server Error
  */
-router.get('/recipes', getAllRecipes);
+router.get('/', getAllRecipes);
 
 /**
  * @swagger
@@ -85,7 +85,7 @@ router.get('/recipes', getAllRecipes);
  *         description: Internal Server Error
  */
 
-router.get('/recipes/:id', getRecipeById);
+router.get('/:id', getRecipeById);
 
 /**
  * @swagger
@@ -118,10 +118,9 @@ router.get('/recipes/:id', getRecipeById);
  *       500:
  *         description: Internal Server Error
  */
-router.get('/recipes-suggested', suggestRecipe);
+router.get('/suggested', suggestRecipe); // Changed from recipes-suggested
+router.get('/expiring-meals', getExpiringMeals); // Changed path
+router.get('/suggested/:id', getSuggestedRecipes);
 
-router.get('/expiring-meals', getExpiringMeals);
-
-router.get('/recipes-suggested/:id', getSuggestedRecipes);
 
 export default router;

@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { toast } from 'react-hot-toast';
 import { apiClient } from '../utils/ApiClient';
+import { useTranslation } from 'react-i18next';
 
 import {
     reducer,
@@ -38,6 +39,7 @@ export const useUser = () => {
 export const UserProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const { allUsers, loading, error } = state;
+    const { t } = useTranslation(); // Add this line
 
     const registerUser = async (formData) => {
         dispatch({ type: SET_LOADING, payload: true });
@@ -48,7 +50,7 @@ export const UserProvider = ({ children }) => {
             console.log('Sending registration data:', registrationData);
 
             const response = await apiClient.request(
-                'register',
+                'users/register',
                 'POST',
                 registrationData
             );
@@ -70,31 +72,58 @@ export const UserProvider = ({ children }) => {
     const login = async (formData) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            console.log('Sending login request with data:', formData); // Debugging
-            const response = await apiClient.request('login', 'POST', formData);
-            console.log('Login response:', response); // Debugging
+            const response = await apiClient.request('users/login', 'POST', formData);
+            console.log('Raw server response:', response); // Debug log
 
-            if (response && response.message === 'Login Correcto' && response.token) {
-                // Store token and user data in localStorage
-                localStorage.setItem('token', response.token);
-                localStorage.setItem('user', JSON.stringify(response.user));
-
-                // Update global state
-                dispatch({ type: SET_USER, payload: response.user });
-
-                // Show success message
-                toast.success(`Bienvenid@, ${response.user.fullName}!`, { duration: 4000 });
-
-                // Return the response for the component to use
-                return response;
-            } else {
-                toast.error('Error al iniciar sesión: ' + (response?.message || 'Respuesta inesperada del servidor'));
-                return null;
+            // First level validation
+            if (!response || typeof response !== 'object') {
+                throw new Error(t('errors.invalidResponse'));
             }
+
+            // Check for error in response
+            if (!response.success) {
+                throw new Error(response.message || t('errors.loginFailed'));
+            }
+
+            // Validate user data exists
+            if (!response.user || typeof response.user !== 'object') {
+                throw new Error(t('errors.noUserData'));
+            }
+
+            // Extract user data with fallbacks
+            const userData = {
+                id: response.user._id || response.user.id, // Try both formats
+                _id: response.user._id || response.user.id, // Store both for compatibility
+                fullName: response.user.fullName || response.user.email?.split('@')[0] || 'User',
+                email: response.user.email,
+                role: response.user.role || 'user'
+            };
+
+            // Validate token
+            if (!response.token) {
+                throw new Error(t('errors.noToken'));
+            }
+
+            // Log processed data
+            console.log('Processed user data:', userData);
+
+            // Store data
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('user', JSON.stringify(userData));
+
+            // Update state
+            dispatch({ type: SET_USER, payload: userData });
+
+            return {
+                success: true,
+                user: userData,
+                token: response.token
+            };
+
         } catch (error) {
-            console.error('Login failed:', error); // Debugging
-            toast.error('Login failed: ' + (error.message || 'Error desconocido'));
-            return null;
+            console.error('Login failed:', error);
+            dispatch({ type: SET_ERROR, payload: error.message });
+            throw error;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
@@ -149,7 +178,7 @@ export const UserProvider = ({ children }) => {
     const updateUserProfile = async (id, updatedData) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const updatedUser = await apiClient.request(`users-updateProfile/${id}`, 'PUT', updatedData);
+            const updatedUser = await apiClient.request(`users/profile/${id}`, 'PUT', updatedData);
             dispatch({
                 type: SET_ALL_USERS,
                 payload: allUsers.map((user) =>
@@ -167,7 +196,7 @@ export const UserProvider = ({ children }) => {
     const deleteUser = async (id) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            await apiClient.request(`users-delete/${id}`, 'DELETE');
+            await apiClient.request(`users/${id}`, 'DELETE');
             const filteredUsers = allUsers.filter((user) => user._id !== id);
             dispatch({ type: SET_ALL_USERS, payload: filteredUsers });
             toast.success('Usuario eliminado.');
@@ -178,7 +207,7 @@ export const UserProvider = ({ children }) => {
             dispatch({ type: SET_LOADING, payload: false });
         }
     };
-    
+
     // Fetch the user from localStorage on component mount
     useEffect(() => {
         const storedUser = localStorage.getItem('user');

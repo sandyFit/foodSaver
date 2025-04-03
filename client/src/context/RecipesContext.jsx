@@ -63,14 +63,20 @@ export const RecipesProvider = ({ children }) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             const user = JSON.parse(localStorage.getItem('user'));
+            console.log('User data from storage:', user); // Debug log
 
-            if (!user?._id) {
-                console.error('No user ID found for suggestions');
+            // Check for both id formats
+            const userId = user?.id || user?._id;
+
+            if (!userId) {
+                console.error('No user ID found:', user);
                 throw new Error(t('errors.userNotFound'));
             }
 
-            console.log('Fetching suggestions for user:', user._id);
-            const response = await apiClient.request('recipes-suggested', 'GET');
+            console.log('Using userId:', userId); // Debug log
+
+            const response = await apiClient.request(`recipes/suggested?userId=${userId}`);
+            console.log('API response:', response); // Debug log
 
             if (response.success) {
                 dispatch({
@@ -95,14 +101,24 @@ export const RecipesProvider = ({ children }) => {
     const getExpiringMeals = useCallback(async () => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const response = await apiClient.request(`/expiring-meals`);
+            const user = JSON.parse(localStorage.getItem('user'));
+            const userId = user?.id || user?._id;
+
+            if (!userId) {
+                console.error('No user ID found:', user);
+                throw new Error(t('errors.userNotFound'));
+            }
+
+            const response = await apiClient.request(`recipes/expiring-meals?userId=${userId}`);
             dispatch({ type: SET_EXPIRING_MEALS, payload: response });
         } catch (error) {
+            console.error('Error fetching expiring meals:', error);
             dispatch({ type: SET_ERROR, payload: error.message });
+            throw error;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    }, []);
+    }, [t]);
 
     const value = useMemo(() => ({
         allRecipes: state.allRecipes,

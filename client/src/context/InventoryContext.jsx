@@ -42,77 +42,84 @@ export const InventoryProvider = ({ children }) => {
             dispatch({ type: SET_ALL_INVENTORY_ITEMS, payload: items });
         } catch (error) {
             dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error(t('inventory.errors.fecthFailed'));
+            toast.error(t('inventory.errors.fetchFailed'));
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
         }
-    }, []);
+    }, [t]);
 
-    const createInventoryItem = useCallback(async (formData) => {
+    // Get single inventory item
+    const getInventoryItem = useCallback(async (id) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const data = await apiClient.request('inventory', 'POST', formData);
-            if (data.success && data.item) {
-                dispatch({ type: ADD_INVENTORY_ITEM, payload: data.item });
-                return data;
-            }
-            throw new Error(data?.message || 'Error creating item');
+            const item = await apiClient.request(`inventory/${id}`);
+            dispatch({ type: SET_INVENTORY_ITEM, payload: item });
+            return item;
         } catch (error) {
             dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error(t('inventory.errors.createFailed'));
-            throw error;
-        }
-    }, []);
-
-
-    const updateInventoryItem = useCallback(async (id, updatedData) => {
-        dispatch({ type: SET_LOADING, payload: true });
-        try {
-            const data = await apiClient.request(`inventory/${id}`, 'PUT', updatedData);
-            const updatedItem = data.item || data.updatedItem || data;
-            dispatch({ type: SET_INVENTORY_ITEM, payload: updatedItem });
-            await getAllInventoryItems(); 
-            return data;
-        } catch (error) {
-            dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error(t('inventory.errors.updateFailed'));
-            throw error;
-        }
-    }, [getAllInventoryItems]);
-
-
-    const deleteInventoryItem = useCallback(async (id) => {
-        console.log('🗑️ Deleting item:', id);
-        dispatch({ type: SET_LOADING, payload: true });
-
-        try {
-            // console.log('Current token:', localStorage.getItem('token')); 
-            const response = await apiClient.request(`inventory/${id}`, 'DELETE');
-            // console.log('Delete response:', response);
-
-            if (response.success) {
-                // Optimistic update instead of refetching
-                dispatch({
-                    type: SET_ALL_INVENTORY_ITEMS,
-                    payload: state.allInventoryItems.filter(item => item._id !== id)
-                });
-                return true;
-            }
-            throw new Error(response.message || t('inventory.errors.deleteFailed'));
-        } catch (error) {
-            /* console.error('❌ Detailed delete error:', {
-                message: error.message,
-                response: error.response?.data,
-                status: error.response?.status
-            }); */
-            dispatch({
-                type: SET_ERROR,
-                payload: error.response?.data?.message || error.message || t('inventory.errors.deleteFailed')
-            });            
+            toast.error(t('inventory.errors.fetchItemFailed'));
             throw error;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
-    }, [state.allInventoryItems]);
+    }, [t]);
 
+    // Create new inventory item
+    const createInventoryItem = useCallback(async (formData) => {
+        dispatch({ type: SET_LOADING, payload: true });
+        try {
+            const response = await apiClient.request('inventory', 'POST', formData);
+            if (response.success) {
+                dispatch({ type: ADD_INVENTORY_ITEM, payload: response.item });
+                toast.success(t('inventory.success.itemCreated'));
+            }
+            return response;
+        } catch (error) {
+            dispatch({ type: SET_ERROR, payload: error.message });
+            toast.error(t('inventory.errors.createFailed'));
+            throw error;
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
+        }
+    }, [t]);
+
+    // Update inventory item
+    const updateInventoryItem = useCallback(async (id, updatedData) => {
+        dispatch({ type: SET_LOADING, payload: true });
+        try {
+            const response = await apiClient.request(`inventory/${id}`, 'PUT', updatedData);
+            if (response.success) {
+                dispatch({ type: UPDATE_INVENTORY_ITEM, payload: response.item });
+                toast.success(t('inventory.success.itemUpdated'));
+            }
+            return response;
+        } catch (error) {
+            dispatch({ type: SET_ERROR, payload: error.message });
+            toast.error(t('inventory.errors.updateFailed'));
+            throw error;
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
+        }
+    }, [t]);
+
+    // Delete inventory item
+    const deleteInventoryItem = useCallback(async (id) => {
+        dispatch({ type: SET_LOADING, payload: true });
+        try {
+            const response = await apiClient.request(`inventory/${id}`, 'DELETE');
+            if (response.success) {
+                dispatch({ type: DELETE_INVENTORY_ITEM, payload: id });
+                toast.success(t('inventory.success.itemDeleted'));
+            }
+            return response;
+        } catch (error) {
+            dispatch({ type: SET_ERROR, payload: error.message });
+            toast.error(t('inventory.errors.deleteFailed'));
+            throw error;
+        } finally {
+            dispatch({ type: SET_LOADING, payload: false });
+        }
+    }, [t]);
 
     const value = useMemo(() => ({
         // State
@@ -123,6 +130,7 @@ export const InventoryProvider = ({ children }) => {
 
         // Functions
         getAllInventoryItems,
+        getInventoryItem,
         createInventoryItem,
         updateInventoryItem,
         deleteInventoryItem,
@@ -132,6 +140,7 @@ export const InventoryProvider = ({ children }) => {
         state.loading,
         state.error,
         getAllInventoryItems,
+        getInventoryItem,
         createInventoryItem,
         updateInventoryItem,
         deleteInventoryItem,

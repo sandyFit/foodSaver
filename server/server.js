@@ -53,11 +53,11 @@ app.use(cookieParser());
 // DB Connection
 connectToMongoDB();
 
-// Routes
-app.use('/api', recipeRoutes);
-app.use('/api', userRoutes);
-app.use('/api', inventoryRoutes);
-app.use('/api', notificationRoutes);
+// Routes with specific prefixes for each resource
+app.use('/api/recipes', recipeRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/inventory', inventoryRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Route logging (for debugging)
 app._router.stack.forEach((middleware) => {

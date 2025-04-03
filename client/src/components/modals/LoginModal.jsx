@@ -59,13 +59,24 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
         e.preventDefault();
 
         try {
-            const data = await login(formData);
+            const response = await login(formData);
+            console.log('Login response:', response); // Debug log
 
-            if (data && data.token) {
+            if (response?.success) {
+                // Verify stored data
+                const storedUser = localStorage.getItem('user');
+                console.log('Stored user after login:', storedUser); // Debug log
+
+                if (!storedUser) {
+                    throw new Error(t('auth.loginDataError'));
+                }
+
                 setFormData({ email: '', password: '' });
                 onClose();
                 navigate('/dashboard');
                 toast.success(t('auth.loginSuccess'));
+            } else {
+                throw new Error(response?.message || t('auth.loginFailed'));
             }
         } catch (error) {
             console.error('Login error:', error);
@@ -153,4 +164,4 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
 
 LoginModal.displayName = 'LoginModal';
 
-export default LoginModal; 
+export default LoginModal;
