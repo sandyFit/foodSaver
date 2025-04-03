@@ -26,6 +26,7 @@ ModalBackdrop.displayName = 'ModalBackdrop';
 // Main modal component for adding a new inventory item
 const AddItemModal = memo(({ onClose }) => {
     const { t } = useTranslation();
+    const [isAdding, setIsAdding] = useState(false);
 
     // Track renders for debugging
     renderCount++;
@@ -34,7 +35,7 @@ const AddItemModal = memo(({ onClose }) => {
     }
 
     // Use inventory context
-    const { loading, createInventoryItem } = useInventory();
+    const { createInventoryItem } = useInventory();
 
     // Form state
     const [formData, setFormData] = useState({
@@ -54,7 +55,7 @@ const AddItemModal = memo(({ onClose }) => {
     }, []);
 
     // Handle form submission
-    const handleSubmit = useCallback((e) => {
+    const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
 
         if (!formData.itemName || !formData.category || !formData.expirationDate) {
@@ -62,20 +63,20 @@ const AddItemModal = memo(({ onClose }) => {
             return;
         }
 
-        // Log the data being sent to the server
-        console.log('Sending data to server:', formData);
+        // console.log('Sending data to server:', formData);
 
-        createInventoryItem(formData)
-            .then((response) => {
-                console.log('Server response:', response);
-                toast.success(t('notifications.itemAdded'));
-                onClose(); // Close the modal after successful submission
-            })
-            .catch((error) => {
-                console.error('Error adding product:', error);
-                const errorMessage = error.response?.data?.message || error.message || 'Unknown error';
-                toast.error(`${t('notifications.addError')} ${errorMessage}`);
-            });
+        try {
+            await createInventoryItem(formData)
+            toast.success(t('notifications.itemAdded'));
+            onClose();
+
+        } catch (error) {
+            // console.error('Error adding product:', error);
+            const errorMessage = error.response?.data?.message || error.message || 'Unknown error';
+            toast.error(`${t('notifications.addError')} ${errorMessage}`);
+        } finally {
+            setIsAdding(false);
+        }
     }, [formData, createInventoryItem, onClose, t]);
 
     // Create a portal to render outside the main component tree
@@ -165,11 +166,11 @@ const AddItemModal = memo(({ onClose }) => {
                         </button>
                         <button
                             type="submit"
-                            disabled={loading}
+                            disabled={isAdding}
                             className="shadow-btn px-8 py-2 bg-green-100 hover:bg-green-200 
                                 border-green-600 text-green-600 rounded"
                         >
-                            {loading ? t('inventory.addingItem') : t('common.add')}
+                            {isAdding ? t('inventory.addingItem') : t('common.add')}
                         </button>
                     </div>
                 </form>

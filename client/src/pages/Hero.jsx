@@ -8,16 +8,16 @@ const Hero = () => {
     const { t } = useTranslation();
 
     const [authModalOpen, setAuthModalOpen] = useState(false);
-        const [authModalMode, setAuthModalMode] = useState('register');
-    
-        const openRegisterModal = () => {
-            setAuthModalMode('register');
-            setAuthModalOpen(true);
-        };
-    
-        const closeAuthModal = () => {
-            setAuthModalOpen(false);
-        };
+    const [authModalMode, setAuthModalMode] = useState('register');
+
+    const openRegisterModal = () => {
+        setAuthModalMode('register');
+        setAuthModalOpen(true);
+    };
+
+    const closeAuthModal = () => {
+        setAuthModalOpen(false);
+    };
 
     return (
         <section id='hero'>

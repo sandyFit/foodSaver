@@ -52,6 +52,8 @@
     "errors": {
         "unknown": "Ocurrió un error desconocido",
         "publicRouteError": "Error en la operación pública",
+        "userNotFound": "Información de usuario no encontrada. Por favor inicie sesión nuevamente.",
+        "fetchFailed": "Error al obtener recetas sugeridas",
         "operationFailed": "Error en la operación",
         "networkError": "Error de conexión con el servidor"
     },
@@ -287,9 +289,16 @@
         "how": {
             "heading": "Por qué FoodSaver",
             "step1": "Registra tus productos",
-            "step2": "Recibe notificaciones antes de que caduquen",
+            "step1Desc": "Registra tus alimentos con fechas de caducidad y cantidad.",
+            "step2": "Recibe notificaciones a tiempo",
+            "step2Desc": "Mantente al tanto de las fechas de caducidad con alertas oportunas.",
             "step3": "Descubre recetas usando tus ingredientes",
-            "step4": "Reduce el desperdicio y ahorra dinero"
+            "step3Desc": "Transforma tus ingredientes en deliciosas recetas antes de que sea tarde.",
+            "step4": "Crea menús personalizados",
+            "step4Desc": "Menús personalizados elaborados para tus necesidades y preferencias." ,
+            "step5": "Reduce el desperdicio y ahorra dinero",
+            "step5Desc": "Monitorea tu proceso de reducción del desperdicio de alimentos",
+            "iconsCredits": "Iconos por Icons8"
         },
         "footer": {
             "slider": "¡ÚNETE AHORA Y EMPIEZA A AHORRAR!",
@@ -309,7 +318,13 @@
             "credits": "Diseño y desarrollo por",
             "backToTop": "Volver Arriba",
             "login": "Accede",
-            "register": "Regístrate"
+            "register": "Regístrate",
+            "iconsCredits": "Icons8 Enlaces",
+            "iconsDashboard": "Panel",
+            "iconsCalendar": "Calendario",
+            "iconsStir": "Revuelve",
+            "iconsMenu": "Menu",
+            "iconsChart": "Analítica"
         }
     }
 }

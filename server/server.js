@@ -14,19 +14,27 @@ const app = express();
 
 // CORS Configuration
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173',
+        'http://localhost:5174',
+        'http://localhost:5175',
+        'http://localhost:5176',
+        'http://localhost:5177',
+        'http://localhost:5178',
+        'http://localhost:5179',
+    ],
+
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 
 // Request logging middleware
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
     console.log(`Incoming request: ${req.method} ${req.url}`);
     console.log('Headers:', req.headers);
     console.log('Body:', req.body);
     next();
-});
+}); */
 
 // Body parsing configuration
 app.use(express.urlencoded({ extended: true }));

@@ -1,8 +1,10 @@
 import express from 'express';
 import {
     suggestRecipe,
+    getSuggestedRecipes,
     getAllRecipes,
-    getRecipeById
+    getRecipeById,
+    getExpiringMeals
 } from '../controllers/recipesController.js';
 
 const router = express.Router();
@@ -116,6 +118,10 @@ router.get('/recipes/:id', getRecipeById);
  *       500:
  *         description: Internal Server Error
  */
-router.get('/recipes-suggest', suggestRecipe);
+router.get('/recipes-suggested', suggestRecipe);
+
+router.get('/expiring-meals', getExpiringMeals);
+
+router.get('/recipes-suggested/:id', getSuggestedRecipes);
 
 export default router;

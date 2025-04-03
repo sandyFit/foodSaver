@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import MealCard from '../components/cards/MealCard';
-import axios from 'axios';
+import { useRecipes } from '../context/RecipesContext';
+import { useInventory } from '../context/InventoryContext';
 import RecipeCardHome from '../components/cards/RecipeCardHome';
-import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
 const Home = () => {
-    const { t } = useTranslation();
 
-    const [expiringMeals, setExpiringMeals] = useState([]);
-    const [suggestedRecipes, setSuggestedRecipes] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const BASE_URL = 'http://localhost:5555/api';
+    const {
+        suggestedRecipes,
+        getSuggestedRecipes,
+        getExpiringMeals,
+        expiringMeals = [],
+        loading,
+        error } = useRecipes();
+
+    const { t } = useTranslation();
+    const [fetchError, setFetchError] = useState(null);
 
     // Colores predefinidos para los fondos
     const bgColors = [
@@ -23,61 +28,71 @@ const Home = () => {
         'bg-pink-100',
     ];
 
-    const getExpiringMeals = async () => {
-        setLoading(true);
-
-        try {
-            const response = await axios.get(`${BASE_URL}/expiring-foodItems`);
-            setExpiringMeals(response.data);
-        } catch (error) {
-            // console.error('Error al obtener los productos.', error);
-            toast.error('No se pudieron obtener los productos. Inténtalo nuevamente.');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const getSuggestedRecipes = async () => {
-        setLoading(true);
-
-        try {
-            const response = await axios.get(`${BASE_URL}/recipes-suggest`);
-            console.log('Recipe suggestion response:', response.data);
-            setSuggestedRecipes(response.data);
-        } catch (error) {
-            console.error('Error al obtener las recetas:', error);
-            toast.error('No se pudieron obtener las recetas. Inténtalo nuevamente.');
-        } finally {
-            setLoading(false);
-        }
-    }
 
     useEffect(() => {
-        getExpiringMeals();
-        getSuggestedRecipes();
-    }, []);
+        const fetchData = async () => {
+            try {
+                setFetchError(null);
+                await getExpiringMeals();
+                await getSuggestedRecipes();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setFetchError(t('errors.fetchFailed'));
+            }
+        };
 
-    useEffect(() => {
-        console.log('Suggested recipes updated:', suggestedRecipes);
-    }, [suggestedRecipes]);
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user?._id) {
+            fetchData();
+        } else {
+            setFetchError(t('errors.userNotFound'));
+        }
+    }, [getExpiringMeals, getSuggestedRecipes, t]);
 
     // Function to render recipe content based on the structure of suggestedRecipes
     const renderRecipeContent = () => {
+        if (fetchError) {
+            return (
+                <div className="text-red-600 p-4 bg-red-100 rounded">
+                    {fetchError}
+                </div>
+            );
+        }
+
         if (!suggestedRecipes) {
             return (
                 <RecipeCardHome
-                    name={t('dashboard.recipeCard.noContent')}                   
+                    name={t('dashboard.recipeCard.noContent')}
                     bgColor="bg-gray-100"
                 />
             );
         }
 
-        // If suggestedRecipes is an array
+        // If suggestedRecipes has recipes array (from the backend response)
+        if (suggestedRecipes.recipes && Array.isArray(suggestedRecipes.recipes)) {
+            return (
+                <div>
+                    <div className="mb-4">
+                        <ul className="list-disc pl-5">
+                            {suggestedRecipes.recipes.map((recipe, idx) => (
+                                <li key={idx}>{recipe}</li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {suggestedRecipes.message && (
+                        <p className="italic text-gray-700">{t(suggestedRecipes.message)}</p>
+                    )}
+                </div>
+            );
+        }
+
+        // If suggestedRecipes is an array of recipe objects
         if (Array.isArray(suggestedRecipes)) {
             return (
                 <ul className="grid grid-cols-1">
                     {suggestedRecipes.map((recipe, index) => (
-                        <li key={index}>
+                        <li key={recipe._id || index}>
                             <RecipeCardHome
                                 id={recipe.id}
                                 name={recipe.name}
@@ -91,24 +106,36 @@ const Home = () => {
             );
         }
 
-        // If suggestedRecipes is a single object
+        // Fallback for other structures
         return (
-            <div >
-
-                {suggestedRecipes.recipes && suggestedRecipes.recipes.length > 0 && (
-                    <div className="mb-4">                   
-                        <ul className="list-disc pl-5">
-                            {suggestedRecipes.recipes.map((recipe, idx) => (
-                                <li key={idx}>{recipe}</li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-
-                {suggestedRecipes.message && (
-                    <p className="italic text-gray-700">{suggestedRecipes.message}</p>
-                )}
+            <div className="text-gray-600 p-4 bg-gray-100 rounded">
+                {t('dashboard.recipeCard.noContent')}
             </div>
+        );
+    };
+
+    const renderExpiringItems = () => {
+        if (!expiringMeals || !expiringMeals.expiringItems || expiringMeals.expiringItems.length === 0) {
+            return (
+                <div className="text-gray-600 p-4 bg-gray-100 rounded">
+                    {t('inventory.errors.fetchExpiredFailed')}
+                </div>
+            );
+        }
+
+        return (
+            <ul className='list-none flex flex-col gap-2'>
+                {expiringMeals.expiringItems.map((item, index) => (
+                    <li key={item._id || index}>
+                        <MealCard
+                            itemName={item.name}
+                            expirationDate={item.expirationDate}
+                            category={item.category || 'General'}
+                            bgColor={bgColors[index % bgColors.length]}
+                        />
+                    </li>
+                ))}
+            </ul>
         );
     };
 
@@ -127,18 +154,7 @@ const Home = () => {
                             </div>
                         </div>
                     ) : (
-                        <ul className='list-none flex flex-col gap-2'>
-                            {expiringMeals.map((meal, index) => (
-                                <li key={meal._id}>
-                                    <MealCard
-                                        itemName={meal.itemName}
-                                        expirationDate={meal.expirationDate}
-                                        category={meal.category}
-                                        bgColor={bgColors[index % bgColors.length]}
-                                    />
-                                </li>
-                            ))}
-                        </ul>
+                        renderExpiringItems()
                     )}
                 </div>
                 <div className="flex flex-col">

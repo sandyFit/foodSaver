@@ -61,6 +61,22 @@ class ApiClient {
     }
 
     async handleError(error) {
+
+        // Add CORS specific error handling
+        if (error.message.includes('Network Error') || error.message.includes('CORS')) {
+            const message = i18next.t('errors.corsError', {
+                origin: window.location.origin,
+                api: BASE_URL
+            });
+            toast.error(message);
+            console.error('CORS Error:', {
+                origin: window.location.origin,
+                api: BASE_URL,
+                error: error.message
+            });
+            throw new Error(message);
+        };
+        
         if (!error.response) {
             // Network error
             toast.error(i18next.t('errors.networkError'));

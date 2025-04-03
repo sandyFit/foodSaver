@@ -1,5 +1,6 @@
 import { createContext, useContext, useReducer, useMemo, useCallback } from "react";
 import { apiClient } from '../utils/ApiClient';
+import { useTranslation } from 'react-i18next';
 import {
     SET_LOADING,
     SET_ERROR,
@@ -15,6 +16,7 @@ const initialState = {
     allRecipes: [],
     recipe: {},
     suggestedRecipes: [],
+    expiringMeals: [],
     loading: false,
     error: null
 };
@@ -31,6 +33,7 @@ export const useRecipes = () => {
 
 export const RecipesProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+    const { t } = useTranslation();
 
     const getAllRecipes = useCallback(async () => {
         dispatch({ type: SET_LOADING, payload: true });
@@ -44,7 +47,7 @@ export const RecipesProvider = ({ children }) => {
         }
     }, []);
 
-    const getRecipeDetails = useCallback(async (id) => {
+    const getRecipeById = useCallback(async (id) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
             const response = await apiClient.request(`recipes/${id}`);
@@ -56,22 +59,43 @@ export const RecipesProvider = ({ children }) => {
         }
     }, []);
 
-    const getSuggestedRecipes = useCallback(async (id) => {
+    const getSuggestedRecipes = useCallback(async () => {
         dispatch({ type: SET_LOADING, payload: true });
-        try {                         
-            const response = await apiClient.request(`recipes/suggested/${id}`);            
-            dispatch({ type: SET_SUGGESTED_RECIPES, payload: response });
-        } catch (error) {            
-            dispatch({ type: SET_ERROR, payload: error.message });                     
+        try {
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            if (!user?._id) {
+                console.error('No user ID found for suggestions');
+                throw new Error(t('errors.userNotFound'));
+            }
+
+            console.log('Fetching suggestions for user:', user._id);
+            const response = await apiClient.request('recipes-suggested', 'GET');
+
+            if (response.success) {
+                dispatch({
+                    type: SET_SUGGESTED_RECIPES,
+                    payload: response
+                });
+            } else {
+                throw new Error(response.message || t('errors.fetchFailed'));
+            }
+        } catch (error) {
+            console.error('Error fetching suggested recipes:', error);
+            dispatch({
+                type: SET_ERROR,
+                payload: error.message
+            });
+            throw error;
         } finally {
-            dispatch({ type: SET_LOADING, payload: false });                            
+            dispatch({ type: SET_LOADING, payload: false });
         }
-    }, []);
+    }, [t]);
 
     const getExpiringMeals = useCallback(async () => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const response = await apiClient.request(`recipes/expiring-meals`);
+            const response = await apiClient.request(`/expiring-meals`);
             dispatch({ type: SET_EXPIRING_MEALS, payload: response });
         } catch (error) {
             dispatch({ type: SET_ERROR, payload: error.message });
@@ -84,20 +108,22 @@ export const RecipesProvider = ({ children }) => {
         allRecipes: state.allRecipes,
         recipe: state.recipe,
         suggestedRecipes: state.suggestedRecipes,
+        expiringMeals: state.expiringMeals,
         loading: state.loading,
         error: state.error,
         getAllRecipes,
-        getRecipeDetails,
+        getRecipeById,
         getSuggestedRecipes,
         getExpiringMeals
     }), [
         state.allRecipes,
         state.recipe,
         state.suggestedRecipes,
+        state.expiringMeals,
         state.loading,
         state.error,
         getAllRecipes,
-        getRecipeDetails,
+        getRecipeById,
         getSuggestedRecipes,
         getExpiringMeals
     ]);

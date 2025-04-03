@@ -63,7 +63,7 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
         }
 
         // Log the data being sent to the server
-        console.log('Updating item with data:', formData);
+        // console.log('Updating item with data:', formData);
 
         try {
             // Format the date properly before sending
@@ -72,13 +72,13 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
                 expirationDate: new Date(formData.expirationDate).toISOString()
             };
 
-            console.log('Updating item with data:', dataToSend);
+            // console.log('Updating item with data:', dataToSend);
             await updateInventoryItem(itemToEdit._id, dataToSend);
 
             toast.success(t('notifications.itemUpdated'));
             onClose();
         } catch (error) {
-            console.error('Error updating product:', error);
+            // console.error('Error updating product:', error);
             const errorMessage = error.response?.data?.message || error.message || t('notifications.updateError');
             toast.error(errorMessage);
         } finally {

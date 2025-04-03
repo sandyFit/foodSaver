@@ -16,29 +16,15 @@ const Landing = () => {
 
     useEffect(() => {
         const sections = sectionRefs.current;
-        const container = containerRef.current;
 
         sections.forEach((panel, i) => {
             ScrollTrigger.create({
                 trigger: panel,
                 start: 'top top',
                 pin: true,
-                pinSpacing: false
+                pinSpacing: false,
+                anticipatePin: 1 // Helps prevent janky pin behavior
             });
-
-            if (i > 0) {
-                gsap.from(panel, {
-                    yPercent: 100,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: panel,
-                        start: "top bottom",
-                        end: "top top",
-                        scrub: true,
-                        markers: false
-                    }
-                });
-            }
         });
 
         return () => {
@@ -47,16 +33,23 @@ const Landing = () => {
     }, []);
 
     return (
-        <main className="relative">           
+        <main className="relative">
             <div ref={containerRef} className="overflow-hidden">
                 {[Hero, Stats, Features, How, Footer].map((Section, index) => (
                     <section
                         key={index}
                         ref={el => sectionRefs.current[index] = el}
-                        className="min-h-screen relative bg-white"
-                        style={{ zIndex: index }}
+                        className="min-h-screen relative"
+                        style={{
+                            zIndex: index, // Forward z-index order - lower sections have higher z-index
+                            backgroundColor: 'white',
+                            position: 'relative',
+                            isolation: 'isolate' // Creates a new stacking context
+                        }}
                     >
-                        <Section />
+                        <div className="relative z-10 h-full">
+                            <Section />
+                        </div>
                     </section>
                 ))}
             </div>

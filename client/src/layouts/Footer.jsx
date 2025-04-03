@@ -78,7 +78,7 @@ const Footer = () => {
                 <hr className='border-t-2 border-black'/>
                     <div className="flex col-span-6 col-start-4 col-end-13 row-span-3 row-start-4 row-end-7 ">
                         <section className="w-full flex py-10 pl-10 ">
-                            <div className="w-[60%] flex ">
+                            <div className="w-[90%] flex ">
                                 <nav className='w-full flex justify-between text-sm'>
                                     <div className="flex flex-col text-white">
                                         <h4>
@@ -131,6 +131,47 @@ const Footer = () => {
                                             <li>
                                                 <a href="#" className='text-white hover:text-gray-300'>
                                                     {t('landing.footer.details')}🡭
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="flex flex-col text-white">
+                                        <h4>                    
+                                            <a target="_blank" href="https://icons8.com"
+                                                className='text-white hover:text-gray-300 '>
+                                                {t('landing.footer.iconsCredits')}🡭
+                                            </a>
+                                        </h4>
+                                        <ul className='flex flex-col gap-2 mt-2'>                                                                     
+                                            <li>
+                                                <a a target="_blank" href="https://icons8.com/icon/zYsNNDB6wPLn/control-panel"
+                                                    className='text-white hover:text-gray-300'>
+                                                    {t('landing.footer.iconsDashboard')}🡭
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a target="_blank" href="https://icons8.com/icon/eKMVFfo5995u/tear-off-calendar"
+                                                    className='text-white hover:text-gray-300'>
+                                                    {t('landing.footer.iconsCalendar')}🡭
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a target="_blank" href="https://icons8.com/icon/GoWNy1UtqIH5/stirr"
+                                                    className='text-white hover:text-gray-300'>
+                                                    {t('landing.footer.iconsStir')}🡭
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a target="_blank" href="https://icons8.com/icon/nZR92qjTp6O0/restaurant-menu"
+                                                    className='text-white hover:text-gray-300'>
+                                                    {t('landing.footer.iconsMenu')}🡭
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a target="_blank" href="https://icons8.com/icon/6MKd3X4iBhzi/combo-chart"
+                                                    className='text-white hover:text-gray-300'>
+                                                    {t('landing.footer.iconsChart')}🡭
                                                 </a>
                                             </li>
                                         </ul>

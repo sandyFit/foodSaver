@@ -53,7 +53,10 @@
         "unknown": "An unknown error occurred",
         "publicRouteError": "Error in public operation",
         "operationFailed": "Operation failed",
-        "networkError": "Server connection error"
+        "userNotFound": "User information not found. Please log in again.",
+        "fetchFailed": "Failed to fetch suggested recipes",
+        "networkError": "Server connection error",
+        "corsError": "Connection blocked. Please check your network settings or contact support."
     },
     "dashboard": {
         "layout": {},
@@ -278,7 +281,7 @@
             "billion": "Billion"
         },
         "features": {
-            "heading": "Features",
+            "heading": "Our Powerful Features",
             "feature1Title": "Inventory Management",
             "feature1Desc": "Keep track of your products with expiration dates.",
             "feature2Title": "Recipe Suggestions",
@@ -287,11 +290,20 @@
             "feature3Desc": "Track your progress in reducing food waste."
         },
         "how": {
-            "heading": "Why FoodSaver",
+            "heading": "Manage Your Food Effortlessly",
+            "description": "FoodSaver is a smart food management system that helps you track, manage, and optimize your grocery purchases and usage. With our AI-generated recipe suggestions, you can use what's about to expire first, extend the shelf life of your food, and contribute to caring for the planet.",
             "step1": "Register your products",
+            "step1Desc": "Add your products to the system and set expiration dates.",
             "step2": "Get notifications before they expire",
+            "step2Desc": "Never miss an expiration date with our alerts.",
             "step3": "Discover recipes using your ingredients",
-            "step4": "Reduce waste and save money"
+            "step3Desc": "Get recipe ideas based on what you have in stock.",    
+            "step4": "Create personalized menus",
+            "step4Desc": "Tailored menus crafted to your specific dietary needs and preferences.",
+            "step5": "Reduce your food waste",  
+            "step5Desc": "Monitor your food waste reduction journey.",
+            "iconsCredits": "Icons by Icons8"
+            
         },
         "footer": {
             "slider": "JOIN US NOW AND START SAVING!",
@@ -312,7 +324,14 @@
             "credits": "Design & Development by",
             "backToTop": "Back to Top",
             "login": "Sign In",
-            "register": "Sign Up"
+            "register": "Sign Up",
+            "iconsCredits": "Icons8 Links",
+            "iconsDashboard": "Dashboard",
+            "iconsCalendar": "Calendar",
+            "iconsStir": "Stir",
+            "iconsMenu": "Menu",
+            "iconsChart": "Chart"
+            
         }
     }
 }
