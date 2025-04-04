@@ -8,6 +8,12 @@ import inventoryRoutes from './routes/inventoryRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import i18next from 'i18next';
+import Backend from 'i18next-fs-backend';
+import i18nextMiddleware from 'i18next-http-middleware';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+
 
 dotenv.config();
 const app = express();
@@ -28,14 +34,6 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 
-// Request logging middleware
-/*app.use((req, res, next) => {
-    console.log(`Incoming request: ${req.method} ${req.url}`);
-    console.log('Headers:', req.headers);
-    console.log('Body:', req.body);
-    next();
-}); */
-
 // Body parsing configuration
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
@@ -49,6 +47,33 @@ app.use((req, res, next) => {
 });
 
 app.use(cookieParser());
+// Get current directory path in ES modules
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Initialize i18next
+// Initialize i18next
+await i18next
+    .use(Backend)
+    .use(i18nextMiddleware.LanguageDetector)
+    .init({
+        backend: {
+            loadPath: join(__dirname, 'locales/{{lng}}/{{ns}}.json'),
+            addPath: join(__dirname, 'locales/{{lng}}/{{ns}}.missing.json')
+        },
+        fallbackLng: 'en',
+        preload: ['en', 'es'],
+        ns: ['translation'],
+        defaultNS: 'translation',
+        debug: process.env.NODE_ENV === 'development',
+        saveMissing: true,
+        missingKeyHandler: (lng, ns, key) => {
+            console.warn(`Missing translation: ${key}`);
+        }
+    });
+
+// Apply middleware
+app.use(i18nextMiddleware.handle(i18next));
+
 
 // DB Connection
 connectToMongoDB();

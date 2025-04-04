@@ -1,0 +1,33 @@
+{
+    "recipes": {
+        "suggested": {
+            "title": "Recetas Sugeridas",
+            "description": "Recetas que se pueden hacer con los ingredientes que tienes en casa.",
+            "suggestedRecipeFound": "Encontramos {{count}} recetas que se pueden hacer con los ingredientes que tienes en casa."
+            
+        },
+        "errors": {
+            "fetchFailed": "Failed to fetch recipes",
+            "fetchRecipeFailed": "Error al obtener la receta",
+            "noRecipesFound": "No se encontraron recetas",
+            "missingId": "Falta el ID del usuario",
+            "invalidId": "El ID del usuario no es válido",
+            "userIdRequired": "El ID del usuario es requerido",
+            "suggestedFailed": "Error al sugerir recetas",
+            "suggestedNotFound": "No se encontraron recetas sugeridas",
+            "suggestedNotFoundForUser": "No se encontraron recetas sugeridas para el usuario",
+            "noExpiringItems": "No se encontraron ingredientes expirados",
+            "noExpiringIngredientsForUser": "No se encontraron ingredientes expirados para el usuario"
+           
+        },
+        "messages": {
+            "noRecipesFound": "No se encontraron recetas para el usuario",
+            "noExpiringItems": "No se encontraron ingredientes expirados para el usuario",
+            "userIdRequired": "El ID del usuario es requerido para esta operación",
+            "userIdInvalid": "Formato de ID de receta inválido: {{id}}. Debe ser una cadena de 24 caracteres hexadecimales.",
+            "suggestedRecipeNotFound": "No se encontraron recetas que se puedan hacer con los ingredientes que tienes en casa.",
+            "recipeNotFound": "Receta no encontrada para el usuario"
+
+        }
+    }
+}

@@ -59,58 +59,59 @@ export const RecipesProvider = ({ children }) => {
         }
     }, []);
 
-    const getSuggestedRecipes = useCallback(async () => {
+    const getSuggestedRecipes = useCallback(async (userId) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const user = JSON.parse(localStorage.getItem('user'));
-            console.log('User data from storage:', user); // Debug log
-
-            // Check for both id formats
-            const userId = user?.id || user?._id;
-
             if (!userId) {
-                console.error('No user ID found:', user);
-                throw new Error(t('errors.userNotFound'));
+                throw new Error('User ID is required');
             }
 
-            console.log('Using userId:', userId); // Debug log
+            const response = await apiClient.request(`recipes/suggested`, 'GET', null, {
+                params: { userId }
+            });
 
-            const response = await apiClient.request(`recipes/suggested?userId=${userId}`);
-            console.log('API response:', response); // Debug log
+            console.log('Suggested recipes response:', response); // Debug log
 
-            if (response.success) {
-                dispatch({
-                    type: SET_SUGGESTED_RECIPES,
-                    payload: response
-                });
-            } else {
+            if (response.success === false) {
                 throw new Error(response.message || t('errors.fetchFailed'));
             }
+
+            dispatch({
+                type: SET_SUGGESTED_RECIPES,
+                payload: response.data || response
+            });
+
         } catch (error) {
             console.error('Error fetching suggested recipes:', error);
-            dispatch({
-                type: SET_ERROR,
-                payload: error.message
-            });
+            dispatch({ type: SET_ERROR, payload: error.message });
             throw error;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
         }
     }, [t]);
 
-    const getExpiringMeals = useCallback(async () => {
+    const getExpiringMeals = useCallback(async (userId) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
-            const user = JSON.parse(localStorage.getItem('user'));
-            const userId = user?.id || user?._id;
-
             if (!userId) {
-                console.error('No user ID found:', user);
-                throw new Error(t('errors.userNotFound'));
+                throw new Error('User ID is required');
             }
 
-            const response = await apiClient.request(`recipes/expiring-meals?userId=${userId}`);
-            dispatch({ type: SET_EXPIRING_MEALS, payload: response });
+            const response = await apiClient.request(`recipes/expiring-meals`, 'GET', null, {
+                params: { userId }
+            });
+
+            console.log('Expiring meals response:', response); // Debug log
+
+            if (response.success === false) {
+                throw new Error(response.message || t('errors.fetchFailed'));
+            }
+
+            dispatch({
+                type: SET_EXPIRING_MEALS,
+                payload: response.data || response
+            });
+
         } catch (error) {
             console.error('Error fetching expiring meals:', error);
             dispatch({ type: SET_ERROR, payload: error.message });

@@ -1,0 +1,32 @@
+{
+    "recipes": {
+        "suggested": {
+            "title": "Suggested Recipes",
+            "description": "Recipes that can be made with the ingredients you have at home.",
+            "suggestedRecipeFound": "We found {{count}} recipes that can be made with the ingredients you have at home."
+
+            
+        },
+        "errors": {
+            "fetchFailed": "Failed to fetch recipes",
+            "fetchRecipeFailed": "Failed to fetch recipe",
+            "noRecipesFound": "No recipes found",
+            "missingId": "User ID is missing",
+            "invalidId": "User ID is no valid",
+            "userIdRequired": "User ID is required",
+            "suggestedFailed": "Failed to suggest recipes",
+            "suggestedNotFound": "No suggested recipes found",
+            "suggestedNotFoundForUser": "No suggested recipes found for user",
+            "noExpiringItems": "No expiring ingredients found",
+            "noExpiringIngredientsForUser": "No expiring ingredients found for user"
+        },
+        "messages": {
+            "noRecipesFound": "No recipes found for the user",
+            "noExpiringItems": "No expiring ingredients found for the user",
+            "userIdRequired": "User ID is required for this operation",
+            "userIdInvalid": "Invalid recipe ID format: {{id}}. Expected 24-character hex string.",
+            "suggestedRecipeNotFound": "We couldn't find any recipes that can be made with the ingredients you have at home.",          
+            "recipeNotFound": "Recipe not found for the user"
+        }
+    }
+}

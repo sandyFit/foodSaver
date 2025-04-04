@@ -44,6 +44,10 @@ const router = express.Router();
  */
 router.get('/', getAllRecipes);
 
+router.get('/suggested', suggestRecipe);
+router.get('/expiring-meals', getExpiringMeals); // Specific path FIRST
+router.get('/suggested/:id', getSuggestedRecipes);
+
 /**
  * @swagger
  * /recipes/{id}:
@@ -118,9 +122,7 @@ router.get('/:id', getRecipeById);
  *       500:
  *         description: Internal Server Error
  */
-router.get('/suggested', suggestRecipe); // Changed from recipes-suggested
-router.get('/expiring-meals', getExpiringMeals); // Changed path
-router.get('/suggested/:id', getSuggestedRecipes);
+
 
 
 export default router;

@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import MealCard from '../components/cards/MealCard';
 import { useRecipes } from '../context/RecipesContext';
-import { useInventory } from '../context/InventoryContext';
 import RecipeCardHome from '../components/cards/RecipeCardHome';
 import { useTranslation } from 'react-i18next';
 
 const Home = () => {
-
     const {
         suggestedRecipes,
         getSuggestedRecipes,
         getExpiringMeals,
         expiringMeals = [],
         loading,
-        error } = useRecipes();
+        error
+    } = useRecipes();
 
     const { t } = useTranslation();
     const [fetchError, setFetchError] = useState(null);
@@ -28,38 +27,35 @@ const Home = () => {
         'bg-pink-100',
     ];
 
-
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setFetchError(null);
                 const userStr = localStorage.getItem('user');
-                console.log('Raw user data:', userStr); // Debug log
 
                 if (!userStr) {
                     throw new Error(t('errors.userNotFound'));
                 }
 
                 const user = JSON.parse(userStr);
-                console.log('Parsed user:', user); // Debug log
 
-                // Try both id and _id, with null coalescing
-                const userId = user?.id ?? user?._id;
-
-                if (!userId) {
-                    console.error('No user ID found:', user);
+                // Try both id formats and verify user data
+                if (!user || (!user.id && !user._id)) {
+                    console.error('Invalid user data:', user);
                     throw new Error(t('errors.userNotFound'));
                 }
 
-                console.log('Using user ID:', userId); // Debug log
+                // Use the first available ID
+                const userId = user.id || user._id;
+                console.log('Fetching data with userId:', userId); // Debug log
 
-                await Promise.all([
-                    getExpiringMeals(userId),
-                    getSuggestedRecipes(userId)
-                ]);
+                // Sequential fetching instead of Promise.all to better handle errors
+                await getExpiringMeals(userId); // Await here
+                await getSuggestedRecipes(userId); // Await here
+
             } catch (error) {
-                console.error('Error fetching data:', error);
-                setFetchError(t('errors.fetchFailed'));
+                console.error('Data fetch error:', error);
+                setFetchError(error.message || t('errors.fetchFailed'));
             }
         };
 
@@ -135,7 +131,7 @@ const Home = () => {
         if (fetchError) {
             return (
                 <div className="text-red-600 p-4 bg-red-100 rounded">
-                    {fetchError}
+                    {t('inventory.errors.fetchExpiredFailed')}
                 </div>
             );
         }
@@ -168,13 +164,13 @@ const Home = () => {
         <section className=''>
             <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
-                    <h4 className='mb-2 font-bold text-lg'>
+                    <h4 className='font-bold text-lg'>
                         {t('dashboard.expiringProducts')}
                     </h4>
                     {loading ? (
                         <div className="text-center">
-                            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 
-                                rounded-full" role="status">
+                            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4
+                                        rounded-full" role="status">
                                 <span className="sr-only">{t('common.loading')}</span>
                             </div>
                         </div>
@@ -188,8 +184,8 @@ const Home = () => {
                     </h4>
                     {loading ? (
                         <div className="text-center">
-                            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 
-                                rounded-full" role="status">
+                            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4
+                                        rounded-full" role="status">
                                 <span className="sr-only">{t('common.loading')}</span>
                             </div>
                         </div>
@@ -201,6 +197,5 @@ const Home = () => {
         </section>
     );
 };
-
 
 export default Home;
