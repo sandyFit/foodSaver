@@ -5,9 +5,7 @@ import mongoose from 'mongoose'; // Import mongoose
 export const suggestRecipe = async (req, res) => {
     const t = req.t;
     try {
-        // Extract userId from query parameters
         const { userId } = req.query;
-        const t = req.t;
 
         if (!userId) {
             return res.status(400).json({
@@ -18,16 +16,14 @@ export const suggestRecipe = async (req, res) => {
 
         const today = new Date();
         const threshold = new Date();
-        threshold.setDate(today.getDate() + 7); // 7 days to expiration
+        threshold.setDate(today.getDate() + 7);
 
-        // Find soon-to-expire ingredients for this specific user
-        // Ensure userId is a valid ObjectId if your schema defines it as such
+        // Get expiring ingredients
         const objectIdUserId = new mongoose.Types.ObjectId(userId);
-
         const ingredients = await InventoryItem.find({
-            user: objectIdUserId, // Use the converted ObjectId
+            user: objectIdUserId,
             expirationDate: { $lte: threshold }
-        }).select('name quantity expirationDate category');
+        }).select('itemName quantity expirationDate category');
 
         if (ingredients.length === 0) {
             return res.status(200).json({
@@ -37,36 +33,133 @@ export const suggestRecipe = async (req, res) => {
             });
         }
 
-        // Match ingredients with recipes
-        const recipes = await Recipe.find({
-            'ingredients.name': { $in: ingredients.map(item => item.name) }
+        // Get all recipes
+        const allRecipes = await Recipe.find({});
+
+        // IMPROVED MATCHING ALGORITHM
+        const matchingResults = [];
+
+        // Prepare ingredient base forms by removing descriptive words
+        const preparedIngredients = ingredients.map(item => {
+            const name = item.itemName.toLowerCase().trim();
+            // Get base ingredient name by removing common qualifiers
+            let baseIngredient = name.replace(/fresh |frozen |dried |raw |cooked |sliced |diced |chopped /g, '');
+
+            return {
+                original: item.itemName,
+                name: name,
+                baseForm: baseIngredient,
+                words: baseIngredient.split(' ')
+            };
         });
 
-        if (recipes.length > 0) {
-            // If there are recipes that can be made with the expiring ingredients
+        // Process each recipe
+        for (const recipe of allRecipes) {
+            const recipeIngredients = recipe.ingredients.map(ing => {
+                const name = ing.name.toLowerCase().trim();
+                return {
+                    original: ing.name,
+                    name: name,
+                    words: name.split(' ')
+                };
+            });
+
+            let score = 0;
+            const matchedIngredients = [];
+
+            // For each inventory ingredient
+            for (const inventoryItem of preparedIngredients) {
+                // Try to match it with recipe ingredients
+                for (const recipeIngredient of recipeIngredients) {
+                    // Check for exact matches
+                    if (recipeIngredient.name === inventoryItem.name ||
+                        recipeIngredient.name === inventoryItem.baseForm) {
+                        score += 3;
+                        matchedIngredients.push(inventoryItem.original);
+                        break;
+                    }
+
+                    // Check for word matches (for multi-word ingredients)
+                    const matches = inventoryItem.words.filter(word =>
+                        word.length > 3 && // Avoid matching small words like "the", "and", etc.
+                        recipeIngredient.words.includes(word));
+
+                    if (matches.length > 0) {
+                        // Score based on how many words matched
+                        score += 1 * matches.length;
+                        matchedIngredients.push(inventoryItem.original);
+                        break;
+                    }
+
+                    // Check if recipe ingredient contains the inventory item name
+                    if (recipeIngredient.name.includes(inventoryItem.baseForm) ||
+                        inventoryItem.baseForm.includes(recipeIngredient.name)) {
+                        score += 2;
+                        matchedIngredients.push(inventoryItem.original);
+                        break;
+                    }
+
+                    // Special cases handling
+                    if ((inventoryItem.name.includes('chicken') &&
+                        recipeIngredient.name.includes('chicken')) ||
+                        (inventoryItem.name.includes('coconut') &&
+                            recipeIngredient.name.includes('coconut'))) {
+                        score += 2;
+                        matchedIngredients.push(inventoryItem.original);
+                        break;
+                    }
+                }
+            }
+
+            if (score > 0) {
+                matchingResults.push({
+                    ...recipe.toObject(),
+                    score,
+                    matchedIngredients: [...new Set(matchedIngredients)]
+                });
+            }
+        }
+
+        // Sort by score and get top 5
+        matchingResults.sort((a, b) => b.score - a.score);
+        const matchedRecipes = matchingResults.slice(0, 5);
+
+        if (matchedRecipes.length > 0) {
             return res.status(200).json({
                 success: true,
                 name: t('recipes.messages.suggestedRecipeFound'),
                 ingredients: ingredients.map(item => ({
-                    name: item.name,
+                    name: item.itemName,
                     quantity: item.quantity,
                     expirationDate: item.expirationDate,
                     category: item.category,
                 })),
-                recipes: recipes.map(recipe => recipe.name),
+                recipes: matchedRecipes.map(recipe => ({
+                    id: recipe._id,
+                    name: recipe.name,
+                    ingredients: recipe.ingredients,
+                    matchedIngredients: recipe.matchedIngredients,
+                    score: recipe.score,
+                    steps: recipe.steps,
+                    image_url: recipe.image_url
+                })),
             });
         } else {
-            // No suitable recipes found
             return res.status(200).json({
                 success: true,
                 name: t('recipes.errors.suggestedNotFound'),
                 ingredients: ingredients.map(item => ({
-                    name: item.name,
+                    name: item.itemName,
                     quantity: item.quantity,
                     expirationDate: item.expirationDate,
                     category: item.category,
                 })),
                 message: t("recipes.messages.suggestedRecipeNotFound"),
+                debug: {
+                    yourIngredients: ingredients.map(i => i.itemName),
+                    allIngredients: [...new Set(allRecipes.flatMap(r =>
+                        r.ingredients.map(i => i.name)))]
+                }
             });
         }
     } catch (error) {

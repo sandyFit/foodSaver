@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 const RecipeDetail = () => {
     const { id } = useParams();
     const { getRecipeById, loading, recipe } = useRecipes();
-    const { t, i18n } = useTranslation(['common', 'recipes']);
+    const { t } = useTranslation(['recipes', 'common']);
 
     useEffect(() => {
         if (id) getRecipeById(id);
@@ -15,9 +15,19 @@ const RecipeDetail = () => {
 
     if (!recipe) return <LoaderComponent isLoading={loading} />;
 
-    // Helper function to get translated content with fallback
-    const translateRecipe = (key, fallback) => {
-        return t(`recipes:${recipe.recipeId}.${key}`, { defaultValue: fallback });
+    // Simplified and fixed translation helper
+    const translate = (key, fallback) => {
+        return t(key, { defaultValue: fallback });
+    };
+
+    // Helper for recipe fields
+    const translateRecipe = (field, fallback) => {
+        return translate(`recipes.${recipe.recipeId}.${field}`, fallback);
+    };
+
+    // Helper for recipe steps (note: steps are 1-indexed in your JSON)
+    const translateStep = (index, fallback) => {
+        return translate(`recipes.${recipe.recipeId}.steps.${index + 1}`, fallback);
     };
 
     return (
@@ -35,17 +45,21 @@ const RecipeDetail = () => {
 
                 <div className="flex flex-col justify-end">
                     <div className="mb-6">
-                        <p>
-                            <strong>{t('common:prep_time')}:</strong> {recipe.prep_time} {t('common:minutes')}
+                        <p className='flex gap-2'>
+                            <strong>{translate('recipes.ui.prep_time', 'Prep Time')}:</strong>
+                            {recipe.prep_time} {translate('recipes.ui.minutes', 'minutes')}
                         </p>
-                        <p>
-                            <strong>{t('common:cook_time')}:</strong> {recipe.cook_time} {t('common:minutes')}
+                        <p className='flex gap-2'>
+                            <strong>{translate('recipes.ui.cook_time', 'Cook Time')}:</strong>
+                            {recipe.cook_time} {translate('recipes.ui.minutes', 'minutes')}
                         </p>
-                        <p>
-                            <strong>{t('common:total_time')}:</strong> {recipe.total_time} {t('common:minutes')}
+                        <p className='flex gap-2'>
+                            <strong>{translate('recipes.ui.total_time', 'Total Time')}:</strong>
+                            {recipe.total_time} {translate('recipes.ui.minutes', 'minutes')}
                         </p>
-                        <p>
-                            <strong>{t('common:servings')}:</strong> {recipe.servings}
+                        <p className='flex gap-2'>
+                            <strong>{translate('recipes.ui.servings', 'Servings')}:</strong>
+                            {recipe.servings}
                         </p>
                     </div>
                     <p className="text-lg text-gray-600 mb-6">
@@ -56,46 +70,55 @@ const RecipeDetail = () => {
 
             <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-gray-800">
-                    {t('common:ingredients')}
+                    {translate('recipes.ui.ingredients', 'Ingredients')}
                 </h2>
                 {recipe.ingredients?.length > 0 ? (
                     <ul className="list-disc pl-5 text-gray-700">
                         {recipe.ingredients.map((ingredient, index) => (
                             <li key={index} className="text-lg">
                                 <strong>
-                                    {translateRecipe(`ingredients.${ingredient.ingredientId}`, ingredient.name)}:
+                                    {translate(
+                                        `recipes.${recipe.recipeId}.ingredients.${ingredient.ingredientId}`,
+                                        ingredient.name
+                                    )}:
                                 </strong> {ingredient.quantity}
                             </li>
                         ))}
                     </ul>
                 ) : (
-                    <p className="text-gray-500">{t('recipes:noIngredients')}</p>
+                    <p className="text-gray-500">
+                        {translate('recipes.noIngredients', 'No ingredients available')}
+                    </p>
                 )}
             </div>
 
             <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-gray-800">
-                    {t('common:instructions')}
+                    {translate('recipes.ui.steps', 'Steps')}
                 </h2>
                 {recipe.steps?.length > 0 ? (
                     <ol className="list-decimal pl-5 text-gray-700">
                         {recipe.steps.map((step, index) => (
                             <li key={index} className="text-lg">
-                                {translateRecipe(`steps.${index}`, step)}
+                                {translateStep(index, step)}
                             </li>
                         ))}
                     </ol>
                 ) : (
-                    <p className="text-gray-500">{t('recipes:noInstructions')}</p>
+                    <p className="text-gray-500">
+                        {translate('recipes.noSteps', 'No steps available')}
+                    </p>
                 )}
             </div>
 
             <div className="mb-6">
-                <p>
-                    <strong>{t('common:category')}:</strong> {recipe.category}
+                <p className='flex gap-2'>
+                    <strong>{translate('recipes.ui.category', 'Category')}:</strong>
+                    {recipe.category}
                 </p>
-                <p>
-                    <strong>{t('common:tags')}:</strong> {recipe.tags?.join(", ")}
+                <p className='flex gap-2'>
+                    <strong>{translate('recipes.ui.tags', 'Tags')}:</strong>
+                    {recipe.tags?.join(", ")}
                 </p>
             </div>
         </div>

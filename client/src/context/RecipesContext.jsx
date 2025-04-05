@@ -66,11 +66,14 @@ export const RecipesProvider = ({ children }) => {
                 throw new Error('User ID is required');
             }
 
-            const response = await apiClient.request(`recipes/suggested`, 'GET', null, {
-                params: { userId }
-            });
+            // Convert to string if it's an ObjectId
+            const userIdStr = userId.toString();
 
-            console.log('Suggested recipes response:', response); // Debug log
+            const response = await apiClient.request(
+                `recipes/suggested?userId=${encodeURIComponent(userIdStr)}`
+            );
+
+            console.log('Suggested recipes response:', response);
 
             if (response.success === false) {
                 throw new Error(response.message || t('errors.fetchFailed'));
@@ -97,11 +100,14 @@ export const RecipesProvider = ({ children }) => {
                 throw new Error('User ID is required');
             }
 
-            const response = await apiClient.request(`recipes/expiring-meals`, 'GET', null, {
-                params: { userId }
-            });
+            // Convert to string if it's an ObjectId
+            const userIdStr = userId.toString();
 
-            console.log('Expiring meals response:', response); // Debug log
+            const response = await apiClient.request(
+                `recipes/expiring-meals?userId=${encodeURIComponent(userIdStr)}`
+            );
+
+            console.log('Expiring meals response:', response);
 
             if (response.success === false) {
                 throw new Error(response.message || t('errors.fetchFailed'));
@@ -111,7 +117,6 @@ export const RecipesProvider = ({ children }) => {
                 type: SET_EXPIRING_MEALS,
                 payload: response.data || response
             });
-
         } catch (error) {
             console.error('Error fetching expiring meals:', error);
             dispatch({ type: SET_ERROR, payload: error.message });
@@ -121,6 +126,7 @@ export const RecipesProvider = ({ children }) => {
         }
     }, [t]);
 
+    
     const value = useMemo(() => ({
         allRecipes: state.allRecipes,
         recipe: state.recipe,

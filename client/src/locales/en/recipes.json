@@ -26,15 +26,15 @@
                 "salt": "Salt",
                 "pepper": "Pepper"
             },
-            "steps": [
-                "Wash the apples and cucumber thoroughly. Peel the cucumber and slice it thinly. Cut the apples into cubes, leaving the peel on if preferred.",
-                "In a large bowl, mix the natural yogurt with lemon juice and honey. Stir well until fully combined.",
-                "Add the apples and cucumber to the yogurt mixture. Toss gently to coat.",
-                "Mix in the chopped walnuts and raisins, distributing them evenly.",
-                "Wash and dry the lettuce leaves. Arrange them on a serving platter.",
-                "Spoon the apple-cucumber salad over the lettuce. Season with salt and pepper to taste.",
-                "Refrigerate for at least 15 minutes before serving to let flavors meld."
-            ]
+            "steps": {
+                "1": "Wash the apples and cucumber thoroughly. Peel the cucumber and slice it thinly. Cut the apples into cubes, leaving the peel on if preferred.",
+                "2": "In a large bowl, mix the natural yogurt with lemon juice and honey. Stir well until fully combined.",
+                "3": "Add the apples and cucumber to the yogurt mixture. Toss gently to coat.",
+                "4": "Mix in the chopped walnuts and raisins, distributing them evenly.",
+                "5": "Wash and dry the lettuce leaves. Arrange them on a serving platter.",
+                "6": "Spoon the apple-cucumber salad over the lettuce. Season with salt and pepper to taste.",
+                "7": "Refrigerate for at least 15 minutes before serving to let flavors meld."
+            }
         },
         "chickpea-spinach-burgers": {
             "name": "Chickpea and Spinach Burgers",
@@ -54,198 +54,24 @@
                 "lettuce-leaves": "Lettuce leaves",
                 "tomato-slices": "Tomato slices"
             },
-            "steps": [
-                "Rinse and drain the cooked chickpeas and place them in a large bowl.",
-                "Add the chopped spinach, onion, and minced garlic to the bowl.",
-                "Mash the chickpeas and mix with the other ingredients until well combined.",
-                "Season with ground cumin, sweet paprika, salt, and pepper.",
-                "Add the bread crumbs, olive oil, and salt to the mixture and mix well until all ingredients are combined..",
-                "Form the mixture into 4 equal-sized patties.",
-                "Heat a pan over medium heat and cook the patties for 2-3 minutes on each side, or until golden brown.",
-                "Remove the burgers from the pan and place them on paper towels to remove excess oil.",
-                "Serve with lettuce leaves, tomato slices, and hamburger buns."
-            ]
+            "steps": {
+                "1": "Rinse and drain the cooked chickpeas and place them in a large bowl.",
+                "2": "Add the chopped spinach, onion, and minced garlic to the bowl.",
+                "3": "Mash the chickpeas and mix with the other ingredients until well combined.",
+                "4": "Season with ground cumin, sweet paprika, salt, and pepper.",
+                "5": "Add the bread crumbs, olive oil, and salt to the mixture and mix well until all ingredients are combined..",
+                "6": "Form the mixture into 4 equal-sized patties.",
+                "7": "Heat a pan over medium heat and cook the patties for 2-3 minutes on each side, or until golden brown.",
+                "8": "Remove the burgers from the pan and place them on paper towels to remove excess oil.",
+                "9": "Serve with lettuce leaves, tomato slices, and hamburger buns."
+            }
         },
-        "chocolate-banana-smoothie": {
-            "name": "Chocolate Banana Smoothie",
-            "description": "A delicious and nutritious smoothie that combines the sweetness of bananas with the richness of cocoa. Perfect for breakfast or a snack! 🍌🥤",
-            "ingredients": {
-                "banana": "Banana",
-                "cocoa-powder": "Cocoa powder",
-                "milk": "Milk",
-                "honey": "Honey",
-                "ice-cubes": "Ice cubes"
-            },
-            "steps": [
-                "Peel the banana and cut it into slices.",
-                "In a blender, combine the banana, cocoa powder, milk, honey, and ice cubes.",
-                "Blend until smooth and creamy.",
-                "Pour into a glass and enjoy!"
-            ]
-        },
-        "fresh-cucumber-jalapeño-salad": {
-            "name": "Fresh Cucumber Jalapeño Salad",
-            "description": "A vibrant and flavorful salad that combines the crisp freshness of cucumber with the bold, spicy kick of jalapeños. Perfect as a side dish to enhance any dish or as a light and delicious option on its own. 🌶️🥒",
-            "ingredients": {
-                "cucumber": "Cucumber",
-                "red-chile-jalapeno": "Red Chile Jalapeño",
-                "yellow-chile-jalapeno": "Yellow Chile Jalapeño",
-                "purple-onion": "Purple onion",
-                "lemon-juice": "Lemon juice",
-                "cilantro": "Fresh cilantro",
-                "olive-oil": "Olive oil",
-                "salt": "Salt",
-                "pepper": "Pepper"
-            },
-            "steps": [
-                "In a large bowl, combine the diced cucumber, red and yellow jalapeño peppers, and red onion.",
-                "In a small bowl, mix the lemon juice, olive oil, salt, and pepper. Whisk well until all ingredients are combined.",
-                "Pour the dressing mixture over the salad and toss gently to coat all ingredients in the dressing.",
-                "If desired, add the chopped fresh cilantro and mix again.",
-                "Let the salad sit in the refrigerator for at least 15 minutes before serving to allow the flavors to blend.",
-                "Serve the fresh cucumber and jalapeño salad as a side dish or as a light main dish. Enjoy!"
-            ]
-        },
-        "diary-free-pancakes": {
-            "name": "Fluffy Diary-Free Pancakes",
-            "description": "The perfect choice for a spicy breakfast or snack. Dairy-free and with an irresistible touch of vanilla, they're the ideal base to pair with honey, fresh fruit, or even a little melted chocolate. 🥞🍓",
-            "ingredients": {
-                "all-purpose-flour": "All-purpose flour",
-                "sugar": "Sugar",
-                "vanilla-extract": "Vanilla extract",
-                "water": "Water",
-                "egg": "Egg",
-                "baking-powder": "Baking powder",
-                "butter": "Butter",
-                "salt": "Salt"
-            },
-            "steps": [
-                "In a large bowl, mix the flour, sugar, baking powder and a pinch of salt.",
-                "In another bowl, beat the egg and add the water (or any vegetable milk of your choice) and vanilla extract, mixing well.",
-                "Pour the wet ingredients into the dry ingredients and stir until combined.",
-                "Heat a frying pan over medium heat and grease it with a little butter.",
-                "Pour a ladle of batter into the pan and cook until bubbles form on the surface.",
-                "Flip the pancake and cook for another 1-2 minutes until golden brown.",
-                "Repeat with the remaining batter.",
-                "Serve the pancakes with your favorite toppings, such as sliced bananas, berries, or a sprinkle of cinnamon.",
-                "Enjoy your delicious milk-free pancakes!"
-            ]
-        },
-        "tropical-coconut-punch": {
-            "name": "Tropical Coconut Punch",
-            "description": "A delicious and refreshing blend of fresh coconut and aromatic spices that evoke the sea breeze and tropical vibes. A delight for your senses that will make you feel like you're on the beach! 🌴✨",
-            "ingredients": {
-                "coconut-milk": "Coconut milk",
-                "condensed-milk": "Condensed milk",
-                "whole-milk": "Whole milk",
-                "sugar": "Sugar",
-                "white-rum": "White rum",
-                "vanilla-extract": "Vanilla extract",
-                "cinnamon-power": "Cinnamon powder",
-                "nutmeg-powder": "Nutmeg powder",
-                "grated-coconut": "Grated coconut",
-                "ice-cubes": "Ice cubes",
-                "pineapple-slices": "Pineapple slices",
-                "cherries": "Cherries"
-            },
-            "steps": [
-                "In a blender, combine the coconut milk, condensed milk, whole milk, and sugar. Blend at high speed until all ingredients are well combined.",
-                "If you want to add white rum, add it while still blending. Add vanilla extract, ground cinnamon, and nutmeg. Mix until smooth.",
-                "Add the grated coconut and mix gently with a spoon so that it is evenly distributed.",
-                "If you prefer a smoother texture, you can strain the mixture to remove any lumps from the shredded coconut.",
-                "Refrigerate the mixture for at least 1 hour to ensure it is completely chilled.",
-                "For serving, fill a tall glass with ice and pour the coconut punch over the ice.",
-                "Garnish with pineapple slices and cherries on top before enjoying.",
-                "Enjoy your tropical coconut punch!"
-            ]
-        },
-        "baked-french-toast": {
-            "name": "Baked French Toast",
-            "description": "Enjoy French toast bursting with flavor. This recipe is perfect for those looking for a dairy-free and no-fries option, combining the natural sweetness of fruit with the crunchy texture of baked bread.🍓🥖",
-            "ingredients": {
-                "whole-wheat-bread": "Whole wheat bread",
-                "eggs": "Eggs",
-                "almond-milk": "Almond milk",
-                "maple-syrup": "Maple syrup",
-                "bananas": "Bananas",
-                "strawberries": "Strawberries",
-                "blueberries": "Blueberries",
-                "spray-oil": "Spray cooking oil",
-                "salt": "Salt"
-            },
-            "steps": [
-                "Preheat oven to 180°C (350°F) and line a baking sheet with parchment paper or spray with cooking spray.",
-                "In a large bowl, beat the eggs together with the almond milk, vanilla extract, cinnamon, and a pinch of salt until well combined.",
-                "Dip each slice of whole wheat bread into the egg mixture, making sure both sides are well coated.",
-                "Place the bread slices on the prepared baking sheet.",
-                "Bake the toasts in the preheated oven for 15-20 minutes, turning them over halfway through, until golden brown and cooked through.",
-                "While the toast is baking, prepare the fruit. Slice the banana and strawberries and mix with the blueberries in a bowl.",
-                "Once the toast is ready, remove it from the oven and place it on individual plates.",
-                "Top each toast with a generous portion of the fruit mixture.",
-                "Drizzle maple syrup over toast and fruit before serving.",
-                "Serve warm and enjoy your delicious, flavorful French toast with fruit!"
-            ]
-        },
-        "chicken-with-fresh-vegetables": {
-            "name": "Chicken with Fresh Vegetables",
-            "description": "An exquisite marinated chicken, bursting with vibrant flavors thanks to a blend of spices and fresh vegetables. This dish combines tradition and freshness in every bite, leaving everyone wanting more.🍗🥕",
-            "ingredients": {
-                "chicken-pieces": "Chicken pieces (tights or breast)",
-                "tomatoes": "Tomatoes",
-                "red-pepper": "Red bell pepper",
-                "rice": "Rice",
-                "onion": "Onion",
-                "garlic": "Garlic",
-                "panca-chiles": "Panca chiles",
-                "welsh-onion": "Welsh onion",
-                "celery": "Celery",
-                "vinegar": "Vinegar",
-                "water": "Water",
-                "sugar": "Sugar",
-                "dried-oregano": "Dried oregano",
-                "laurel": "Bay leaf",
-                "salt": "Salt"
-            },
-            "steps": [
-                "In a large bowl, combine the vinegar, water, sugar, oregano, bay leaf, salt, and pepper. Add the chicken pieces and let marinate in the refrigerator for at least 2 hours, preferably overnight.",
-                "In a large pot, heat a little oil and sauté the chopped onion and garlic until golden.",
-                "Add the marinated chicken pieces (reserve the marinade) and brown on all sides for about 5-7 minutes.",
-                "Add the tomatoes, bell pepper, panca chilies, spring onion, and celery. Cook for about 5 minutes, stirring occasionally.",
-                "Pour the reserved marinade over the chicken and vegetables. Bring to a boil, then reduce heat and simmer for 30-40 minutes, or until the chicken is cooked through and tender.",
-                "While the chicken is cooking, prepare the rice. In a separate pot, boil 2 cups of lightly salted water. Add the rice and simmer until the water is absorbed and the rice is tender, about 15-20 minutes.",
-                "Once the chicken is done, remove it from the heat and let it rest for a few minutes before serving.",
-                "Serve the pickled chicken hot, accompanied by white rice.",
-                "Garnish with welsh onion and enjoy your delicious pickled chicken with fresh vegetables!"
-            ]
-        },
-        "colorful-stir-fried-vegetables": {
-            "name": "Colorful Stir-Fried Vegetables",
-            "description": "This colorful stir-fry is a vibrant and healthy mix of bell peppers, onions, carrots, and peas, all sautéed al dente and seasoned with a hint of lemon. Perfect as a side dish or as a light main dish.🥕🌶️🍋",
-            "ingredients": {
-                "green-peas": "Green peas",
-                "carrots": "Carrots",
-                "red-pepper": "Red bell pepper",
-                "yellow-pepper": "Yellow bell pepper",
-                "onion": "Onion",
-                "garlic": "Garlic",
-                "parsley": "Parsley",
-                "lemon-juice": "Lemon juice",
-                "olive-oil": "Olive oil",
-                "salt": "Salt",
-                "pepper": "Pepper"
-            },
-            "steps": [
-                "Heat the olive oil in a large skillet over medium heat.",
-                "Add the minced garlic and sauté for 1 minute until fragrant.",
-                "Add the onion and cook for 2-3 minutes until translucent.",
-                "Add the peppers and carrots, and sauté for 5 minutes, stirring occasionally.",
-                "Add the green peas and cook for another 3-4 minutes until all vegetables are tender but still crisp.",
-                "Add the lemon juice, parsley, salt, and pepper. Stir to combine.",
-                "Season with salt and pepper to taste.",
-                "Remove from heat and garnish with chopped fresh parsley before serving.",
-                "Enjoy your colorful stir-fried vegetables!"
-            ]
-        }
+        
+        "noIngredients": "No ingredients available",
+        "noSteps": "No steps available",
+        "noDescription": "No description available",
+        "noName": "No name available",
+        "noRecipe": "No recipe available"
 
     }
 }

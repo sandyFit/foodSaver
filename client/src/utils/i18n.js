@@ -2,31 +2,36 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-// Import translations
-import translationEN from '../locales/en/translation.json';
-import translationES from '../locales/es/translation.json';
+// Import all translation files
+import commonEN from '../locales/en/common.json';
+import commonES from '../locales/es/common.json';
+import recipesEN from '../locales/en/recipes.json';
+import recipesES from '../locales/es/recipes.json';
 
-// Resources object with translations
+// Resources object with translations for multiple namespaces
 const resources = {
     en: {
-        translation: translationEN
+        common: commonEN,
+        recipes: recipesEN
     },
     es: {
-        translation: translationES
+        common: commonES,
+        recipes: recipesES
     }
 };
 
 // Initialize i18next
 i18n
-    // Detect user language
     .use(LanguageDetector)
-    // Pass the i18n instance to react-i18next
     .use(initReactI18next)
-    // Initialize i18next
     .init({
         resources,
-        fallbackLng: 'en', 
-        debug: process.env.NODE_ENV === 'development', // Enable debug in development
+        fallbackLng: 'en',
+        debug: process.env.NODE_ENV === 'development',
+
+        // Specify namespaces to use
+        ns: ['common', 'recipes'],
+        defaultNS: 'common',
 
         interpolation: {
             escapeValue: false, // React already safes from XSS
@@ -38,6 +43,12 @@ i18n
             lookupLocalStorage: 'language',
             caches: ['localStorage'],
         },
+
+        // Additional useful settings
+        saveMissing: true,
+        missingKeyHandler: (lng, ns, key) => {
+            console.warn(`Missing translation: ${ns}:${key}`);
+        }
     });
 
-export default i18n; 
+export default i18n;

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 const Recipes = () => {
 
     const { allRecipes, getAllRecipes, loading, error } = useRecipes();
-    const { t } = useTranslation();
+    const { t } = useTranslation(['common', 'recipes']);
 
     const bgColors = [
         'bg-red-100',

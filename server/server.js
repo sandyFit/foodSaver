@@ -20,7 +20,8 @@ const app = express();
 
 // CORS Configuration
 app.use(cors({
-    origin: ['http://localhost:5173',
+    origin: [
+        'http://localhost:5173',
         'http://localhost:5174',
         'http://localhost:5175',
         'http://localhost:5176',
@@ -62,7 +63,7 @@ await i18next
         },
         fallbackLng: 'en',
         preload: ['en', 'es'],
-        ns: ['common', 'recipes', 'inventory', 'notifications'],
+        ns: ['common'],
         defaultNS: 'common',
         interpolation: {
             escapeValue: false, // React already does escaping

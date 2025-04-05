@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 const RecipeCard = ({ bgColor, id, name, image_url, description }) => {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation(['common', 'recipes']);
 
     return (
         <article className='w-[24vw]'>

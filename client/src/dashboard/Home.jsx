@@ -38,20 +38,14 @@ const Home = () => {
                 }
 
                 const user = JSON.parse(userStr);
-
-                // Try both id formats and verify user data
-                if (!user || (!user.id && !user._id)) {
-                    console.error('Invalid user data:', user);
-                    throw new Error(t('errors.userNotFound'));
-                }
-
-                // Use the first available ID
                 const userId = user.id || user._id;
-                console.log('Fetching data with userId:', userId); // Debug log
 
-                // Sequential fetching instead of Promise.all to better handle errors
-                await getExpiringMeals(userId); // Await here
-                await getSuggestedRecipes(userId); // Await here
+                // Ensure userId is a string
+                const userIdStr = userId.toString();
+                console.log('Fetching data with userId:', userIdStr);
+
+                await getExpiringMeals(userIdStr);
+                await getSuggestedRecipes(userIdStr);
 
             } catch (error) {
                 console.error('Data fetch error:', error);
@@ -72,6 +66,16 @@ const Home = () => {
             );
         }
 
+        if (loading) {
+            return (
+                <div className="text-center">
+                    <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
+                        <span className="sr-only">{t('common.loading')}</span>
+                    </div>
+                </div>
+            );
+        }
+
         if (!suggestedRecipes) {
             return (
                 <RecipeCardHome
@@ -81,51 +85,35 @@ const Home = () => {
             );
         }
 
-        // If suggestedRecipes has recipes array (from the backend response)
-        if (suggestedRecipes.recipes && Array.isArray(suggestedRecipes.recipes)) {
-            return (
-                <div>
-                    <div className="mb-4">
-                        <ul className="list-disc pl-5">
-                            {suggestedRecipes.recipes.map((recipe, idx) => (
-                                <li key={idx}>{recipe}</li>
-                            ))}
-                        </ul>
-                    </div>
+        const recipesArray = Array.isArray(suggestedRecipes)
+            ? suggestedRecipes
+            : suggestedRecipes.recipes || [];
 
-                    {suggestedRecipes.message && (
-                        <p className="italic text-gray-700">{t(suggestedRecipes.message)}</p>
-                    )}
+        if (recipesArray.length === 0) {
+            return (
+                <div className="text-gray-600 p-4 bg-gray-100 rounded">
+                    {t('dashboard.recipeCard.noContent')}
                 </div>
             );
         }
 
-        // If suggestedRecipes is an array of recipe objects
-        if (Array.isArray(suggestedRecipes)) {
-            return (
-                <ul className="grid grid-cols-1">
-                    {suggestedRecipes.map((recipe, index) => (
-                        <li key={recipe._id || index}>
-                            <RecipeCardHome
-                                id={recipe.id}
-                                name={recipe.name}
-                                image_url={recipe.image_url}
-                                description={recipe.description}
-                                bgColor={bgColors[index % bgColors.length]}
-                            />
-                        </li>
-                    ))}
-                </ul>
-            );
-        }
-
-        // Fallback for other structures
         return (
-            <div className="text-gray-600 p-4 bg-gray-100 rounded">
-                {t('dashboard.recipeCard.noContent')}
+            <div className="grid grid-cols-1 gap-4">
+                {recipesArray.map((recipe, index) => (
+                    <RecipeCardHome
+                        key={recipe.id || recipe._id || index}
+                        id={recipe.id || recipe._id}
+                        name={recipe.name}
+                        image_url={recipe.image_url}
+                        description={recipe.description || ''}
+                        bgColor={bgColors[index % bgColors.length]}
+                    />
+                ))}
             </div>
         );
     };
+
+        
 
     const renderExpiringItems = () => {
         if (fetchError) {
