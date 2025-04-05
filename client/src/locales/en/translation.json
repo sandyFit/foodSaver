@@ -117,6 +117,7 @@
     },
 
     "recipes": {
+        "title": "Your Best Recipes",
         "suggestedRecipes": "Suggested Recipes",
         "recipeDetails": "Recipe Details",
         "noSuggestedRecipes": "No suggested recipes available",

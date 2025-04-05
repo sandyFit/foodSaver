@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import RecipeCard from '../components/cards/RecipeCard';
 import { useRecipes } from '../context/RecipesContext';
 import LoaderComponent from '../components/ui/LoaderComponent';
+import { useTranslation } from 'react-i18next';
 
 const Recipes = () => {
 
     const { allRecipes, getAllRecipes, loading, error } = useRecipes();
+    const { t } = useTranslation();
 
     const bgColors = [
         'bg-red-100',
@@ -31,7 +33,7 @@ const Recipes = () => {
 
             <div className="flex col-span-12 justify-center items-center flex-wrap">
                 <h3 className="w-full text-center text-xl font-semibold mb-4">
-                    Tus Mejores Recetas
+                    {t('recipes.title')}
                 </h3>
                 <div className="flex flex-wrap gap-4">
                     {allRecipes.map((recipe, index) => (

@@ -62,8 +62,11 @@ await i18next
         },
         fallbackLng: 'en',
         preload: ['en', 'es'],
-        ns: ['translation'],
-        defaultNS: 'translation',
+        ns: ['common', 'recipes', 'inventory', 'notifications'],
+        defaultNS: 'common',
+        interpolation: {
+            escapeValue: false, // React already does escaping
+        },
         debug: process.env.NODE_ENV === 'development',
         saveMissing: true,
         missingKeyHandler: (lng, ns, key) => {

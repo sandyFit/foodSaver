@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const RecipeCard = ({ bgColor, id, name, image_url, description }) => {
+
+    const { t } = useTranslation();
 
     return (
         <article className='w-[24vw]'>
@@ -15,7 +18,7 @@ const RecipeCard = ({ bgColor, id, name, image_url, description }) => {
                     
                 <Link to={`/dashboard/recipes/${id}`}
                     className={`shadow-btn ${bgColor} text-center py-2 mt-3`}>
-                    Ver Receta
+                    {t('dashboard.recipeCard.btn')}
                 </Link>
                     
             </div>

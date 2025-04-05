@@ -1,57 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useRecipes } from '../context/RecipesContext';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import LoaderComponent from '../components/ui/LoaderComponent';
+import { useTranslation } from 'react-i18next';
 
 const RecipeDetail = () => {
-    
-    const [recipe, setRecipe] = useState({
-        name: '',
-        image_url: '',
-        description: '',
-        ingredients: [],
-        steps: [],
-        prep_time: 0,
-        cook_time: 0,
-        total_time: 0,
-        servings: 0,
-        category: '',
-        tags: []
-    });
-
-    const [loading, setLoading] = useState('')
     const { id } = useParams();
-    // console.log('ID recibido:', id);
-
-    const BASE_URL = 'http://localhost:5555/api';
-
-    const getRecipeById = async () => {
-        setLoading(true);
-
-        try {
-            const response = await axios.get(`${BASE_URL}/recipes/${id}`);
-            setRecipe(response.data)
-        } catch (error) {
-            // console.error('Error al obtener la receta.', error);
-            setError('No se pudo obtener la receta. Inténtalo nuevamente.');
-        } finally {
-            // console.error('Error en la petición');
-            setLoading(false);
-            toast.error('Error en la petición:');
-        }
-    }
+    const { getRecipeById, loading, recipe } = useRecipes();
+    const { t, i18n } = useTranslation(['common', 'recipes']);
 
     useEffect(() => {
-        getRecipeById();
-    }, [id]);
+        if (id) getRecipeById(id);
+    }, [id, getRecipeById]);
 
-    if (loading) {
-        return <p className="text-center text-lg font-semibold">Cargando receta...</p>;
-    }
+    if (!recipe) return <LoaderComponent isLoading={loading} />;
+
+    // Helper function to get translated content with fallback
+    const translateRecipe = (key, fallback) => {
+        return t(`recipes:${recipe.recipeId}.${key}`, { defaultValue: fallback });
+    };
 
     return (
         <div className="max-w-4xl mx-auto p-6">
             <h1 className="text-4xl font-semibold text-center text-gray-800 mb-4">
-                {recipe.name}
+                {translateRecipe('name', recipe.name)}
             </h1>
 
             <div className="flex gap-4">
@@ -64,58 +36,66 @@ const RecipeDetail = () => {
                 <div className="flex flex-col justify-end">
                     <div className="mb-6">
                         <p>
-                            <strong>Tiempo de preparación:</strong> {recipe.prep_time} minutos
+                            <strong>{t('common:prep_time')}:</strong> {recipe.prep_time} {t('common:minutes')}
                         </p>
                         <p>
-                            <strong>Tiempo de cocción:</strong> {recipe.cook_time} minutos
+                            <strong>{t('common:cook_time')}:</strong> {recipe.cook_time} {t('common:minutes')}
                         </p>
                         <p>
-                            <strong>Tiempo total:</strong> {recipe.total_time} minutos
+                            <strong>{t('common:total_time')}:</strong> {recipe.total_time} {t('common:minutes')}
                         </p>
                         <p>
-                            <strong>Porciones:</strong> {recipe.servings}
+                            <strong>{t('common:servings')}:</strong> {recipe.servings}
                         </p>
                     </div>
-                    <p className="text-lg text-gray-600 mb-6">{recipe.description}</p>
+                    <p className="text-lg text-gray-600 mb-6">
+                        {translateRecipe('description', recipe.description)}
+                    </p>
                 </div>
             </div>
 
             <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-gray-800">Ingredientes</h2>
-                {recipe.ingredients.length > 0 ? (
+                <h2 className="text-2xl font-semibold text-gray-800">
+                    {t('common:ingredients')}
+                </h2>
+                {recipe.ingredients?.length > 0 ? (
                     <ul className="list-disc pl-5 text-gray-700">
                         {recipe.ingredients.map((ingredient, index) => (
                             <li key={index} className="text-lg">
-                                <strong>{ingredient.name}:</strong> {ingredient.quantity}
+                                <strong>
+                                    {translateRecipe(`ingredients.${ingredient.ingredientId}`, ingredient.name)}:
+                                </strong> {ingredient.quantity}
                             </li>
                         ))}
                     </ul>
                 ) : (
-                    <p className="text-gray-500">No hay ingredientes disponibles.</p>
+                    <p className="text-gray-500">{t('recipes:noIngredients')}</p>
                 )}
             </div>
 
             <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-gray-800">Instrucciones</h2>
-                {recipe.steps.length > 0 ? (
+                <h2 className="text-2xl font-semibold text-gray-800">
+                    {t('common:instructions')}
+                </h2>
+                {recipe.steps?.length > 0 ? (
                     <ol className="list-decimal pl-5 text-gray-700">
                         {recipe.steps.map((step, index) => (
                             <li key={index} className="text-lg">
-                                {step}
+                                {translateRecipe(`steps.${index}`, step)}
                             </li>
                         ))}
                     </ol>
                 ) : (
-                    <p className="text-gray-500">No hay instrucciones disponibles.</p>
+                    <p className="text-gray-500">{t('recipes:noInstructions')}</p>
                 )}
             </div>
 
             <div className="mb-6">
                 <p>
-                    <strong>Categoría:</strong> {recipe.category}
+                    <strong>{t('common:category')}:</strong> {recipe.category}
                 </p>
                 <p>
-                    <strong>Etiquetas:</strong> {recipe.tags.join(", ")}
+                    <strong>{t('common:tags')}:</strong> {recipe.tags?.join(", ")}
                 </p>
             </div>
         </div>
