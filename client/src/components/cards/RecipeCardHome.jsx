@@ -3,36 +3,66 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 const RecipeCardHome = ({ bgColor, id, name, image_url, description }) => {
-    console.log('recipe ID from RecipeCardHome:', id);
+    const { t } = useTranslation(['common', 'recipes']);
 
-    const { t } = useTranslation();
+    // Match recipe ID to translation ID
+    const getTranslationKeyFromName = () => {
+        // This map connects database IDs to translation keys
+        const idToTranslationMap = {
+            '67f0ca2b27a49323d3db189d': 'tropical-coconut-punch',
+            '67f1636e35e62906f2f616e1': 'chicken-with-fresh-vegetables'
+        };
+
+        return idToTranslationMap[id] || null;
+    };
+
+    // Try to get description from translations if empty
+    const getDescription = () => {
+        // If description prop is not empty, use it
+        if (description && description.trim() !== '') {
+            return description;
+        }
+
+        // Try to find a matching translation key
+        const translationKey = getTranslationKeyFromName();
+        if (translationKey) {
+            return t(`recipes:recipes.${translationKey}.description`, '');
+        }
+
+        // Default fallback
+        return 'No description available';
+    };
 
     return (
-        <article className='w-[40vw] py-2 '>
-            <div className="flex flex-col p-6 border-2 border-stone-700 text-sm rounded-lg
-                relative">
+        <article className='w-[40vw] py-2'>
+            <div className="flex flex-col p-6 border-2 border-stone-700 text-sm rounded-lg relative">
                 <h4 className='font-[600] text-center'>{name}</h4>
-                <div className="flex f gap-4 items-end">
-                    <img src={image_url} alt={name} width={'180px'} />
+                <div className="flex gap-4 items-end">
+                    {image_url && (
+                        <img
+                            src={image_url}
+                            alt={name}
+                            className="w-[180px] h-auto object-cover"
+                        />
+                    )}
 
                     <div className="flex flex-col">
                         <p className='text-[.8rem]'>
-                            {description}
+                            {getDescription()}
                         </p>
                         {id && (
-                            <Link to={`/dashboard/recipes/${id}`}
-                                className={`shadow-btn ${bgColor} text-center py-2 mt-3`}>
+                            <Link
+                                to={`/dashboard/recipes/${id}`}
+                                className={`shadow-btn ${bgColor} text-center py-2 mt-3`}
+                            >
                                 {t('dashboard.recipeCard.btn')}
                             </Link>
                         )}
                     </div>
                 </div>
-
-
-
             </div>
         </article>
-    )
-}
+    );
+};
 
 export default RecipeCardHome;

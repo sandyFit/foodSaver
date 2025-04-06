@@ -42,13 +42,13 @@ const Home = () => {
 
                 // Ensure userId is a string
                 const userIdStr = userId.toString();
-                console.log('Fetching data with userId:', userIdStr);
+                //console.log('Fetching data with userId:', userIdStr);
 
                 await getExpiringMeals(userIdStr);
                 await getSuggestedRecipes(userIdStr);
 
             } catch (error) {
-                console.error('Data fetch error:', error);
+                //console.error('Data fetch error:', error);
                 setFetchError(error.message || t('errors.fetchFailed'));
             }
         };
@@ -112,8 +112,6 @@ const Home = () => {
             </div>
         );
     };
-
-        
 
     const renderExpiringItems = () => {
         if (fetchError) {
