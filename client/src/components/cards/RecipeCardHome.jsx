@@ -1,42 +1,67 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 const RecipeCardHome = ({ bgColor, id, name, image_url, description }) => {
-    const { t } = useTranslation(['common', 'recipes']);
+    const { t, i18n } = useTranslation(['common', 'recipes']);
+    const [translatedDescription, setTranslatedDescription] = useState('');
 
-    // Match recipe ID to translation ID
-    const getTranslationKeyFromName = () => {
-        // This map connects database IDs to translation keys
-        const idToTranslationMap = {
-            '67f0ca2b27a49323d3db189d': 'tropical-coconut-punch',
-            '67f1636e35e62906f2f616e1': 'chicken-with-fresh-vegetables'
+    useEffect(() => {
+        // Function to find the English recipe key first (to be used as the translation key)
+        const findRecipeKey = () => {
+            // Get the English resources, which have the original recipe keys
+            const enResources = i18n.getResourceBundle('en', 'recipes');
+            if (!enResources || !enResources.recipes) return null;
+
+            // First, try direct ID mapping if it exists (best case)
+            if (enResources.recipes[id]) return id;
+
+            // For each possible recipe in English resources
+            for (const key in enResources.recipes) {
+                const recipe = enResources.recipes[key];
+
+                // Skip non-object entries
+                if (!recipe || typeof recipe !== 'object') continue;
+
+                // If recipe name matches our name, use this key
+                if (recipe.name === name) {
+                    return key;
+                }
+            }
+            return null;
         };
 
-        return idToTranslationMap[id] || null;
-    };
+        // Only try to find translation if description is empty
+        if (!description || description.trim() === '') {
+            const recipeKey = findRecipeKey();
 
-    // Try to get description from translations if empty
+            if (recipeKey) {
+                // Use the found key to get description in current language
+                const desc = t(`recipes:recipes.${recipeKey}.description`, '');
+                setTranslatedDescription(desc);
+            } else {
+                setTranslatedDescription('');
+            }
+        }
+    }, [name, description, id, t, i18n]);
+
+    // Get the description to display
     const getDescription = () => {
-        // If description prop is not empty, use it
         if (description && description.trim() !== '') {
             return description;
         }
-
-        // Try to find a matching translation key
-        const translationKey = getTranslationKeyFromName();
-        if (translationKey) {
-            return t(`recipes:recipes.${translationKey}.description`, '');
+        if (translatedDescription && translatedDescription.trim() !== '') {
+            return translatedDescription;
         }
-
-        // Default fallback
-        return 'No description available';
+        return t('recipes:recipes.noDescription', 'No description available');
     };
+
+    const recipeName = name || t('recipes:recipes.noName', 'No name available');
 
     return (
         <article className='w-[40vw] py-2'>
             <div className="flex flex-col p-6 border-2 border-stone-700 text-sm rounded-lg relative">
-                <h4 className='font-[600] text-center'>{name}</h4>
+                <h4 className='font-[600] text-center'>{recipeName}</h4>
                 <div className="flex gap-4 items-end">
                     {image_url && (
                         <img

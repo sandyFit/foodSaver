@@ -253,6 +253,14 @@
             "itemsPerPage": "Items por página"
         }
     },
+
+    "expiring-products": {
+        "title": "Prodictos Caducados",
+        "noProducts": "No hay productos que caducan pronto",
+        "expired": "Expirado",
+        "daysLeft": "Expira en"
+    },
+
     "landing": {
         "navbar": {
             "globalImpact": "Impacto Global",

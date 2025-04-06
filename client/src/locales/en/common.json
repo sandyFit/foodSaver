@@ -256,6 +256,15 @@
         }
     
     },
+
+    "expiring-products": {
+        "title": "Expiring Products",
+        "noProducts": "No products expiring soon",
+        "noValidDate": "No valid expiration dates",
+        "expired": "Expired",
+        "daysLeft": "Expires on"
+    },
+
     "landing": {
         "navbar": {
             "globalImpact": "Global Impact",

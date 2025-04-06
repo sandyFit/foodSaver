@@ -85,9 +85,8 @@ const Home = () => {
             );
         }
 
-        const recipesArray = Array.isArray(suggestedRecipes)
-            ? suggestedRecipes
-            : suggestedRecipes.recipes || [];
+        // Updated this part to handle the actual response structure
+        const recipesArray = suggestedRecipes.recipes || [];
 
         if (recipesArray.length === 0) {
             return (
@@ -101,8 +100,8 @@ const Home = () => {
             <div className="grid grid-cols-1 gap-4">
                 {recipesArray.map((recipe, index) => (
                     <RecipeCardHome
-                        key={recipe.id || recipe._id || index}
-                        id={recipe.id || recipe._id}
+                        key={recipe.id || index}
+                        id={recipe.id}
                         name={recipe.name}
                         image_url={recipe.image_url}
                         description={recipe.description || ''}
