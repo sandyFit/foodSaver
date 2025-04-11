@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import Navbar from '../layouts/Navbar';
 import Hero from './Hero.jsx';
 import Stats from './Stats.jsx';
-import Features from './Features.jsx';
 import Footer from '../layouts/Footer.jsx';
 import How from './How.jsx';
 import { gsap } from 'gsap';
@@ -35,7 +33,8 @@ const Landing = () => {
     return (
         <main className="relative">
             <div ref={containerRef} className="overflow-hidden">
-                {[Hero, Stats, Features, How, Footer].map((Section, index) => (
+                <Hero />
+                {[Stats, How, Footer].map((Section, index) => (
                     <section
                         key={index}
                         ref={el => sectionRefs.current[index] = el}
@@ -48,6 +47,7 @@ const Landing = () => {
                         }}
                     >
                         <div className="relative z-10 h-full">
+                            
                             <Section />
                         </div>
                     </section>

@@ -66,11 +66,15 @@
     }
 
     h4 {
-        @apply text-xl font-semibold
+        @apply text-lg md:text-xl font-semibold md:font-bold 
+    }
+
+    h5 {
+        @apply text-base md:text-lg font-semibold 
     }
 
     input, select {
-        @apply p-2.5 border-2 border-stone-700 rounded-lg custom-shadow
+        @apply p-1.5 md:p-2.5 border-2 border-stone-700 rounded-lg custom-shadow
     }
 
 
@@ -102,7 +106,7 @@
     }
 
     .sidebar-text {
-        @apply text-[.68rem] hover:text-teal-300 uppercase
+        @apply text-[.68rem] font-medium uppercase
     }
 
     .custom-border {

@@ -59,10 +59,10 @@ const RecipeCardHome = ({ bgColor, id, name, image_url, description }) => {
     const recipeName = name || t('recipes:recipes.noName', 'No name available');
 
     return (
-        <article className='w-[40vw] py-2'>
-            <div className="flex flex-col p-6 border-2 border-stone-700 text-sm rounded-lg relative">
-                <h4 className='font-[600] text-center'>{recipeName}</h4>
-                <div className="flex gap-4 items-end">
+        <article className='w-full md:w-[40vw] py-2'>
+            <div className="flex flex-col p-6 border-2 border-stone-700 text-xs md:text-sm rounded-lg relative">
+                <h5 className='text-center mb-2'>{recipeName}</h5>
+                <div className="flex flex-col md:flex-row gap-4 items-center md:items-end">
                     {image_url && (
                         <img
                             src={image_url}

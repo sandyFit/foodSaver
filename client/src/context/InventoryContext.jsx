@@ -8,6 +8,8 @@ import {
     SET_ALL_INVENTORY_ITEMS,
     ADD_INVENTORY_ITEM,
     SET_INVENTORY_ITEM,
+    UPDATE_INVENTORY_ITEM,
+    DELETE_INVENTORY_ITEM,
     reducer
 } from '../utils/reducer';
 
@@ -71,12 +73,10 @@ export const InventoryProvider = ({ children }) => {
             const response = await apiClient.request('inventory', 'POST', formData);
             if (response.success) {
                 dispatch({ type: ADD_INVENTORY_ITEM, payload: response.item });
-                toast.success(t('inventory.success.itemCreated'));
             }
             return response;
         } catch (error) {
             dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error(t('inventory.errors.createFailed'));
             throw error;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
@@ -90,12 +90,10 @@ export const InventoryProvider = ({ children }) => {
             const response = await apiClient.request(`inventory/${id}`, 'PUT', updatedData);
             if (response.success) {
                 dispatch({ type: UPDATE_INVENTORY_ITEM, payload: response.item });
-                toast.success(t('inventory.success.itemUpdated'));
             }
             return response;
         } catch (error) {
             dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error(t('inventory.errors.updateFailed'));
             throw error;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });
@@ -109,12 +107,11 @@ export const InventoryProvider = ({ children }) => {
             const response = await apiClient.request(`inventory/${id}`, 'DELETE');
             if (response.success) {
                 dispatch({ type: DELETE_INVENTORY_ITEM, payload: id });
-                toast.success(t('inventory.success.itemDeleted'));
+            
             }
             return response;
         } catch (error) {
             dispatch({ type: SET_ERROR, payload: error.message });
-            toast.error(t('inventory.errors.deleteFailed'));
             throw error;
         } finally {
             dispatch({ type: SET_LOADING, payload: false });

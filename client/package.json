@@ -12,6 +12,7 @@
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "axios": "^1.7.9",
+    "classnames": "^2.5.1",
     "client": "file:",
     "date-fn": "^0.0.2",
     "date-fns": "^4.1.0",

@@ -291,7 +291,7 @@ export const getExpiringMeals = async (req, res) => {
         const expiringItems = await InventoryItem.find({
             user: objectIdUserId, // Use objectIdUserId
             expirationDate: { $lte: threshold }
-        }).select('name quantity expirationDate category');
+        }).select('itemName quantity expirationDate category');
 
         if (expiringItems.length === 0) {
             return res.status(200).json({
@@ -302,7 +302,7 @@ export const getExpiringMeals = async (req, res) => {
 
         // Find recipes using these ingredients
         const recipes = await Recipe.find({
-            'ingredients.name': { $in: expiringItems.map(item => item.name) }
+            'ingredients.name': { $in: expiringItems.map(item => item.itemName) }
         });
 
         res.status(200).json({

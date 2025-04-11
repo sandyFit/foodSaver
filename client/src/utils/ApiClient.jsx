@@ -146,15 +146,15 @@ class ApiClient {
         }
     }
 
-    logRequest(config) {
-        console.log('📝 Request:', {
-            method: config.method.toUpperCase(),
-            url: config.url,
-            fullUrl: config.baseURL + config.url, // Add this line
-            headers: config.headers,
-            data: config.data || 'No body',
-        });
-    }
+    // logRequest(config) {
+    //     console.log('📝 Request:', {
+    //         method: config.method.toUpperCase(),
+    //         url: config.url,
+    //         fullUrl: config.baseURL + config.url, 
+    //         headers: config.headers,
+    //         data: config.data || 'No body',
+    //     });
+    // }
 
     shouldRetry(error) {
         // Retry on network errors or 5xx server errors

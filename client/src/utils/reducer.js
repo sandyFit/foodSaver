@@ -1,6 +1,8 @@
 export const ADD_INVENTORY_ITEM = 'ADD_INVENTORY_ITEM';
 export const SET_ALL_INVENTORY_ITEMS = 'SET_ALL_INVENTORY_ITEMS';
 export const SET_INVENTORY_ITEM = 'SET_INVENTORY_ITEM';
+export const UPDATE_INVENTORY_ITEM = 'UPDATE_INVENTORY_ITEM';
+export const DELETE_INVENTORY_ITEM = 'DELETE_INVENTORY_ITEM';
 export const REGISTER_USER = 'REGISTER_USER';
 export const SET_ALL_USERS = 'SET_ALL_USERS';
 export const SET_USER = 'SET_USER';
@@ -25,9 +27,12 @@ export const reducer = (state, action) => {
                     : action.payload,
                 loading: false,
             };
-
         case SET_INVENTORY_ITEM:
             return { ...state, inventoryItem: action.payload };
+        case UPDATE_INVENTORY_ITEM:
+            return { ...state, allInventoryItems: state.allInventoryItems.map(item => item._id === action.payload._id ? action.payload : item) };
+        case DELETE_INVENTORY_ITEM:
+            return { ...state, allInventoryItems: state.allInventoryItems.filter(item => item._id !== action.payload) };
         case SET_EXPIRING_MEALS:
 
             return { ...state, expiringMeals: action.payload }; 

@@ -3,6 +3,7 @@ import MealCard from '../components/cards/MealCard';
 import { useRecipes } from '../context/RecipesContext';
 import RecipeCardHome from '../components/cards/RecipeCardHome';
 import { useTranslation } from 'react-i18next';
+import LoaderComponent from '../components/ui/LoaderComponent';
 
 const Home = () => {
     const {
@@ -134,7 +135,7 @@ const Home = () => {
                 {expiringMeals.expiringItems.map((item, index) => (
                     <li key={item._id || index}>
                         <MealCard
-                            itemName={item.name}
+                            itemName={item.itemName}
                             expirationDate={item.expirationDate}
                             category={item.category || 'General'}
                             bgColor={bgColors[index % bgColors.length]}
@@ -146,37 +147,31 @@ const Home = () => {
     };
 
     return (
-        <section className=''>
-            <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-2">
-                    <h4 className='font-bold text-lg'>
+        <section className='h-full w-full'>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+                <div className="flex flex-col gap-2 min-h-0">
+                    <h4 className=''>
                         {t('dashboard.expiringProducts')}
                     </h4>
-                    {loading ? (
-                        <div className="text-center">
-                            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4
-                                        rounded-full" role="status">
-                                <span className="sr-only">{t('common.loading')}</span>
-                            </div>
-                        </div>
-                    ) : (
-                        renderExpiringItems()
-                    )}
+                    <div className="mb-2">
+                        {loading ? (
+                            <LoaderComponent/>
+                        ) : (
+                            renderExpiringItems()
+                        )}
+                    </div>
                 </div>
-                <div className="flex flex-col">
-                    <h4 className='mb-2 font-bold text-lg'>
+                <div className="flex flex-col min-h-0">
+                    <h4 className='mb-1'>
                         {t('dashboard.suggestedRecipes')}
                     </h4>
-                    {loading ? (
-                        <div className="text-center">
-                            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4
-                                        rounded-full" role="status">
-                                <span className="sr-only">{t('common.loading')}</span>
-                            </div>
-                        </div>
-                    ) : (
-                        renderRecipeContent()
-                    )}
+                    <div className="">
+                        {loading ? (
+                            <LoaderComponent/>
+                        ) : (
+                            renderRecipeContent()
+                        )}
+                    </div>
                 </div>
             </div>
         </section>

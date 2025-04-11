@@ -152,7 +152,8 @@
                 "expirationDateRequired": "Please enter the expiration date",
                 "categoryRequired": "Please select a category",
                 "categoryInvalid": "Invalid category selected",
-                "userRequired": "User is required"
+                "userRequired": "User is required",
+                "itemCreated": "Product added successfully"
             },
             "categories": {
                 "diary": "Dairy",
@@ -262,7 +263,7 @@
         "noProducts": "No products expiring soon",
         "noValidDate": "No valid expiration dates",
         "expired": "Expired",
-        "daysLeft": "Expires on"
+        "daysLeft": "Expires in"
     },
 
     "landing": {
