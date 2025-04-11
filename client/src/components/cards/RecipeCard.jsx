@@ -5,15 +5,16 @@ import { useTranslation } from 'react-i18next';
 const RecipeCard = ({ bgColor, id, name, image_url, description }) => {
 
     const { t } = useTranslation(['common', 'recipes']);
+    const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
 
     return (
-        <article className='w-[24vw]'>
-            <div className="flex flex-col gap-2 p-8 border-2 border-stone-700 text-sm rounded-lg
-                relative">
-                <h4 className='font-[600] text-center'>{ name}</h4>
+        <article className='w-full md:w-[24vw]'>
+            <div className="flex flex-col gap-2 p-4 md:p-6 border-2 border-stone-700 text-xs md:text-sm 
+                rounded-lg relative">
+                <h4 className='font-condensed uppercase text-center'>{ name}</h4>
                 <img src={image_url} alt={name} width={'320px'} />
                 <p >
-                    {description}
+                    {isMobile ? description.slice(0, 90)+ '...' : description}
                 </p>
                     
                 <Link to={`/dashboard/recipes/${id}`}

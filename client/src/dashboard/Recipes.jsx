@@ -24,18 +24,19 @@ const Recipes = () => {
             console.error('Error fetching inventory:', error);
             toast.error(t('notifications.fetchError'));
         });
-    }, []); 
+    }, []);
 
 
     return (
-        <section className='w-full grid grid-cols-12'>
+        <section className='w-full pb-6'>
             <LoaderComponent isLoading={loading} />
 
-            <div className="flex col-span-12 justify-center items-center flex-wrap">
-                <h3 className="w-full text-center text-xl font-semibold mb-4">
+            <div className="flex flex-col items-center gap-4">
+                <h4 className="w-full text-center text-xl font-semibold">
                     {t('recipes.title')}
-                </h3>
-                <div className="flex flex-wrap gap-4">
+                </h4>
+
+                <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {allRecipes.map((recipe, index) => (
                         <RecipeCard
                             key={recipe._id}

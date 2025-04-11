@@ -101,22 +101,45 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
 
                 <h4 className="text-lg font-bold my-2">{t('inventory.editingItem')}</h4>
                 <form onSubmit={handleSubmit} className="flex w-full flex-col space-y-4 mb-6">
-                    <div className="flex space-x-4">
-                        <div className="flex flex-col flex-1">
-                            <label htmlFor="itemName" className="text-sm font-medium mb-1">{t('inventory.itemName')}</label>
-                            <input
-                                id="itemName"
-                                type="text"
-                                name="itemName"
-                                value={formData.itemName}
-                                onChange={handleChange}
-                                className="border p-2 rounded"
-                                required
-                            />
-                        </div>
+                    <div className="flex flex-col flex-1">
+                        <label htmlFor="itemName" className="text-sm font-medium mb-1">{t('inventory.itemName')}</label>
+                        <input
+                            id="itemName"
+                            type="text"
+                            name="itemName"
+                            value={formData.itemName}
+                            onChange={handleChange}
+                            className="border p-2 rounded"
+                            required
+                        />
+                    </div>
 
+                    <div className="flex flex-col md:flex-row gap-4">
+                        <div className="flex ">
+                            <div className="flex flex-col flex-1">
+                                <label htmlFor="category" className="text-sm font-medium mb-1">{t('inventory.category')}</label>
+                                <select
+                                    id="category"
+                                    name="category"
+                                    value={formData.category}
+                                    onChange={handleChange}
+                                    className="border p-2 rounded"
+                                    required
+                                >
+                                    <option value="diary">{t('inventory.categories.diary')}</option>
+                                    <option value="meat">{t('inventory.categories.meat')}</option>
+                                    <option value="vegetables">{t('inventory.categories.vegetables')}</option>
+                                    <option value="fruits">{t('inventory.categories.fruits')}</option>
+                                    <option value="grains">{t('inventory.categories.grains')}</option>
+                                    <option value="other">{t('inventory.categories.other')}</option>
+                                </select>
+                            </div>
+                        </div>
                         <div className="flex flex-col flex-1">
-                            <label htmlFor="expirationDate" className="text-sm font-medium mb-1">{t('inventory.expirationDate')}</label>
+                            <label htmlFor="expirationDate"
+                                className="text-sm font-medium mb-1">
+                                {t('inventory.expirationDate')}
+                            </label>
                             <input
                                 id="expirationDate"
                                 type="date"
@@ -127,45 +150,7 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
                                 required
                             />
                         </div>
-                    </div>
 
-                    <div className="flex space-x-4">
-                        <div className="flex flex-col flex-1">
-                            <label htmlFor="category" className="text-sm font-medium mb-1">
-                                {t('inventory.category')}
-                            </label>
-                            <select
-                                id="category"
-                                name="category"
-                                value={formData.category}
-                                onChange={handleChange}
-                                className="border p-2 rounded"
-                                required
-                            >
-                                <option value="diary">{t('inventory.categories.diary')}</option>
-                                <option value="meat">{t('inventory.categories.meat')}</option>
-                                <option value="vegetables">{t('inventory.categories.vegetables')}</option>
-                                <option value="fruits">{t('inventory.categories.fruits')}</option>
-                                <option value="grains">{t('inventory.categories.grains')}</option>
-                                <option value="other">{t('inventory.categories.other')}</option>
-                            </select>
-                        </div>
-
-                        <div className="flex flex-col w-1/4">
-                            <label htmlFor="quantity" className="text-sm font-medium mb-1">
-                                {t('inventory.quantity')}
-                            </label>
-                            <input
-                                id="quantity"
-                                type="number"
-                                name="quantity"
-                                value={formData.quantity}
-                                onChange={handleChange}
-                                min="1"
-                                className="border p-2 rounded"
-                                required
-                            />
-                        </div>
                     </div>
 
                     <div className="flex justify-end mt-4">

@@ -78,7 +78,7 @@ const Dashboard = () => {
             className={classNames(
                 current ? 'bg-zinc-900 text-white' :
                     'text-gray-300 hover:bg-zinc-800',
-                `rounded-md ${isMobile ? 'w-[4rem]' : 'w-[6.6rem]'} py-2 flex flex-col items-center sidebar-text `,
+                `rounded-md ${isMobile ? 'w-[3.8rem]' : 'w-[6.6rem]'} py-2 flex flex-col items-center sidebar-text `,
             )}
         >
             <span>{icon}</span>
@@ -203,7 +203,7 @@ const Dashboard = () => {
 
                 {/* main content - adjust height to account for footer */}
                 <main className='col-span-full md:col-start-2 row-start-2 px-4 md:px-12 
-                    pt-16 md:pt-0 overflow-y-auto h-[calc(100vh-8.6rem)] md:h-[calc(100vh-8rem)]'>
+                    pt-16 md:pt-0 overflow-y-auto h-[calc(100vh-8.6rem)] md:h-[calc(100vh-12.5rem)]'>
                     <Outlet />
                 </main>
 

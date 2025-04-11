@@ -52,8 +52,8 @@ export const createItem = async (req, res, next) => {
         }
 
         // Validate required fields
-        const { itemName, quantity, expirationDate, category } = req.body;
-        if (!itemName || !quantity || !expirationDate || !category) {
+        const { itemName, expirationDate, category } = req.body;
+        if (!itemName || !expirationDate || !category) {
             return res.status(400).json({
                 success: false,
                 message: 'validations.required'

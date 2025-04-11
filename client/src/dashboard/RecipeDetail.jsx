@@ -31,19 +31,19 @@ const RecipeDetail = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-4xl font-semibold text-center text-gray-800 mb-4">
+        <div className="md:max-w-4xl mx-auto pt-2 md:p-6 overflow-y-auto">
+            <h2 className="md:text-center text-gray-800 uppercase font-condensed mb-4">
                 {translateRecipe('name', recipe.name)}
-            </h1>
+            </h2>
 
-            <div className="flex gap-4">
+            <div className="flex flex-col md:flex-row gap-0 md:gap-4">
                 <img
                     src={recipe.image_url}
                     alt={recipe.name}
-                    className="w-1/2 object-cover rounded-lg mb-6"
+                    className="md:w-1/2 object-cover rounded-lg mb-6"
                 />
 
-                <div className="flex flex-col justify-end">
+                <div className="flex flex-col justify-end text-sm md:text-lg">
                     <div className="mb-6">
                         <p className='flex gap-2'>
                             <strong>{translate('recipes.ui.prep_time', 'Prep Time')}:</strong>
@@ -62,20 +62,20 @@ const RecipeDetail = () => {
                             {recipe.servings}
                         </p>
                     </div>
-                    <p className="text-lg text-gray-600 mb-6">
+                    <p className=" text-gray-600 mb-6">
                         {translateRecipe('description', recipe.description)}
                     </p>
                 </div>
             </div>
 
-            <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-gray-800">
+            <div className="mb-6 text-sm md:text-lg">
+                <h3 className="uppercase font-condensed text-gray-800">
                     {translate('recipes.ui.ingredients', 'Ingredients')}
-                </h2>
+                </h3>
                 {recipe.ingredients?.length > 0 ? (
                     <ul className="list-disc pl-5 text-gray-700">
                         {recipe.ingredients.map((ingredient, index) => (
-                            <li key={index} className="text-lg">
+                            <li key={index}>
                                 <strong>
                                     {translate(
                                         `recipes.${recipe.recipeId}.ingredients.${ingredient.ingredientId}`,
@@ -92,14 +92,14 @@ const RecipeDetail = () => {
                 )}
             </div>
 
-            <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-gray-800">
+            <div className="mb-6 text-sm md:text-lg">
+                <h3 className="uppercase font-condensed text-gray-800">
                     {translate('recipes.ui.steps', 'Steps')}
-                </h2>
+                </h3>
                 {recipe.steps?.length > 0 ? (
                     <ol className="list-decimal pl-5 text-gray-700">
                         {recipe.steps.map((step, index) => (
-                            <li key={index} className="text-lg">
+                            <li key={index}>
                                 {translateStep(index, step)}
                             </li>
                         ))}
@@ -111,7 +111,7 @@ const RecipeDetail = () => {
                 )}
             </div>
 
-            <div className="mb-6">
+            <div className="text-xs md:text-sm mb-6">
                 <p className='flex gap-2'>
                     <strong>{translate('recipes.ui.category', 'Category')}:</strong>
                     {recipe.category}

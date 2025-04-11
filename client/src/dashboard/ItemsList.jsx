@@ -39,7 +39,6 @@ const ItemsList = () => {
 
     const {
         loading,
-        error,
         allInventoryItems,
         getAllInventoryItems,
         deleteInventoryItem
@@ -105,10 +104,10 @@ const ItemsList = () => {
     return (
         <RenderTracker componentName="ItemsList">
             <section>
-                <div className="w-full col-span-12 flex flex-col items-center ">
+                <div className="w-full flex flex-col  items-center ">
                     <AddItemButton />
 
-                    <h4 className="text-lg font-bold mt-8 mb-3">{t('inventory.title')}</h4>
+                    <h4 className="mt-8 mb-3">{t('inventory.title')}</h4>
 
                     <MealsTable
                         items={paginatedItems || []}
