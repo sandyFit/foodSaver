@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 const RecipeCardHome = ({ bgColor, id, name, image_url, description }) => {
     const { t, i18n } = useTranslation(['common', 'recipes']);
     const [translatedDescription, setTranslatedDescription] = useState('');
+    const [isDesktop, setIsDesktop] = React.useState(window.innerWidth > 1300);
 
     useEffect(() => {
         // Function to find the English recipe key first (to be used as the translation key)
@@ -45,33 +46,56 @@ const RecipeCardHome = ({ bgColor, id, name, image_url, description }) => {
         }
     }, [name, description, id, t, i18n]);
 
-    // Get the description to display
+    // Add window resize listener
+    useEffect(() => {
+        const handleResize = () => {
+            setIsDesktop(window.innerWidth >= 1300);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Get the description to display with character limit for mobile only
     const getDescription = () => {
+        let desc;
         if (description && description.trim() !== '') {
-            return description;
+            desc = description;
+        } else if (translatedDescription && translatedDescription.trim() !== '') {
+            desc = translatedDescription;
+        } else {
+            desc = t('recipes:recipes.noDescription', 'No description available');
         }
-        if (translatedDescription && translatedDescription.trim() !== '') {
-            return translatedDescription;
+
+        // Only limit characters on mobile screens
+        if (!isDesktop) {
+            return desc.length > 100 ? `${desc.substring(0, 97)}...` : desc;
         }
-        return t('recipes:recipes.noDescription', 'No description available');
+
+        // Return full description for desktop
+        return desc;
     };
 
     const recipeName = name || t('recipes:recipes.noName', 'No name available');
 
     return (
-        <article className='w-full md:w-[40vw] py-2'>
-            <div className="flex flex-col p-6 border-2 border-stone-700 text-xs md:text-sm rounded-lg relative">
-                <h5 className='text-center mb-2'>{recipeName}</h5>
-                <div className="flex flex-col md:flex-row gap-4 items-center md:items-end">
+        <article className='w-full  py-2'>
+            <div className="flex flex-col p-6 border-2 border-stone-700 text-xs md:text-sm 
+                rounded-lg relative">
+                <h5 className='uppercase font-condensed mb-2'>
+                    {recipeName}
+                </h5>
+                <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-4 items-center 
+                    lg:items-end">
                     {image_url && (
                         <img
                             src={image_url}
                             alt={name}
-                            className="w-[180px] h-auto object-cover"
+                            className="w-[220px] lg:w-[180px] h-auto object-cover"
                         />
                     )}
 
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-2">
                         <p className='text-[.8rem]'>
                             {getDescription()}
                         </p>

@@ -49,20 +49,20 @@ const MealCard = ({ itemName, expirationDate, category, bgColor }) => {
     };
 
     return (
-        <article className={`w-full max-w-lg py-2 px-4 md:px-6 border-2 border-stone-900 rounded-lg 
+        <article className={`w-full md:w-[80%] py-2 px-4 md:px-6 border-2 border-stone-900 rounded-lg 
             ${bgColor} bg-opacity-60`}>
             <div className="w-full flex justify-between items-center py-1">
                 <div className="flex flex-col min-w-0 ">
-                    <p className="text-xs md:text-sm font-medium text-gray-900 truncate">
+                    <p className="text-xs lg:text-sm font-medium text-gray-900 truncate">
                         {itemName} 
                     </p>
-                    <p className="text-xs md:text-sm text-gray-500 truncate">
+                    <p className="text-xs lg:text-sm text-gray-500 truncate">
                         {expirationStatus()}
                     </p>
                 </div>
                 <div className="flex flex-col items-center min-w-0 ">
-                    {selectedCategory ? selectedCategory.icon : <MdOutlineKitchen />}
-                    <p className="text-xs md:text-sm text-gray-500 truncate">
+                    {selectedCategory ? selectedCategory.icon :  <MdOutlineKitchen />}
+                    <p className="text-xs lg:text-sm text-gray-500 truncate">
                         {translatedCategory}
                     </p>
                 </div>

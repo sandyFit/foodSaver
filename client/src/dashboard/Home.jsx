@@ -131,23 +131,22 @@ const Home = () => {
         }
 
         return (
-            <ul className='list-none flex flex-col gap-2'>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-2 overflow-y-auto">
                 {expiringMeals.expiringItems.map((item, index) => (
-                    <li key={item._id || index}>
-                        <MealCard
-                            itemName={item.itemName}
-                            expirationDate={item.expirationDate}
-                            category={item.category || 'General'}
-                            bgColor={bgColors[index % bgColors.length]}
-                        />
-                    </li>
+                    <MealCard
+                        key={item._id || index}
+                        itemName={item.itemName}
+                        expirationDate={item.expirationDate}
+                        category={item.category || 'General'}
+                        bgColor={bgColors[index % bgColors.length]}
+                    />
                 ))}
-            </ul>
+            </div>
         );
     };
 
     return (
-        <section className='h-full w-full'>
+        <section className='h-full w-full lg:pt-4'>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
                 <div className="flex flex-col gap-2 min-h-0">
                     <h4 className=''>
@@ -155,7 +154,7 @@ const Home = () => {
                     </h4>
                     <div className="mb-2">
                         {loading ? (
-                            <LoaderComponent/>
+                            <LoaderComponent />
                         ) : (
                             renderExpiringItems()
                         )}
@@ -167,7 +166,7 @@ const Home = () => {
                     </h4>
                     <div className="">
                         {loading ? (
-                            <LoaderComponent/>
+                            <LoaderComponent />
                         ) : (
                             renderRecipeContent()
                         )}

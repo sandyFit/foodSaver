@@ -203,7 +203,8 @@ const Dashboard = () => {
 
                 {/* main content - adjust height to account for footer */}
                 <main className='col-span-full md:col-start-2 row-start-2 px-4 md:px-12 
-                    pt-16 md:pt-0 overflow-y-auto h-[calc(100vh-8.6rem)] md:h-[calc(100vh-12.5rem)]'>
+                    pt-16 md:pt-0 overflow-y-auto h-[calc(100vh-8.6rem)] md:h-[calc(100vh-10rem)]
+                    lg:h-[calc(100vh-12.5rem)]'>
                     <Outlet />
                 </main>
 
