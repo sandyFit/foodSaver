@@ -78,7 +78,8 @@ const Dashboard = () => {
             className={classNames(
                 current ? 'bg-zinc-900 text-white' :
                     'text-gray-300 hover:bg-zinc-800',
-                `rounded-md ${isMobile ? 'w-[3.8rem]' : 'w-[6.6rem]'} py-2 flex flex-col items-center sidebar-text `,
+                `rounded-md w-[3.8rem] sm:w-[10rem] md:w-[4.8rem] 3xl:w-[8rem] 
+                py-2 flex flex-col items-center sidebar-text `,
             )}
         >
             <span>{icon}</span>
@@ -105,9 +106,10 @@ const Dashboard = () => {
     return (
         <section className="w-full h-screen flex justify-center items-center p-2 md:p-4 xl:p-8 
             bg-stone-200 md:overflow-y-hidden">
-            <div className="w-full h-full grid grid-cols-1 md:grid-cols-6 xl:grid-cols-12 
+            <div className="w-full h-full grid grid-cols-1 md:grid-cols-8 lg:grid-cols-12 
                 grid-rows-[auto_1fr_auto] md:grid-rows-6 rounded-2xl bg-stone-50 border-2
                 border-stone-700">
+                
                 {/* Sidebar */}
                 <aside className='hidden md:flex flex-col justify-between items-center w-full relative  
                     col-span-1 col-start-1 bg-tahiti-700 row-span-6 rounded-s-2xl 
@@ -137,7 +139,7 @@ const Dashboard = () => {
 
                 {/* header */}
                 <header className='w-full h-16 md:h-20 flex flex-col md:flex-row justify-between 
-                    bg-tahiti-200 items-center col-span-full md:col-start-2 z-50
+                    bg-tahiti-200 items-center col-span-full md:col-start-2 z-10
                     border-b-2 border-stone-700 rounded-t-2xl md:rounded-tr-2xl'>
 
                     {/* Logo for mobile only - positioned absolutely */}
@@ -149,7 +151,7 @@ const Dashboard = () => {
                         />
                     </div>
 
-                    {/* Search Bar - Left on desktop, top on mobile */}
+                    {/* Search Bar - Left on desktop, down on mobile */}
                     <div className="w-full md:w-auto flex justify-center md:justify-start items-center 
                         p-4 md:pl-8 order-2 md:order-1">
                         <div className="relative w-full md:w-64">
@@ -165,7 +167,7 @@ const Dashboard = () => {
                     {/* User Info and Notifications - Right aligned */}
                     <div className="w-full md:w-auto flex justify-end items-center gap-2 md:gap-6 
                         p-4 md:pr-8 order-1 md:order-2">
-                        <div className="flex items-center gap-2 md:gap-8">
+                        <div className="flex items-center gap-2 md:gap-4">
                             {/* Notifications */}
                             <div className="frame relative bg-stone-50 w-8 md:w-12 h-8 md:h-12 
                                 flex justify-center items-center rounded-full border-2 

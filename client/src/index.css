@@ -91,19 +91,19 @@
 
     .table-th {
         @apply px-3 py-2 bg-blue-100 border-b-2 border-stone-700 text-left text-xs md:text-sm 
-            font-semibold uppercase tracking-wider md:pl-12;
-        min-width: 140px;
+            font-semibold uppercase tracking-wider xl:pl-12;
+        /* min-width: 220px; */
     }
 
     .table-td {
-        @apply px-3 py-2 md:pl-12 border-b border-stone-500 text-left text-xs md:text-sm align-top;
-        min-width: 140px;
+        @apply px-3 py-2 xl:pl-12 border-b border-stone-500 text-left text-xs md:text-sm align-top;
+        /* min-width: 220px; */
         word-break: break-word;
     }
 
     .table-btn {
-        @apply px-2 py-1 w-full md:w-[30%] text-center border-2 rounded-md uppercase font-[500] text-[.8rem] 
-            transition-colors;
+        @apply  text-center border-2 rounded-md uppercase font-[500] text-[.8rem] w-[60%] sm:w-[70%] 
+            md:w-[50%] lg:w-[40%] xl:w-[30%] transition-colors;
     }
 
     .shadow-btn {

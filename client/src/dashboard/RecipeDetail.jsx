@@ -43,7 +43,7 @@ const RecipeDetail = () => {
                     className="md:w-1/2 object-cover rounded-lg mb-6"
                 />
 
-                <div className="flex flex-col justify-end text-sm md:text-lg">
+                <div className="flex flex-col justify-end text-sm md:text-base xl:text-lg">
                     <div className="mb-6">
                         <p className='flex gap-2'>
                             <strong>{translate('recipes.ui.prep_time', 'Prep Time')}:</strong>
@@ -68,7 +68,7 @@ const RecipeDetail = () => {
                 </div>
             </div>
 
-            <div className="mb-6 text-sm md:text-lg">
+            <div className="mb-6 text-sm md:text-base xl:text-lg">
                 <h3 className="uppercase font-condensed text-gray-800">
                     {translate('recipes.ui.ingredients', 'Ingredients')}
                 </h3>
@@ -92,7 +92,7 @@ const RecipeDetail = () => {
                 )}
             </div>
 
-            <div className="mb-6 text-sm md:text-lg">
+            <div className="mb-6 text-sm md:text-base xl:text-lg">
                 <h3 className="uppercase font-condensed text-gray-800">
                     {translate('recipes.ui.steps', 'Steps')}
                 </h3>

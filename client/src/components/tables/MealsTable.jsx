@@ -74,10 +74,10 @@ const MealsTable = React.memo(({
                 <table className="table-base">
                     <thead>
                         <tr>
-                            <th className="table-th w-[25%]">{t('table.product')}</th>
-                            <th className="table-th w-[25%]">{t('table.expiresIn')}</th>
-                            <th className="table-th w-[25%]">{t('table.category')}</th>
-                            <th className="table-th w-[25%]">{t('table.actions')}</th>
+                            <th className="table-th min-w-[140px]">{t('table.product')}</th>
+                            <th className="table-th min-w-[140px]">{t('table.expiresIn')}</th>
+                            <th className="table-th min-w-[120px]">{t('table.category')}</th>
+                            <th className="table-th min-w-[220px]">{t('table.actions')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -103,7 +103,7 @@ const MealsTable = React.memo(({
                                                     aria-label={`Edit ${item.itemName}`}
                                                     onClick={() => onEditBtn(item)}
                                                     className="table-btn bg-yellow-100 hover:bg-yellow-200 
-                                                        border-yellow-600 text-yellow-600"
+                                                        border-yellow-600 text-yellow-600 px-6 lg:px-4 py-1"
                                                 >
                                                     {t('common.edit')}
                                                 </button>
@@ -111,7 +111,7 @@ const MealsTable = React.memo(({
                                                     aria-label={`Delete ${item.itemName}`}
                                                     onClick={() => onDeleteBtn(item._id)}
                                                     className={`table-btn bg-red-100 hover:bg-red-200 
-                                                        border-red-600 text-red-600 
+                                                        border-red-600 text-red-600 px-4 lg:px-4 py-1
                                                         ${isDeleting ? 'opacity-40' : ''}`}
                                                     disabled={isDeleting}
                                                 >

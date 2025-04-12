@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next';
 const RecipeCard = ({ bgColor, id, name, image_url, description }) => {
 
     const { t } = useTranslation(['common', 'recipes']);
-    const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
+    const [isMobile, setIsMobile] = React.useState(window.innerWidth < 580);
 
     return (
-        <article className='w-full md:w-[24vw]'>
+        <article className='w-full '>
             <div className="flex flex-col gap-2 p-4 md:p-6 border-2 border-stone-700 text-xs md:text-sm 
                 rounded-lg relative">
                 <h4 className='font-condensed uppercase text-center'>{ name}</h4>

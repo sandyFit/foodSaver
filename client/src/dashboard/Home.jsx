@@ -146,7 +146,7 @@ const Home = () => {
     };
 
     return (
-        <section className='h-full w-full lg:pt-4'>
+        <section className='h-full w-full lg:pt-4 2xl:pt-0'>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
                 <div className="flex flex-col gap-2 min-h-0">
                     <h4 className=''>

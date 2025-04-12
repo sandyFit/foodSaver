@@ -20,7 +20,7 @@ const AddMealForm = React.memo(() => {
 
     return (
         <article className='w-full border-b-2 border-zinc-950 flex justify-center md:justify-end 
-            pt-4 md:pt-0 pb-8'>
+            pt-4 md:pt-0 xl:pt-4 3xl:pt-0 pb-8'>
             <button className='shadow-btn px-4 py-2 bg-purple-200 rounded md:mr-2 flex items-center'
                 onClick={openModal}>
                 <svg
