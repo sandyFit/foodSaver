@@ -65,7 +65,7 @@ Here's what’s cooking next:
 ### Frontend
 
 * React.js
-* HTML, CSS, Bootstrap
+* HTML, TailwindCss
 * Context API for managing global state
 
 ### Backend
