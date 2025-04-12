@@ -1,10 +1,20 @@
 # FoodSaver
 
-**FoodSaver** is a smart, multi-user food inventory app designed to help reduce food waste. Users can track their personal pantry items, receive alerts before food expires, and get delicious recipe suggestions to use up ingredients — all while making sustainable and budget-friendly choices.
 
-![FoodSaver Dashboard Screenshot](client/public/screenshot-dashboard.jpg) 
+**FoodSaver** is a smart, multi-user food inventory app designed to help reduce food waste. Users can manage their personal pantry, get alerts when items are nearing expiration, and discover tasty recipe ideas to make the most of what they have — all while making sustainable and budget-friendly choices.
 
-*A glimpse of the FoodSaver dashboard, where you can manage your inventory, track expiration dates, and discover recipes.*
+---
+
+![FoodSaver Landing Page](client/public/gifs/landing.gif)  
+*A glimpse of the FoodSaver landing page, featuring a clean interface and Spanish translation.*
+
+---
+
+![FoodSaver Dashboard in Action](client/public/gifs/panel.gif)  
+*Explore the FoodSaver dashboard: track your inventory, spot items about to expire, and turn ingredients into meals.*
+
+---
+
 
 ## Key Features (So far)
 
@@ -18,14 +28,18 @@
 
 * **Recipe Suggestions** – Discover smart ways to use what you’ve got before it goes bad.
 
-## How FoodSaver Works
+---
 
-FoodSaver combines a user-friendly interface with powerful backend functionality and AI to help you manage your food effectively.
+## Roadmap
+Here's what’s cooking next:
 
-1. **Add your food items:** Easily input your groceries into the system, specifying name, quantity, expiration date, and storage location.
-2. **Track expiration dates:** FoodSaver automatically monitors expiration dates and provides timely notifications to prevent food spoilage.
-3. **Get recipe recommendations:** The system suggests delicious recipes tailored to your close to expire ingredients.
-4. **Reduce waste and save money:** By using what you have and minimizing spoilage, you'll reduce food waste and save money on your grocery bills.
+* **Third-Party Sign-In (Google)** – For faster, frictionless access.
+
+* **Admin Features** – Manage users, view system analytics, and oversee app data.
+
+* **Custom User Profiles** – Let users personalize their experience and set preferences.
+
+---
 
 ## Project Structure
 
@@ -44,6 +58,8 @@ FoodSaver combines a user-friendly interface with powerful backend functionality
 * **CRUD Operations:**  Supports creating, reading, updating, and deleting data.
 * **AI Integration:**  Utilizes AI algorithms to generate personalized recipe recommendations.
 
+---
+
 ## Tech Stack
 
 ### Frontend
@@ -57,6 +73,8 @@ FoodSaver combines a user-friendly interface with powerful backend functionality
 * Node.js with Express
 * Swagger for API documentation
 * MongoDB for database management
+
+---
 
 ## Getting Started
 
