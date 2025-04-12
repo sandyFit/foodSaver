@@ -6,6 +6,8 @@ export const DELETE_INVENTORY_ITEM = 'DELETE_INVENTORY_ITEM';
 export const REGISTER_USER = 'REGISTER_USER';
 export const SET_ALL_USERS = 'SET_ALL_USERS';
 export const SET_USER = 'SET_USER';
+export const SET_PROFILE_USER = 'SET_PROFILE_USER';
+export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
 export const SET_ALL_RECIPES = 'SET_ALL_RECIPES';
 export const SET_RECIPE = 'SET_RECIPE';
 export const SET_SUGGESTED_RECIPES = 'SET_SUGGESTED_RECIPES';
@@ -50,6 +52,10 @@ export const reducer = (state, action) => {
                 loading: false,
                 error: null
             };
+        case SET_PROFILE_USER:
+            return { ...state, profileUser: action.payload };
+        case UPDATE_USER_PROFILE:
+            return { ...state, allUsers: state.allUsers.map(user => user._id === action.payload._id ? action.payload : user) };
             
         case SET_ALL_RECIPES:
             return { ...state, allRecipes: action.payload };

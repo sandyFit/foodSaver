@@ -60,14 +60,14 @@ const Dashboard = () => {
             { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: t('common.home'), current: location.pathname === '/dashboard' },
             { to: '/dashboard/meals-users', icon: <CiViewList className='text-[1.3rem]' />, label: t('common.products'), current: location.pathname === '/dashboard/meals-users' },
             { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: t('common.recipes'), current: location.pathname === '/dashboard/recipes' },
-            { to: '/dashboard/config-users', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: t('common.settings'), current: location.pathname === '/dashboard/config-users' },
+            { to: `/dashboard/users/profile/${activeUser?.id}`, icon: <IoSettingsOutline className='text-[1.3rem]' />, label: t('common.settings'), current: location.pathname.includes('/dashboard/users/profile') },
         ] : [
             { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: t('common.home'), current: location.pathname === '/dashboard' },
             { to: '/dashboard/meals-users', icon: <CiViewList className='text-[1.3rem]' />, label: t('common.products'), current: location.pathname === '/dashboard/meals-users' },
             { to: '/dashboard/recipes', icon: <PiNotebookLight className='text-[1.3rem]' />, label: t('common.recipes'), current: location.pathname === '/dashboard/recipes' },
             { to: '/dashboard/users', icon: <TbUsers className='text-[1.3rem]' />, label: t('common.users'), current: location.pathname === '/dashboard/users' },
             { to: '/dashboard/config-admin', icon: <IoSettingsOutline className='text-[1.3rem]' />, label: t('common.settings'), current: location.pathname === '/dashboard/config-admin' },
-        ], [activeUser?.role, t, location.pathname]);
+        ], [activeUser?.role, activeUser?.id, t, location.pathname]);
 
 
 
@@ -109,7 +109,7 @@ const Dashboard = () => {
             <div className="w-full h-full grid grid-cols-1 md:grid-cols-8 lg:grid-cols-12 
                 grid-rows-[auto_1fr_auto] md:grid-rows-6 rounded-2xl bg-stone-50 border-2
                 border-stone-700">
-                
+
                 {/* Sidebar */}
                 <aside className='hidden md:flex flex-col justify-between items-center w-full relative  
                     col-span-1 col-start-1 bg-tahiti-700 row-span-6 rounded-s-2xl 

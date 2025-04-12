@@ -31,7 +31,7 @@ const RecipeDetail = () => {
     };
 
     return (
-        <div className="md:max-w-4xl mx-auto pt-2 md:p-6 overflow-y-auto">
+        <section className="md:max-w-4xl mx-auto pt-2 md:p-6 overflow-y-auto">
             <h2 className="md:text-center text-gray-800 uppercase font-condensed mb-4">
                 {translateRecipe('name', recipe.name)}
             </h2>
@@ -121,7 +121,7 @@ const RecipeDetail = () => {
                     {recipe.tags?.join(", ")}
                 </p>
             </div>
-        </div>
+        </section>
     );
 };
 

@@ -1,18 +1,22 @@
 # FoodSaver
 
-**FoodSaver** is your ultimate tool for managing your household food inventory, making smarter meal choices, and reducing waste. Our platform empowers you to take control of your pantry, making environmentally friendly and cost-effective decisions.
+**FoodSaver** is a smart, multi-user food inventory app designed to help reduce food waste. Users can track their personal pantry items, receive alerts before food expires, and get delicious recipe suggestions to use up ingredients — all while making sustainable and budget-friendly choices.
 
 ![FoodSaver Dashboard Screenshot](client/public/screenshot-dashboard.jpg) 
 
 *A glimpse of the FoodSaver dashboard, where you can manage your inventory, track expiration dates, and discover recipes.*
 
-## Key Features
+## Key Features (So far)
 
-* **Effortless Inventory Management:**  Easily add, edit, and categorize your food items. Keep track of quantities and storage locations.
-* **Automatic Expiration Tracking:** Never let food go to waste again! FoodSaver automatically monitors expiration dates and alerts you when items are nearing their expiration.
-* **AI-Powered Recipe Suggestions:** Get personalized recipe recommendations based on the ingredients you have on hand, with a focus on using items close to expiring.
-* **Reduce Food Waste & Save Money:** Make informed meal choices, minimize waste, and save money on groceries.
-* **Leftover Transformation:**  Turn last night's dinner into a brand new meal with creative recipe ideas for using leftovers.
+* **Personalized Inventories** – Each user gets their own pantry space to track items.
+
+* **Authentication System** – Full user auth flow including sign up, login, and token protection.
+
+* **Inventory CRUD** – Add, edit, delete, and view your own food items.
+
+* **Expiration Alerts** – Get notified about items nearing expiration.
+
+* **Recipe Suggestions** – Discover smart ways to use what you’ve got before it goes bad.
 
 ## How FoodSaver Works
 
@@ -20,7 +24,7 @@ FoodSaver combines a user-friendly interface with powerful backend functionality
 
 1. **Add your food items:** Easily input your groceries into the system, specifying name, quantity, expiration date, and storage location.
 2. **Track expiration dates:** FoodSaver automatically monitors expiration dates and provides timely notifications to prevent food spoilage.
-3. **Get recipe recommendations:** Our AI algorithm analyzes your inventory and suggests delicious recipes tailored to your available ingredients.
+3. **Get recipe recommendations:** The system suggests delicious recipes tailored to your close to expire ingredients.
 4. **Reduce waste and save money:** By using what you have and minimizing spoilage, you'll reduce food waste and save money on your grocery bills.
 
 ## Project Structure

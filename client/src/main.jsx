@@ -18,6 +18,7 @@ import Users from './dashboard/Users.jsx';
 import PrivateRoute from './dashboard/PrivateRoute.jsx';
 import ItemsList from './dashboard/ItemsList.jsx';
 import GlobalLoader from './context/GlobalLoader.jsx';
+import UserProfile from './dashboard/UserProfile.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -30,7 +31,7 @@ createRoot(document.getElementById('root')).render(
             <Routes>
               {/* Public routes */}
               <Route path="/" element={<Landing />} />
-              
+
 
               {/* Protected routes */}
               <Route path="/dashboard" element={
@@ -43,6 +44,9 @@ createRoot(document.getElementById('root')).render(
                 <Route path="recipes" element={<Recipes />} />
                 <Route path="recipes/:id" element={<RecipeDetail />} />
                 <Route path="users" element={<Users />} />
+                {/* Update the profile route to make the ID parameter optional */}
+                <Route path="users/profile" element={<UserProfile />} />
+                <Route path="users/profile/:id" element={<UserProfile />} />
               </Route>
             </Routes>
           </RecipesProvider>
