@@ -14,7 +14,7 @@ const ModalBackdrop = memo(({ children, onClose }) => {
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center"
             onClick={onClose}>
-            <div className="bg-zinc-100 py-8 px-12 rounded-lg shadow-xl w-[40vw]  border-2 
+            <div className="w-11/12 max-w-2xl bg-zinc-100 py-8 px-12 rounded-lg shadow-xl border-2 
                 border-white"
                 onClick={e => e.stopPropagation()}>
                 {children}
@@ -226,13 +226,13 @@ const RegisterModal = memo(({ onClose, onSwitchToLogin }) => {
                             </div>
                         </div>
 
-                        <p className='text-right text-black'>
+                        <p className='text-sm lg:text-base text-right text-black'>
                             {t('auth.haveAccount')}
                             <button
                                 type="button"
                                 onClick={onSwitchToLogin}                               
                             >
-                                <span className='text-tahiti-700 hover:text-blue-700 underline 
+                                <span className='text-sm lg:text-base text-tahiti-700 hover:text-blue-700 underline 
                                     underline-offset-4 ml-2'>
                                     {t('auth.loginHere')}
                                 </span>

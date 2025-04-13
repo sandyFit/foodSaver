@@ -24,24 +24,14 @@ const Navbar = () => {
         setAuthModalOpen(true);
     };
 
-    const openRegisterModal = () => {
-        setAuthModalMode('register');
-        setAuthModalOpen(true);
-    };
-
     const closeAuthModal = () => {
         setAuthModalOpen(false);
     };
 
     return (
         <nav className='w-full h-16 lg:h-24 bg-tahiti-700 absolute'>
-            <div className="flex justify-between items-center px-4 lg:px-16 relative">
-                <div className="flex justify-center items-center bg-stone-900 w-32 h-16 lg:w-60 lg:h-24
-                    px-3">
-                    <a href="/" className="h-6 lg:h-10 bg-stone-900 z-20 inline-block">
-                        <img src="/img/FoodSaver_lignt.png" alt="FoodSaver Logo" />
-                    </a>
-                </div>
+            <div className="flex justify-between items-center px-4 sm:px-10 md:px-12 lg:px-16 relative">
+                <Logo />
 
                 <div className='hidden lg:flex justify-center items-center border-2 rounded-lg 
                     border-white'>
@@ -56,11 +46,7 @@ const Navbar = () => {
                                 {t('landing.navbar.about')}
                             </Link>
                         </li>
-                        <li>
-                            <Link to="features" className='text-white hover:text-black'>
-                                {t('landing.navbar.features')}
-                            </Link>
-                        </li>
+                        
                         <li>
                             <Link to="contact" className='text-white hover:text-black'>
                                 {t('landing.navbar.contact')}
@@ -84,7 +70,7 @@ const Navbar = () => {
                     <MenuBtn onClick={toggleMenu} isOpen={isMenuOpen} />
                 </div>
                 {isMenuOpen && (
-                    <MenuDropdown/>
+                    <MenuDropdown onOpenLogin={openLoginModal}/>
                 )}
             </div>
 

@@ -14,8 +14,7 @@ const ModalBackdrop = memo(({ children, onClose }) => {
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center"
             onClick={onClose}>
-            <div className="bg-zinc-100 py-8 px-12 rounded-lg shadow-xl w-[40vw]  border-2 
-                border-white"
+            <div className="w-11/12 max-w-2xl bg-white py-8 px-12 rounded-lg p-6 shadow-xl"
                 onClick={e => e.stopPropagation()}>
                 {children}
             </div>
@@ -89,7 +88,7 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
     // Create a portal to render outside the main component tree
     return createPortal(
         <ModalBackdrop onClose={onClose}>
-            <div className='flex flex-col justify-center relative'>
+            <div className=' flex flex-col justify-center relative'>
                 <button
                     onClick={onClose}
                     className='absolute top-0 right-0 text-black'
@@ -102,7 +101,7 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
                 </h2>
 
                 <form onSubmit={handleSubmit} className="flex w-full flex-col space-y-4 mb-6">
-                    <div className="flex flex-col">
+                    <div className="flex flex-col flex-1">
                         <input
                             type="email"
                             name="email"
@@ -126,14 +125,15 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
                         />
                     </div>
 
-                    <p className='text-center text-black'>
+                    <p className='text-sm lg:text-base text-center text-black'>
                         {t('auth.noAccount')}
                         <button
                             type="button"
                             onClick={onSwitchToRegister}
 
                         >
-                            <span className='text-tahiti-700 hover:text-blue-700 underline underline-offset-4 ml-2'>
+                            <span className='text-sm lg:text-base text-tahiti-700 hover:text-blue-700 underline 
+                                underline-offset-4 ml-2'>
                                 {t('auth.registerHere')}
                             </span>
                         </button>
@@ -147,7 +147,8 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
                         >
                             {loading ? (
                                 <div className="flex items-center justify-center">
-                                    <div className="w-5 h-5 border-t-2 border-tahiti-700 rounded-full animate-spin"></div>
+                                    <div className="w-5 h-5 border-t-2 border-tahiti-700 rounded-full 
+                                        animate-spin"></div>
                                     <span className="ml-2">{t('auth.loggingIn')}</span>
                                 </div>
                             ) : (

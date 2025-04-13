@@ -7,8 +7,6 @@
 @tailwind utilities;
 
 .custom-shadow {
-    -webkit-box-shadow: -4px 4px 0px 0px rgba(0, 0, 0, 1);
-    -moz-box-shadow: -4px 4px 0px 0px rgba(0, 0, 0, 1);
     box-shadow: -4px 4px 0px 0px rgba(0, 0, 0, 1);
     transition: all 0.15s ease-in-out;
 }
@@ -40,50 +38,60 @@
     top: 46px !important;
 }
 
+@theme {
+    --breakpoint-xs: 30rem;
+    --breakpoint-2xl: 100rem;
+    --breakpoint-3xl: 120rem;
+}
 
 @layer base {
 
     html,
     body {
-        @apply w-full h-full font-monserrat font-[62.5%] box-border m-0 p-0 bg-tahiti-200
+        @apply w-full h-full font-monserrat font-[62.5%] box-border m-0 p-0 bg-tahiti-200;
     }
 
-    button, a {
-        @apply cursor-pointer
+    button,
+    a {
+        @apply cursor-pointer;
     }
-
 
     h1 {
-        @apply font-extrabold font-condensed tracking-tight  uppercase
-            text-[3rem] 
-            md:text-4xl 
-            xl:text-[6.8rem] 
+        @apply font-extrabold font-condensed tracking-tight uppercase 
+            text-[2.8rem] 
+            sm:text-[3.6rem]
+            md:text-[4.4rem] 
+            lg:text-[5rem]
+            xl:text-[5.6rem]
+            2xl:text-[6.8rem] 
             leading-[42px] 
-            md:leading-[52px] 
-            xl:leading-[110px]
+            sm:leading-[48px]
+            md:leading-[62px] 
+            lg:leading-[74px]
+            xl:leading-[86px]
+            2xl:leading-[110px];
     }
 
     h2 {
-        @apply text-2xl lg:text-4xl font-bold
+        @apply text-2xl lg:text-4xl font-bold;
     }
 
     h3 {
-        @apply text-lg lg:text-2xl font-bold 
+        @apply text-lg lg:text-2xl font-bold;
     }
 
     h4 {
-        @apply text-lg xl:text-xl font-semibold md:font-bold
+        @apply text-lg xl:text-xl font-semibold md:font-bold;
     }
 
     h5 {
-        @apply text-base xl:text-lg font-semibold
+        @apply text-base xl:text-lg font-semibold;
     }
 
-    input, select {
-        @apply p-1.5 lg:p-2.5 border-2 border-stone-700 rounded-lg custom-shadow
+    input,
+    select {
+        @apply p-1.5 lg:p-2.5 border-2 border-stone-700 rounded-lg custom-shadow;
     }
-
-
 }
 
 @layer utilities {
@@ -96,8 +104,7 @@
     }
 
     .table-th {
-        @apply px-3 py-2 bg-blue-100 border-b-2 border-stone-700 text-left text-xs md:text-sm 
-            font-semibold uppercase tracking-wider xl:pl-12;
+        @apply px-3 py-2 bg-blue-100 border-b-2 border-stone-700 text-left text-xs md:text-sm font-semibold uppercase tracking-wider xl:pl-12;
         /* min-width: 220px; */
     }
 
@@ -108,29 +115,27 @@
     }
 
     .table-btn {
-        @apply  text-center border-2 rounded-md uppercase font-[500] text-[.8rem] w-[60%] sm:w-[70%] 
-            md:w-[50%] lg:w-[40%] xl:w-[30%] transition-colors;
+        @apply text-center border-2 rounded-md uppercase font-[500] text-[.8rem] w-[60%] sm:w-[70%] md:w-[50%] lg:w-[40%] xl:w-[30%] transition-colors;
     }
 
     .shadow-btn {
-        @apply text-xs md:text-sm lg:text-base font-semibold text-stone-700 border-2 
-            border-stone-700 rounded-lg custom-shadow relative transition-all duration-150 ease-in-out hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none dark:hover:shadow-none active:translate-x-[4px] active:translate-y-[4px]
+        @apply text-xs sm:text-sm lg:text-base font-semibold text-stone-700 border-2 border-stone-700 rounded-lg custom-shadow relative transition-all duration-150 ease-in-out hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none dark:hover:shadow-none active:translate-x-[4px] active:translate-y-[4px];
     }
 
     .shadow-btn-static {
-        @apply font-semibold text-stone-700 border-2 border-stone-700 rounded-lg custom-shadow
+        @apply font-semibold text-stone-700 border-2 border-stone-700 rounded-lg custom-shadow;
     }
 
     .full-btn {
-        @apply px-6 text-sm font-semibold text-white hover:text-black bg-black hover:bg-white
+        @apply px-6 text-sm font-semibold text-white hover:text-black bg-black hover:bg-white;
     }
 
     .sidebar-text {
-        @apply text-[.68rem] font-medium uppercase
+        @apply text-[.68rem] font-medium uppercase;
     }
 
     .custom-border {
-        @apply border-2 border-stone-900
+        @apply border-2 border-stone-900;
     }
 
     /* Style for language dropdown */

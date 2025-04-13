@@ -91,7 +91,8 @@ const AddItemModal = memo(({ onClose }) => {
                 <h4 className="text-lg font-bold my-2">{t('inventory.addItem')}</h4>
                 <form onSubmit={handleSubmit} className="flex w-full flex-col space-y-4 mb-6">
                     <div className="flex flex-col flex-1">
-                        <label htmlFor="itemName" className="text-sm font-medium mb-1">{t('inventory.itemName')}</label>
+                        <label htmlFor="itemName"
+                            className="text-sm font-medium mb-1">{t('inventory.itemName')}</label>
                         <input
                             id="itemName"
                             type="text"
@@ -106,7 +107,8 @@ const AddItemModal = memo(({ onClose }) => {
                     <div className="flex flex-col md:flex-row gap-4">
                         <div className="flex ">
                             <div className="flex flex-col flex-1">
-                                <label htmlFor="category" className="text-sm font-medium mb-1">{t('inventory.category')}</label>
+                                <label htmlFor="category"
+                                    className="text-sm font-medium mb-1">{t('inventory.category')}</label>
                                 <select
                                     id="category"
                                     name="category"

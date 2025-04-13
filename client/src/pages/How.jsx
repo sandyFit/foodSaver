@@ -22,17 +22,18 @@ const How = () => {
 
     return (
         <section id='how' className='w-full min-h-screen bg-purple-100 pt-8'>
-            <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 px-4 lg:px-16 relative lg:pb-12"> 
+            <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 px-4 sm:px-10 md:px-12 lg:px-16 relative lg:pb-12"> 
                 <div className="w-full col-span-1 lg:col-start-1 lg:col-end-2 flex flex-col 
                     justify-center gap-6">
-                    <h2 className='w-[90%] lg:w-[60%] text-4xl lg:text-6xl font-extrabold uppercase '>
+                    <h2 className='w-[90%] lg:w-[70%] xl:w-[60%] text-4xl lg:text-5xl xl:text-6xl 
+                        font-extrabold uppercase '>
                         {t('landing.how.heading')}
                     </h2>
-                    <p className='w-full text-xs lg:text-base lg:pr-12'>
+                    <p className='w-full text-xs lg:text-sm xl:text-base lg:pr-12'>
                         {t('landing.how.description')}
                     </p>
                     <button
-                        className='w-full lg:w-1/2 shadow-btn bg-tahiti-200 px-8 py-2.5 z-20'
+                        className='w-full lg:w-[90%] 2xl:w-1/2 shadow-btn bg-tahiti-200 px-8 py-2.5 z-20'
                         onClick={openRegisterModal}
                     >
                         {t('landing.hero.button1')}
@@ -53,10 +54,10 @@ const How = () => {
                                 </figure>
 
                                 <div className="flex flex-col">
-                                    <h3 className="text-base lg:text-2xl font-semibold">
+                                    <h3 className="text-base lg:text-xl xl:text-2xl font-semibold">
                                         1. {t('landing.how.step1')}
                                     </h3>
-                                    <p className='w-full text-xs lg:text-base leading-[1.5] '>
+                                    <p className='w-full text-xs lg:text-sm xl:text-base leading-[1.5] '>
                                         {t('landing.how.step1Desc')}
                                     </p>
                                 </div>
@@ -73,10 +74,10 @@ const How = () => {
                                 </figure>
 
                                 <div className="flex flex-col">
-                                    <h3 className="text-base lg:text-2xl font-semibold leading-[20px]">
+                                    <h3 className="text-base lg:text-xl xl:text-2xl font-semibold leading-[20px]">
                                         2. {t('landing.how.step2')}
                                     </h3>
-                                    <p className='w-full text-xs lg:text-base '>
+                                    <p className='w-full text-xs lg:text-sm xl:text-base '>
                                         {t('landing.how.step2Desc')}
                                     </p>
                                 </div>
@@ -93,10 +94,10 @@ const How = () => {
                                 </figure>
 
                                 <div className="flex flex-col">
-                                    <h3 className="text-base lg:text-2xl font-semibold leading-[20px]">
+                                    <h3 className="text-base lg:text-xl xl:text-2xl font-semibold leading-[20px]">
                                         3. {t('landing.how.step3')}
                                     </h3>
-                                    <p className='w-full text-xs lg:text-base'>
+                                    <p className='w-full text-xs lg:text-sm xl:text-base'>
                                         {t('landing.how.step3Desc')}
                                     </p>
                                 </div>
@@ -113,10 +114,10 @@ const How = () => {
                                 </figure>
 
                                 <div className="flex flex-col">
-                                    <h3 className="text-base lg:text-2xl font-semibold leading-[20px]">
+                                    <h3 className="text-base lg:text-xl xl:text-2xl font-semibold leading-[20px]">
                                         4. {t('landing.how.step4')}
                                     </h3>
-                                    <p className='w-full text-xs lg:text-base'>
+                                    <p className='w-full text-xs lg:text-sm xl:text-base'>
                                         {t('landing.how.step4Desc')}
                                     </p>
                                 </div>
@@ -133,10 +134,10 @@ const How = () => {
                                 </figure>
 
                                 <div className="flex flex-col">
-                                    <h3 className="text-base lg:text-2xl font-semibold">
+                                    <h3 className="text-base lg:text-xl xl:text-2xl font-semibold">
                                         4. {t('landing.how.step5')}
                                     </h3>
-                                    <p className='w-full text-xs lg:text-base'>
+                                    <p className='w-full text-xs lg:text-sm xl:text-base'>
                                         {t('landing.how.step5Desc')}
                                     </p>
                                 </div>
