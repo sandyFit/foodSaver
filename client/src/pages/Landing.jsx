@@ -9,35 +9,34 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const Landing = () => {
-    const containerRef = useRef(null);
-    const sectionRefs = useRef([]);
+    // const containerRef = useRef(null);
+    // const sectionRefs = useRef([]);
 
-    useEffect(() => {
-        const sections = sectionRefs.current;
+    // useEffect(() => {
+    //     const sections = sectionRefs.current;
 
-        sections.forEach((panel, i) => {
-            ScrollTrigger.create({
-                trigger: panel,
-                start: 'top top',
-                pin: true,
-                pinSpacing: false,
-                anticipatePin: 1 // Helps prevent janky pin behavior
-            });
-        });
+    //     sections.forEach((panel, i) => {
+    //         ScrollTrigger.create({
+    //             trigger: panel,
+    //             start: 'top top',
+    //             pin: true,
+    //             pinSpacing: false,
+    //             anticipatePin: 1 // Helps prevent janky pin behavior
+    //         });
+    //     });
 
-        return () => {
-            ScrollTrigger.getAll().forEach(t => t.kill());
-        };
-    }, []);
+    //     return () => {
+    //         ScrollTrigger.getAll().forEach(t => t.kill());
+    //     };
+    // }, []);
 
     return (
         <main className="relative">
-            <div ref={containerRef} className="overflow-hidden">
+            <div className="overflow-hidden">
                 <Hero />
                 {[Stats, How, Footer].map((Section, index) => (
                     <section
                         key={index}
-                        ref={el => sectionRefs.current[index] = el}
                         className="min-h-screen relative"
                         style={{
                             zIndex: index, // Forward z-index order - lower sections have higher z-index

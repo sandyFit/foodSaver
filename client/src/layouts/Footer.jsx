@@ -25,16 +25,17 @@ const Footer = () => {
         <footer id='contact'
             className='w-full min-h-screen bg-tahiti-700 flex flex-col justify-center items-center'>
             <MotionText/>
-            <div className="w-full grid grid-cols-12 grid-rows-6 gap-6 px-16 pt-[4rem]">
-                <section className="w-full flex flex-col h-full col-span-4 col-start-1 col-end-4 row-span-6 
-                    row-start-1 row-end-7 border-2 border-black custom-shadow px-6 pb-6 justify-between
-                    items-center text-white">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-12 lg:grid-rows-6 gap-6 px-4 lg:px-16 pt-6 
+                lg:pt-[4rem]">
+                <section className="w-full flex flex-col h-full lg:col-span-4 lg:col-start-1 lg:col-end-4 
+                    lg:row-span-6 row-start-1 row-end-7 border-2 border-black custom-shadow px-6 pb-6 
+                    justify-between items-center text-white">
                     <Logo/> 
-                    <div className='p-1 pb-6'>
+                    <div className='p-1  lg:pb-6'>
                         <h4>
                             {t('landing.footer.contactTitle')}
                         </h4>
-                        <p className='text-sm'>
+                        <p className='text-xs lg:text-sm'>
                             {t('landing.footer.contactMessage')} <br/>
                             <a href='mailto:foodsaver@gmail.com'
                                 className='text-yellow-100 hover:text-yellow-200'>
@@ -44,30 +45,31 @@ const Footer = () => {
                     </div>
                 </section>
 
-                <div className="flex flex-col border-2 border-black custom-shadow col-span-9 col-start-4 col-end-13 row-span-3 
-                    row-start-1 row-end-7">
-                    <section className="w-full flex col-span-9 col-start-4 col-end-13 row-span-3 
-                        row-start-1 row-end-4 p-12 text-white">
-                        <div className="w-full flex justify-between items-center">
-                            <div className="flex flex-col">
+                <div className="flex flex-col border-2 border-black custom-shadow lg:col-span-9 
+                    lg:col-start-4 lg:col-end-13 lg:row-span-3 lg:row-start-1 lg:row-end-7">
+                    <section className="w-full flex lg:col-span-9 lg:col-start-4 lg:col-end-13 lg:row-span-3 
+                        lg:row-start-1 lg:row-end-4 p-3 lg:p-12 text-white">
+                        <div className="w-full flex flex-col lg:flex-row justify-between items-center">
+                            <div className="flex flex-col gap-2 lg:gap-0">
                                 <h4>
                                     {t('landing.footer.subscribe')}
                                 </h4>
-                                <p className='w-[90%]'>
+                                <p className='text-xs lg:text-base lg:w-[90%] pb-4 lg:pb-0'>
                                     {t('landing.footer.subcribeDescription')}
                                 </p>
                             </div>
                             
                             <div className="flex flex-col gap-2">
                                 <input type="text"
-                                    className='w-80 h-12 border-2 border-black rounded-lg'
+                                    className='w-full lg:w-80 h-10 lg:h-12 border-2 border-black 
+                                        rounded-lg'
                                     placeholder={t('landing.footer.inputPlaceholder')}
 
                                 />
-                                <button className='full-btn rounded-lg py-3 border-2 border-black'>
+                                <button className='full-btn rounded-lg py-2 lg:py-3 border-2 border-black'>
                                     {t('landing.footer.SubscribeBtn')}
                                 </button>
-                                <p className='text-sm text-center'>
+                                <p className='text-xs lg:text-sm text-center'>
                                     {t('landing.footer.unsubscribeText')}
                                 </p>
                             </div>
@@ -76,15 +78,16 @@ const Footer = () => {
                     </section>
 
                 <hr className='border-t-2 border-black'/>
-                    <div className="flex col-span-6 col-start-4 col-end-13 row-span-3 row-start-4 row-end-7 ">
-                        <section className="w-full flex py-10 pl-10 ">
-                            <div className="w-[90%] flex ">
-                                <nav className='w-full flex justify-between text-sm'>
+                    <div className="flex flex-col lg:flex-row lg:col-span-6 lg:col-start-4 lg:col-end-13  
+                        lg:row-span-3 lg:row-start-4 lg:row-end-7 ">
+                        <section className="w-full flex flex-col lg:flex-row py-4 lg:py-10 pl-4 lg:pl-10 ">
+                            <div className="w-full lg:w-[90%] flex ">
+                                <nav className='w-full flex justify-between text-xs lg:text-sm'>
                                     <div className="flex flex-col text-white">
-                                        <h4>
+                                        <h4 className='text-sm lg:text-base'>
                                             {t('landing.footer.product')}
                                         </h4>
-                                        <ul className='flex flex-col gap-2 mt-2'>
+                                        <ul className='flex flex-col gap-2 mt-2 '>
                                             <li>
                                                 <Link to="stats" className='text-white hover:text-gray-300'>
                                                     {t('landing.navbar.globalImpact')}🡭
@@ -109,7 +112,7 @@ const Footer = () => {
                                     </div>
 
                                     <div className="flex flex-col text-white">
-                                        <h4>
+                                        <h4 className='text-sm lg:text-base'>
                                             {t('landing.footer.more')}
                                         </h4>
                                         <ul className='flex flex-col gap-2 mt-2'>                                                                     
@@ -137,7 +140,7 @@ const Footer = () => {
                                     </div>
 
                                     <div className="flex flex-col text-white">
-                                        <h4>                    
+                                        <h4 className='text-sm lg:text-base'>                    
                                             <a target="_blank" href="https://icons8.com"
                                                 className='text-white hover:text-gray-300 '>
                                                 {t('landing.footer.iconsCredits')}🡭
@@ -181,8 +184,9 @@ const Footer = () => {
 
                         </section>
 
-                        <section className="flex flex-col col-span-3 col-start-10 col-end-13 row-span-3 
-                            row-start-4 row-end-7 place-content-between pr-12 pt-8">
+                        <section className="flex flex-col lg:col-span-3 lg:col-start-10 lg:col-end-13 
+                            lg:row-span-3 lg:row-start-4 :lgrow-end-7 lg:place-content-between
+                            place-items-center px-4 lg:px-0 lg:pr-12 lg:pt-8 gap-4 lg:gap-0">
                             <div className="flex gap-4 text-white">
                                 <a href='http://instagram.com' target='_blank'
                                     className="flex col-span-2 col-start-10 col-end-12 row-span-1 row-start-4 
@@ -204,7 +208,8 @@ const Footer = () => {
                                 </a>
                             </div>
                             <button
-                                className='border-2 border-white hover:border-black rounded-lg w-full px-4 py-2.5 mb-8 
+                                className='border-2 border-white hover:border-black rounded-lg w-full 
+                                    lg:px-4 py-2.5 mb-8 
                                     text-white hover:text-black font-medium'
                                 onClick={openLoginModal}
                                 onClose={closeAuthModal}
@@ -216,11 +221,12 @@ const Footer = () => {
                 </div>
             </div>
 
-            <aside className="flex w-full h-16 bg-black justify-between items-center mt-auto px-16">
-                <p className='text-white'>
+            <aside className="flex flex-col lg:flex-row w-full lg-28 lg:h-16 bg-black justify-between items-center 
+                mt-auto px-4 lg:px-16">
+                <p className='text-xs lg:text-base text-white'>
                     © {new Date().getFullYear()} FoodSaver
                 </p>
-                <p className='text-white'>
+                <p className='text-xs lg:text-base text-white'>
                     {t('landing.footer.credits')}
                     <a href="https://www.trishramos.com"
                         className='ml-2 underline underline-offset-4 hover:text-gray-300'
@@ -228,7 +234,7 @@ const Footer = () => {
                         Trish Ramos
                     </a>
                 </p>
-                <Link to='hero' className='text-white underline underline-offset-4 hover:text-gray-300'>
+                <Link to='hero' className='text-xs lg:text-base text-white underline underline-offset-4 hover:text-gray-300'>
                     {t('landing.footer.backToTop')}🡭
                 </Link>
             </aside>

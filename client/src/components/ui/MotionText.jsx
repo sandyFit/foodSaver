@@ -9,10 +9,11 @@ const MotionText = () => {
 
     const content = (
         <>
-            <div className="w-10 h-10 rounded-full bg-white flex justify-center items-center">
-                <img src="/img/watermelon.png" alt="watermelon" className="w-8 h-8" />
+            <div className="w-6 h-6 lg:w-10 lg:h-10 rounded-full bg-white flex justify-center 
+                items-center">
+                <img src="/img/watermelon.png" alt="watermelon" className="w-5 lg:w-8 h-5 lg:h-8" />
             </div>
-            <p className='text-2xl text-white uppercase whitespace-nowrap'>
+            <p className='text-base lg:text-2xl text-white uppercase whitespace-nowrap'>
                 {t('landing.footer.slider')}
             </p>
         </>
@@ -33,7 +34,7 @@ const MotionText = () => {
     }, []);
 
     return (
-        <aside className='w-full overflow-hidden h-16 bg-black'>
+        <aside className='w-full overflow-hidden h-10 lg:h-16 bg-black'>
             <div ref={containerRef} className="w-full h-full flex justify-center">
                 <div
                     ref={textRef}

@@ -57,19 +57,19 @@ const Stats = () => {
     }, []);
 
     return (
-        <section id="stats" className="bg-yellow-100 w-full h-screen px-24">
+        <section id="stats" className="bg-yellow-100 w-full h-screen px-4 lg:px-24">
             <header className="flex flex-col text-stone-900">
-                <h2 className="text-3xl font-semibold mt-16">
+                <h2 className="text-sm lg:text-3xl font-semibold mt-8 lg:mt-16">
                     {t('landing.stats.intro')}
                 </h2>
-                <h2 className="text-5xl font-bold mt-8 uppercase tracking-tighter">
+                <h2 className="text-xl lg:text-5xl font-bold mt-4 lg:mt-8 uppercase tracking-tighter">
                     {t('landing.stats.statsTitle')}
                 </h2>
-                <h2 className="text-3xl font-semibold mt-8">
+                <h2 className="text-sm lg:text-3xl font-semibold mt-4 lg:mt-8">
                     {t('landing.stats.statsSubtitle')}
                 </h2>
             </header>
-            <div className="flex flex-wrap justify-around mt-8 gap-4">
+            <div className="flex flex-wrap justify-around mt-4 lg:mt-8 gap-4">
                 {stats.map((stat, index) => (
                     <StatsCard
                         key={index}

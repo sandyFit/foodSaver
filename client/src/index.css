@@ -54,7 +54,13 @@
 
 
     h1 {
-        @apply text-[6.8rem] font-extrabold font-condensed tracking-tight leading-[110px] uppercase
+        @apply font-extrabold font-condensed tracking-tight  uppercase
+            text-[3rem] 
+            md:text-4xl 
+            xl:text-[6.8rem] 
+            leading-[42px] 
+            md:leading-[52px] 
+            xl:leading-[110px]
     }
 
     h2 {
@@ -107,7 +113,8 @@
     }
 
     .shadow-btn {
-        @apply font-semibold text-stone-700 border-2 border-stone-700 rounded-lg custom-shadow relative transition-all duration-150 ease-in-out hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none dark:hover:shadow-none active:translate-x-[4px] active:translate-y-[4px]
+        @apply text-xs md:text-sm lg:text-base font-semibold text-stone-700 border-2 
+            border-stone-700 rounded-lg custom-shadow relative transition-all duration-150 ease-in-out hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none dark:hover:shadow-none active:translate-x-[4px] active:translate-y-[4px]
     }
 
     .shadow-btn-static {

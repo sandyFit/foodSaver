@@ -192,62 +192,62 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    const getUserProfile = useCallback(async (userId) => {
-        if (!userId) return;
+    // const getUserProfile = useCallback(async (userId) => {
+    //     if (!userId) return;
 
-        dispatch({ type: SET_LOADING, payload: true });
-        try {
-            const response = await apiClient.request(`users/profile/${userId}`);
-            console.log('Raw profile response:', response); // Debug log
+    //     dispatch({ type: SET_LOADING, payload: true });
+    //     try {
+    //         const response = await apiClient.request(`users/profile/${userId}`);
+    //         console.log('Raw profile response:', response); // Debug log
 
-            // Safely transform API response with null checks and defaults
-            const transformedUser = {
-                id: response?.data?._id || response?._id || userId,
-                fullName: response?.data?.fullName || response?.fullName || 'Unknown User',
-                email: response?.data?.email || response?.email || '',
-                role: response?.data?.role || response?.role || 'user',
-                avatar: response?.data?.avatar || response?.avatar || null,
-                inventory: Array.isArray(response?.data?.inventory) ? response.data.inventory :
-                    Array.isArray(response?.inventory) ? response.inventory : [],
-                notifications: Array.isArray(response?.data?.notifications) ? response.data.notifications :
-                    Array.isArray(response?.notifications) ? response.notifications : []
-            };
+    //         // Safely transform API response with null checks and defaults
+    //         const transformedUser = {
+    //             id: response?.data?._id || response?._id || userId,
+    //             fullName: response?.data?.fullName || response?.fullName || 'Unknown User',
+    //             email: response?.data?.email || response?.email || '',
+    //             role: response?.data?.role || response?.role || 'user',
+    //             avatar: response?.data?.avatar || response?.avatar || null,
+    //             inventory: Array.isArray(response?.data?.inventory) ? response.data.inventory :
+    //                 Array.isArray(response?.inventory) ? response.inventory : [],
+    //             notifications: Array.isArray(response?.data?.notifications) ? response.data.notifications :
+    //                 Array.isArray(response?.notifications) ? response.notifications : []
+    //         };
 
-            console.log('Transformed user data:', transformedUser);
+    //         console.log('Transformed user data:', transformedUser);
 
-            if (!transformedUser.id) {
-                throw new Error('Invalid user data received');
-            }
+    //         if (!transformedUser.id) {
+    //             throw new Error('Invalid user data received');
+    //         }
 
-            dispatch({ type: SET_USER, payload: transformedUser });
-            return transformedUser;
+    //         dispatch({ type: SET_USER, payload: transformedUser });
+    //         return transformedUser;
 
-        } catch (error) {
-            console.error('Error fetching user profile:', error);
-            dispatch({ type: SET_ERROR, payload: error.message });
-            throw error;
-        } finally {
-            dispatch({ type: SET_LOADING, payload: false });
-        }
-    }, []);
+    //     } catch (error) {
+    //         console.error('Error fetching user profile:', error);
+    //         dispatch({ type: SET_ERROR, payload: error.message });
+    //         throw error;
+    //     } finally {
+    //         dispatch({ type: SET_LOADING, payload: false });
+    //     }
+    // }, []);
 
-    const updateUserProfile = async (id, updatedData) => {
-        dispatch({ type: SET_LOADING, payload: true });
-        try {
-            const updatedUser = await apiClient.request(`users/profile/${id}`, 'PUT', updatedData);
-            dispatch({
-                type: SET_ALL_USERS,
-                payload: allUsers.map((user) =>
-                    user._id === id ? { ...user, ...updatedUser } : user
-                ),
-            });
+    // const updateUserProfile = async (id, updatedData) => {
+    //     dispatch({ type: SET_LOADING, payload: true });
+    //     try {
+    //         const updatedUser = await apiClient.request(`users/profile/${id}`, 'PUT', updatedData);
+    //         dispatch({
+    //             type: SET_ALL_USERS,
+    //             payload: allUsers.map((user) =>
+    //                 user._id === id ? { ...user, ...updatedUser } : user
+    //             ),
+    //         });
 
-            getAllUsers();
-            toast.success('Usuario actualizado correctamente.');
-        } finally {
-            dispatch({ type: SET_LOADING, payload: false });
-        }
-    };
+    //         getAllUsers();
+    //         toast.success('Usuario actualizado correctamente.');
+    //     } finally {
+    //         dispatch({ type: SET_LOADING, payload: false });
+    //     }
+    // };
 
     const deleteUser = async (id) => {
         dispatch({ type: SET_LOADING, payload: true });
@@ -272,11 +272,11 @@ export const UserProvider = ({ children }) => {
             const userData = JSON.parse(storedUser);
             dispatch({ type: SET_USER, payload: userData });
             // Fetching profile data
-            if (userData.id) {
-                getUserProfile(userData.id);
-            }
+            // if (userData.id) {
+            //     getUserProfile(userData.id);
+            // }
         }
-    }, [getUserProfile]);
+    }, [] );
 
     // Fetch data on load
     useEffect(() => {
@@ -294,8 +294,8 @@ export const UserProvider = ({ children }) => {
         registerUser,
         login,
         updateUser,
-        getUserProfile,
-        updateUserProfile,
+        // getUserProfile,
+        // updateUserProfile,
         getUserInfo,
         deleteUser,
         error
@@ -306,8 +306,8 @@ export const UserProvider = ({ children }) => {
         registerUser,
         login,
         updateUser,
-        getUserProfile,
-        updateUserProfile,
+        // getUserProfile,
+        // updateUserProfile,
         getUserInfo,
         deleteUser,
         error
