@@ -15,7 +15,7 @@ const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const toggleMenu = () => {
-        console.log("Current state:", isMenuOpen);
+        // console.log("Current state:", isMenuOpen);
         setIsMenuOpen(prevState => !prevState);
     };
 

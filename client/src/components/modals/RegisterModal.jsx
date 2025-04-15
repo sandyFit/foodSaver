@@ -89,10 +89,10 @@ const RegisterModal = memo(({ onClose, onSwitchToLogin }) => {
             // Prepare registration data without confirmPass
             const { confirmPass, ...registrationData } = formData;
 
-            console.log('Sending registration data:', registrationData);
+            // console.log('Sending registration data:', registrationData);
 
             const response = await registerUser(registrationData);
-            console.log('Registration response:', response);
+            // console.log('Registration response:', response);
 
             if (response && response.success) {
                 toast.success(t('notifications.registerSuccess'));

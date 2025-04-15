@@ -31,10 +31,10 @@ const UpdateFormModal = memo(({ itemToEdit, onClose }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Track renders for debugging
-    renderCount++;
-    if (renderCount % 10 === 0) {
-        console.log('🔄 UpdateFormModal render count:', renderCount);
-    }
+    // renderCount++;
+    // if (renderCount % 10 === 0) {
+    //     console.log('🔄 UpdateFormModal render count:', renderCount);
+    // }
 
     // Create local state for the form instead of using parent state
     const [formData, setFormData] = useState({

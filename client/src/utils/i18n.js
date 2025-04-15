@@ -46,9 +46,9 @@ i18n
 
         // Additional useful settings
         saveMissing: true,
-        missingKeyHandler: (lng, ns, key) => {
-            console.warn(`Missing translation: ${ns}:${key}`);
-        }
+        // missingKeyHandler: (lng, ns, key) => {
+        //     console.warn(`Missing translation: ${ns}:${key}`);
+        // }
     });
 
 export default i18n;

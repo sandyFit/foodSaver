@@ -151,7 +151,7 @@ const Footer = () => {
                                         </h4>
                                         <ul className='flex flex-col gap-2 mt-2'>                                                                     
                                             <li>
-                                                <a a target="_blank" href="https://icons8.com/icon/zYsNNDB6wPLn/control-panel"
+                                                <a target="_blank" href="https://icons8.com/icon/zYsNNDB6wPLn/control-panel"
                                                     className='text-white hover:text-gray-300'>
                                                     {t('landing.footer.iconsDashboard')}🡭
                                                 </a>
@@ -242,7 +242,8 @@ const Footer = () => {
                         Trish Ramos
                     </a>
                 </p>
-                <Link to='hero' className='text-xs lg:text-sm xl:text-base text-white underline underline-offset-4 hover:text-gray-300'>
+                <Link to='hero' className='text-xs lg:text-sm xl:text-base text-white underline 
+                    underline-offset-4 hover:text-gray-300'>
                     {t('landing.footer.backToTop')}🡭
                 </Link>
             </aside>
@@ -250,4 +251,5 @@ const Footer = () => {
     )
 }
 
-export default Footer
+export default Footer;
+

@@ -73,7 +73,7 @@ export const RecipesProvider = ({ children }) => {
                 `recipes/suggested?userId=${encodeURIComponent(userIdStr)}`
             );
 
-            console.log('Suggested recipes response:', response);
+            // console.log('Suggested recipes response:', response);
 
             if (response.success === false) {
                 throw new Error(response.message || t('errors.fetchFailed'));
@@ -85,7 +85,7 @@ export const RecipesProvider = ({ children }) => {
             });
 
         } catch (error) {
-            console.error('Error fetching suggested recipes:', error);
+            // console.error('Error fetching suggested recipes:', error);
             dispatch({ type: SET_ERROR, payload: error.message });
             throw error;
         } finally {
@@ -107,7 +107,7 @@ export const RecipesProvider = ({ children }) => {
                 `recipes/expiring-meals?userId=${encodeURIComponent(userIdStr)}`
             );
 
-            console.log('Expiring meals response:', response);
+            // console.log('Expiring meals response:', response);
 
             if (response.success === false) {
                 throw new Error(response.message || t('errors.fetchFailed'));

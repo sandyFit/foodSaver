@@ -30,10 +30,10 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
     const navigate = useNavigate();
 
     // Track renders for debugging
-    renderCount++;
-    if (renderCount % 10 === 0) {
-        console.log('🔄 LoginModal render count:', renderCount);
-    }
+    // renderCount++;
+    // if (renderCount % 10 === 0) {
+    //     console.log('🔄 LoginModal render count:', renderCount);
+    // }
 
     // Use global context
     const { login, loading } = useUser();
@@ -59,12 +59,12 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
 
         try {
             const response = await login(formData);
-            console.log('Login response:', response); // Debug log
+            // console.log('Login response:', response); 
 
             if (response?.success) {
                 // Verify stored data
                 const storedUser = localStorage.getItem('user');
-                console.log('Stored user after login:', storedUser); // Debug log
+                // console.log('Stored user after login:', storedUser); 
 
                 if (!storedUser) {
                     throw new Error(t('auth.loginDataError'));
@@ -78,7 +78,7 @@ const LoginModal = memo(({ onClose, onSwitchToRegister }) => {
                 throw new Error(response?.message || t('auth.loginFailed'));
             }
         } catch (error) {
-            console.error('Login error:', error);
+            // console.error('Login error:', error);
             toast.error(t('auth.loginError', {
                 message: error.message || t('auth.unknownError')
             }));

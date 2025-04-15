@@ -21,8 +21,8 @@ const LanguageSwitcher = () => {
 
     // Debug current language
     useEffect(() => {
-        console.log('Current i18n language:', i18n.language);
-        console.log('Current state language:', currentLanguage);
+        // console.log('Current i18n language:', i18n.language);
+        // console.log('Current state language:', currentLanguage);
     }, [i18n.language, currentLanguage]);
 
     // Update state when language changes

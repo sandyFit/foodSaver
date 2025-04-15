@@ -29,10 +29,10 @@ const AddItemModal = memo(({ onClose }) => {
     const [isAdding, setIsAdding] = useState(false);
 
     // Track renders for debugging
-    renderCount++;
-    if (renderCount % 10 === 0) {
-        console.log('🔄 AddItemModal render count:', renderCount);
-    }
+    // renderCount++;
+    // if (renderCount % 10 === 0) {
+    //     console.log('🔄 AddItemModal render count:', renderCount);
+    // }
 
     // Use inventory context
     const { createInventoryItem } = useInventory();

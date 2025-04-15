@@ -21,7 +21,7 @@ export const reducer = (state, action) => {
         case ADD_INVENTORY_ITEM:
             return { ...state, allInventoryItems: [...state.allInventoryItems, action.payload] };
         case SET_ALL_INVENTORY_ITEMS:
-            console.log('Reducer payload:', action.payload);
+            // console.log('Reducer payload:', action.payload);
             return {
                 ...state,
                 allInventoryItems: JSON.stringify(state.allInventoryItems) === JSON.stringify(action.payload)

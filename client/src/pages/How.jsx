@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AuthModal from '../components/modals/AuthModal';
-import { Link } from 'react-scroll';
 
 const How = () => {
 

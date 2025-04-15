@@ -68,7 +68,7 @@ const Hero = () => {
                         </button>
 
 
-                        <Link href="/stats"
+                        <Link to="/stats"
                             className='w-[36%] hidden lg:block shadow-btn py-2.5 bg-purple-100 text-center'
                         >
                             {t('landing.hero.button2')}

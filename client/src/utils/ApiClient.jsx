@@ -26,7 +26,7 @@ class ApiClient {
                 return config;
             },
             (error) => {
-                console.error('Request interceptor error:', error);
+                //console.error('Request interceptor error:', error);
                 return Promise.reject(error);
             }
         );
@@ -38,7 +38,7 @@ class ApiClient {
                 return response;
             },
             async (error) => {
-                console.error('Response interceptor error:', error);
+                //console.error('Response interceptor error:', error);
                 return this.handleError(error);
             }
         );
@@ -69,11 +69,11 @@ class ApiClient {
                 api: BASE_URL
             });
             toast.error(message);
-            console.error('CORS Error:', {
-                origin: window.location.origin,
-                api: BASE_URL,
-                error: error.message
-            });
+            // console.error('CORS Error:', {
+            //     origin: window.location.origin,
+            //     api: BASE_URL,
+            //     error: error.message
+            // });
             throw new Error(message);
         };
         

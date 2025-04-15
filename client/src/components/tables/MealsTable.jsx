@@ -16,7 +16,7 @@ const MealsTable = React.memo(({
     const { t } = useTranslation();
 
     if (!Array.isArray(items)) {
-        console.error('Items prop must be an array');
+        // console.error('Items prop must be an array');
         return null;
     }
 

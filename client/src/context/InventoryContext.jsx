@@ -92,7 +92,7 @@ export const InventoryProvider = ({ children }) => {
             }
 
             // Ensure the ID is being sent correctly
-            console.log('Updating item with ID:', id);  // Debug log
+            // console.log('Updating item with ID:', id);  // Debug log
             const response = await apiClient.request(`inventory/${id}`, 'PUT', updatedData);
 
             if (response.success) {

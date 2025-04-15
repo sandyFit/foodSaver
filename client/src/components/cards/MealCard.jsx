@@ -43,7 +43,7 @@ const MealCard = ({ itemName, expirationDate, category, bgColor }) => {
 
             return `${t("expiring-products.daysLeft")} ${formatDistanceToNow(expDate, { locale })}`;
         } catch (error) {
-            console.error("Error processing date:", error, "Value:", expirationDate);
+            // console.error("Error processing date:", error, "Value:", expirationDate);
             return t("expiring-products.noValidDate");
         }
     };
