@@ -12,28 +12,37 @@ const inventoryItemSchema = new mongoose.Schema(
             required: [true, 'models.inventory.validation.itemNameRequired'],
             trim: true
         },
-        quantity: {
-            type: Number,
-            required: [true, 'models.inventory.validation.quantityRequired'],
-            min: [1, 'models.inventory.validation.quantityMin']
-        },
+        
         expirationDate: {
             type: Date,
             required: [true, 'models.inventory.validation.expirationDateRequired']
         },
-        category: {
+        location: {
             type: String,
             enum: {
-                values: ['diary', 'meat', 'vegetables', 'fruits', 'grains', 'other'],
-                message: 'models.inventory.validation.categoryInvalid'
+                values: ['refrigerator', 'freezer', 'pantry', 'cabinet', 'other'],
+                message: 'models.inventory.validation.locationInvalid'
             },
-            required: [true, 'models.inventory.validation.categoryRequired'],
-            default: 'other'
+            required: [true, 'models.inventory.validation.locationRequired'],
+            default: 'refrigerator'
         },
+        
         addedDate: {
             type: Date,
             default: Date.now
         },
+        // Version control fields
+        version: { type: Number, default: 1 },
+        
+        lastModifiedBy: {
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'User',
+        },
+        lastAction: {
+            type: String,
+            enum: ['added', 'updated', 'status_changed', 'location_changed', 'deleted'],
+            default: 'added'
+        }
     },
     { timestamps: true }
 );

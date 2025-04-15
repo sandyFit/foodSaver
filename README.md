@@ -22,22 +22,44 @@
 
 * **Authentication System** – Full user auth flow including sign up, login, and token protection.
 
-* **Inventory CRUD** – Add, edit, delete, and view your own food items.
+* **Inventory CRUD** – Users can add, edit, delete, and view food items in their inventory.
 
-* **Expiration Alerts** – Get notified about items nearing expiration.
+* **Expiration Alerts** – Users receive notifications on the home dashboard for close-to-expire items in their inventory.
 
-* **Recipe Suggestions** – Discover smart ways to use what you’ve got before it goes bad.
+* **Recipe Suggestions** – Based on available ingredients, users receive smart recipe suggestions to help use items before they expire.
 
 ---
 
 ## Roadmap
-Here's what’s cooking next:
 
-* **Third-Party Sign-In (Google)** – For faster, frictionless access.
+Here’s what’s planned next for future versions of FoodSaver:
 
-* **Admin Features** – Manage users, view system analytics, and oversee app data.
+### Short-Term Goals (v1.1.x)
+- **Google Sign-In** – Simplify access with one-click login.
+- **Basic Admin Panel** – Start managing users and monitoring data.
+- **Search Function** – Implement autocomplete and keyword search to quickly find items within the inventory.
 
-* **Custom User Profiles** – Let users personalize their experience and set preferences.
+### Mid-Term Improvements (v1.2+)
+- **Inventory Tags & Categories** – Make it easier to sort and filter food items.
+- **Changelog / History** – Keep track of updates like item moves or edits.
+- **Soft Deletion** – Allow recovery of deleted items (e.g., undo delete).
+- **Improved Version Control** – Automate version incrementing for meaningful changes.
+- **Enhanced Notification System** – Introduce a centralized notification model with read/dismiss tracking. Expiration checks run in the background, and alerts can be surfaced throughout the app—not just on the dashboard—for better visibility and user engagement.
+
+### Long-Term Vision (v2.0)
+
+#### AI Features
+- **AI-Powered Insights** – Analyze food usage and suggest waste-reducing habits.
+- **Personalized Menu Planning** – Receive tailored meal suggestions based on preferences and inventory.
+
+#### Collaboration & Accessibility
+- **Shared Pantries** – Let households or roommates collaborate on one pantry.
+- **Localized Translations** – Expand beyond Spanish and English.
+
+#### Smarter Inputs
+- **Item Image Support** – Snap a pic instead of typing item details.
+- **Voice or Barcode Entry** – Add food with a quick scan or voice command.
+
 
 ---
 
@@ -100,15 +122,15 @@ Here's what’s cooking next:
 4. **Create a `.env` file in the `server` directory:**
    ```bash
    MONGO_URI=<your_mongodb_connection_string>
-   PORT=<your_desired_port> 
+   PORT=<your_desired_port>
    NODE_ENV=development
    JWT_SECRET=<your_secret_key>
-   JWT_EXPIRE_TIME=1d 
-   COOKIE_EXPIRES_TIME=1 
+   JWT_EXPIRE_TIME=1d
+   COOKIE_EXPIRES_TIME=1
    ```
 5. **Start the development server:**
    ```bash
-   npm run dev 
+   npm run dev
    ```
 6. **Access the API documentation:**
    * Open your browser and go to `http://localhost:<your_desired_port>/api-docs`
@@ -138,5 +160,5 @@ Here's what’s cooking next:
 
 ## Contact
 
-For questions, feedback, or support, please contact us at [support@foodsaver.com](mailto:trishramos29@gmail.com). 
+For questions, feedback, or support, please contact us at [support@foodsaver.com](mailto:trishramos29@gmail.com).
 

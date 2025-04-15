@@ -87,20 +87,16 @@
         "deleteConfirmTitle": "Confirmar Eliminación",
         "deleteConfirmMessage": "¿Estás seguro de que quieres eliminar este producto?",
         "noItems": "No hay productos disponibles",
-        "categories": {
-            "refrigerated": "Refrigerados",
-            "frozen": "Congelados",
-            "fresh": "Frescos",
-            "pantry": "Alacena",
-            "diary": "Lácteos",
-            "meat": "Carnes",
-            "vegetables": "Vegetales",
-            "fruits": "Frutas",
-            "grains": "Granos",
-            "other": "Otros"
+        "locations": {
+            "refrigerator": "Refrigerador",
+            "freezer": "Congelador",
+            "pantry": "Despensa",
+            "cabinet": "Alacena",
+            "other": "Other"
         },
         "errors": {
             "itemNotFound": "Producto no encontrado",
+            "invalidItem": "El id del producto no es válido.",
             "createFailed": "Error al crear el producto. Por favor, inténtalo de nuevo.",
             "fecthFailed": "Error al obtener la lista de productos.",
             "updateFailed": "Error al editar el producto. Por favor, inténtalo de nuevo.",
@@ -142,24 +138,23 @@
             "itemName": "Nombre del Producto",
             "quantity": "Cantidad",
             "expirationDate": "Fecha de Caducidad",
-            "category": "Categoría",
+            "location": "Ubicación",
             "addedDate": "Fecha de Agregado",
             "validation": {
                 "itemNameRequired": "Ingrese el nombre del producto",
                 "quantityRequired": "Ingrese la cantidad",
                 "quantityMin": "La cantidad debe ser al menos 1",
                 "expirationDateRequired": "Ingrese la fecha de caducidad",
-                "categoryRequired": "Seleccione una categoría",
-                "categoryInvalid": "Categoría seleccionada no válida",
+                "locationRequired": "Seleccione una ubicación",
+                "locationInvalid": "Ubicación seleccionada no válida",
                 "userRequired": "Usuario es requerido"
             },
-            "categories": {
-                "diary": "Lácteos",
-                "meat": "Carnes",
-                "vegetables": "Vegetales",
-                "fruits": "Frutas",
-                "grains": "Granos",
-                "other": "Otros"
+            "locations": {
+                "refrigerator": "Refrigerador",
+                "freezer": "Congelador",
+                "pantry": "Despensa",
+                "cabinet": "Alacena",
+                "other": "Other"
             }
         },
         "recipes": {
@@ -242,8 +237,7 @@
     "table": {
         "product": "Producto",
         "expiresIn": "Expira en",
-        "category": "Categoría",
-        "quantity": "Cantidad",
+        "location": "Ubicación",
         "actions": "Acciones",
         "pagination": {
             "first": "Primera",

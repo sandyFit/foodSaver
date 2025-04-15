@@ -1,6 +1,7 @@
 import InventoryItem from '../models/inventory.js';
 import User from '../models/users.js';
 import Notification from '../models/notifications.js';
+import { isValidObjectId } from '../validators/inventoryValidator.js';
 
 const checkExpiringItems = async (userId) => {
     const threshold = new Date();
@@ -41,6 +42,17 @@ const checkLowStock = async (userId, threshold = 3) => {
     }
 };
 
+// Helper function to sanitize inventory items
+const sanitizeItem = (item) => {
+    const itemObj = item.toObject ? item.toObject() : item;
+    const { user, __v, _id, ...rest } = itemObj;
+    return {
+        ...rest,
+        id: _id // Convert _id to id
+    };
+};
+
+
 export const createItem = async (req, res, next) => {
     try {
         // Validate that we have a user
@@ -52,8 +64,8 @@ export const createItem = async (req, res, next) => {
         }
 
         // Validate required fields
-        const { itemName, expirationDate, category } = req.body;
-        if (!itemName || !expirationDate || !category) {
+        const { itemName, expirationDate, location } = req.body;
+        if (!itemName || !expirationDate || !location) {
             return res.status(400).json({
                 success: false,
                 message: 'validations.required'
@@ -86,7 +98,7 @@ export const createItem = async (req, res, next) => {
 
         res.status(201).json({
             success: true,
-            item
+            item: sanitizeItem(item)
         });
     } catch (error) {
         console.error('Error creating inventory item:', error);
@@ -114,7 +126,11 @@ export const getItems = async (req, res, next) => {
             .sort('-addedDate')
             .populate('user', 'fullName email');
 
-        res.json({ success: true, count: items.length, items });
+        res.json({
+            success: true,
+            count: items.length,
+            items: items.map(sanitizeItem) 
+        });
     } catch (error) {
         next(error);
     }
@@ -142,9 +158,30 @@ export const getItem = async (req, res, next) => {
 
 export const updateItem = async (req, res, next) => {
     try {
+        // Validate ID parameter
+        if (!req.params.id || !isValidObjectId(req.params.id)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid item ID'
+            });
+        }
+
+        // Validate request body
+        const { itemName, expirationDate, location } = req.body;
+        if (!itemName || !expirationDate || !location) {
+            return res.status(400).json({
+                success: false,
+                message: 'Missing required fields'
+            });
+        }
+
         const item = await InventoryItem.findOneAndUpdate(
             { _id: req.params.id, user: req.user.id },
-            req.body,
+            {
+                itemName,
+                expirationDate: new Date(expirationDate),
+                location
+            },
             { new: true, runValidators: true }
         );
 
@@ -159,12 +196,26 @@ export const updateItem = async (req, res, next) => {
         await checkExpiringItems(req.user.id);
         await checkLowStock(req.user.id);
 
-        res.json({ success: true, item });
+        res.json({ 
+            success: true, 
+            item: sanitizeItem(item) 
+        });
     } catch (error) {
-        next(error);
+        console.error('Update error:', error);
+        
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({
+                success: false,
+                message: Object.values(error.errors).map(err => err.message).join(', ')
+            });
+        }
+        
+        res.status(500).json({
+            success: false,
+            message: 'inventory.errors.updateFailed'
+        });
     }
 };
-
 export const deleteItem = async (req, res, next) => {
     try {
         const item = await InventoryItem.findOneAndDelete({
@@ -192,32 +243,3 @@ export const deleteItem = async (req, res, next) => {
     }
 };
 
-export const getRecipeSuggestions = async (req, res, next) => {
-    try {
-        const items = await InventoryItem.find({ user: req.user.id });
-        const ingredients = items.map(item => item.itemName.toLowerCase()).join(',');
-
-        const response = await axios.get('https://api.spoonacular.com/recipes/findByIngredients', {
-            params: {
-                ingredients,
-                number: 5,
-                apiKey: process.env.SPOONACULAR_API_KEY
-            }
-        });
-
-        const recipes = response.data.map(recipe => ({
-            id: recipe.id,
-            title: recipe.title,
-            image: recipe.image,
-            usedIngredients: recipe.usedIngredients,
-            missingIngredients: recipe.missedIngredients
-        }));
-
-        res.json({
-            success: true,
-            count: recipes.length, recipes
-        });
-    } catch (error) {
-        next(error);
-    }
-};

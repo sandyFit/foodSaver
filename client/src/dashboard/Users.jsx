@@ -1,14 +1,11 @@
 import React from 'react'
-import UsersTable from '../components/tables/UsersTable';
-
 
 const Users = () => {
-
     return (
-        <div>
-            <UsersTable />
-        </div>
+        <h1>
+            Coming Soon!
+        </h1>
     )
 }
 
-export default Users;
+export default Users

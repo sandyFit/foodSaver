@@ -1,13 +1,16 @@
 import React from 'react';
-import { useContext } from 'react';
-import { ContextGlobal } from '../utils/globalContext';
+import { useUser } from '../context/UserContext';
+import { useInventory } from '../context/InventoryContext';
+import { useRecipes } from '../context/RecipesContext';
 import HomeCard from '../components/cards/HomeCard';
 import { PiNotebookLight } from 'react-icons/pi';
 import { CiViewList } from 'react-icons/ci';
-import { TbUsers } from 'react-icons/tb';
+
 
 const AdminHome = () => {
-    const { allUsers, allFoodItems, allRecipes } = useContext(ContextGlobal);
+    const { allUsers } = useUser();
+    const { allInventoryItems, } = useInventory();
+    const { allRecipes } = useRecipes();
 
     const bgColors = [
         'bg-red-100',
@@ -19,14 +22,14 @@ const AdminHome = () => {
     ];
 
     const stats = [
-        {
-            title: "Usuarios Registrados",
-            count: allUsers?.length || 0,
-            icon: <TbUsers />,
-        },
+        // {
+        //     title: "Usuarios Registrados",
+        //     count: allUsers?.length || 0,
+        //     icon: <TbUsers />,
+        // },
         {
             title: "Productos Disponibles",
-            count: allFoodItems?.length || 0,
+            count: allInventoryItems?.length || 0,
             icon: <CiViewList />,
         },
         {

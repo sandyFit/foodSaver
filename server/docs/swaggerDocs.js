@@ -6,10 +6,11 @@ dotenv.config();
 
 const swaggerOptions = {
     swaggerDefinition: {
+        openapi: '3.0.0',
         info: {
-            title: 'Food Saver API', // API title
-            version: '1.0.0', // API version
-            description: 'API documentation for the Food Saver application', // API description
+            title: 'Food Saver API',
+            version: '1.0.0',
+            description: 'API documentation for the Food Saver application',
         },
         servers: [
             {
@@ -17,25 +18,45 @@ const swaggerOptions = {
                 description: 'Local server',
             },
         ],
+        security: [{
+            bearerAuth: []
+        }],
         components: {
             securitySchemes: {
                 bearerAuth: {
                     type: 'http',
                     scheme: 'bearer',
                     bearerFormat: 'JWT',
+                    description: 'Enter JWT token in format: Bearer <token>'
                 },
             },
         },
+        responses: {
+            UnauthorizedError: {
+                description: 'Authentication failed',
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                message: {
+                                    type: 'string',
+                                    example: 'Unauthorized',
+                                },
+                            }
+                        },
+                    },
+                },
+            },
+        },
+        basePath: '/api', // Add this line to specify the base path
     },
-    apis: ['./routes/*.js'], // Path to your API docs (adjust the path if necessary)
+    apis: ['./routes/*.js'],
 };
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 export default (app, port) => {
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs)); // Set up Swagger UI at /api-docs
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
     console.log(`Docs available at http://localhost:${port}/api-docs`);
 };
-
-
-

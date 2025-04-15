@@ -41,7 +41,7 @@ const AddItemModal = memo(({ onClose }) => {
     const [formData, setFormData] = useState({
         itemName: '',
         expirationDate: '',
-        category: 'diary',
+        location: 'refrigerator',
     });
 
     // Handle input changes
@@ -49,7 +49,7 @@ const AddItemModal = memo(({ onClose }) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: name === 'quantity' ? parseInt(value, 10) || 0 : value,
+            [name]: value,
         }));
     }, []);
 
@@ -57,7 +57,7 @@ const AddItemModal = memo(({ onClose }) => {
     const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
 
-        if (!formData.itemName || !formData.category || !formData.expirationDate) {
+        if (!formData.itemName || !formData.location || !formData.expirationDate) {
             toast.error(t('validations.required'));
             return;
         }
@@ -107,22 +107,21 @@ const AddItemModal = memo(({ onClose }) => {
                     <div className="flex flex-col md:flex-row gap-4">
                         <div className="flex ">
                             <div className="flex flex-col flex-1">
-                                <label htmlFor="category"
-                                    className="text-sm font-medium mb-1">{t('inventory.category')}</label>
+                                <label htmlFor="location"
+                                    className="text-sm font-medium mb-1">{t('inventory.location')}</label>
                                 <select
-                                    id="category"
-                                    name="category"
-                                    value={formData.category}
+                                    id="location"
+                                    name="location"
+                                    value={formData.location}
                                     onChange={handleChange}
                                     className="border p-2 rounded"
                                     required
                                 >
-                                    <option value="diary">{t('inventory.categories.diary')}</option>
-                                    <option value="meat">{t('inventory.categories.meat')}</option>
-                                    <option value="vegetables">{t('inventory.categories.vegetables')}</option>
-                                    <option value="fruits">{t('inventory.categories.fruits')}</option>
-                                    <option value="grains">{t('inventory.categories.grains')}</option>
-                                    <option value="other">{t('inventory.categories.other')}</option>
+                                    <option value="refrigerator">{t('inventory.locations.refrigerator')}</option>
+                                    <option value="freezer">{t('inventory.locations.freezer')}</option>
+                                    <option value="pantry">{t('inventory.locations.pantry')}</option>
+                                    <option value="cabinet">{t('inventory.locations.cabinet')}</option>
+                                    <option value="other">{t('inventory.locations.other')}</option>
                                 </select>
                             </div>
                         </div>

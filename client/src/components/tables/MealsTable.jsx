@@ -76,7 +76,7 @@ const MealsTable = React.memo(({
                         <tr>
                             <th className="table-th min-w-[140px]">{t('table.product')}</th>
                             <th className="table-th min-w-[140px]">{t('table.expiresIn')}</th>
-                            <th className="table-th min-w-[120px]">{t('table.category')}</th>
+                            <th className="table-th min-w-[120px]">{t('table.location')}</th>
                             <th className="table-th min-w-[220px]">{t('table.actions')}</th>
                         </tr>
                     </thead>
@@ -95,8 +95,9 @@ const MealsTable = React.memo(({
                                             {formatDate(item.expirationDate)}
                                         </td>
                                         <td className="table-td">
-                                            {item.category}
+                                            {item.location}
                                         </td>
+                                        
                                         <td className="table-td">
                                             <div className="flex flex-col md:flex-row gap-2">
                                                 <button

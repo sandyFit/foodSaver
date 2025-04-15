@@ -13,6 +13,7 @@ import Backend from 'i18next-fs-backend';
 import i18nextMiddleware from 'i18next-http-middleware';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { sanitizeResponse } from './middleware/responseSanitizer.js';
 
 
 dotenv.config();
@@ -78,6 +79,7 @@ await i18next
 // Apply middleware
 app.use(i18nextMiddleware.handle(i18next));
 
+app.use(sanitizeResponse);
 
 // DB Connection
 connectToMongoDB();

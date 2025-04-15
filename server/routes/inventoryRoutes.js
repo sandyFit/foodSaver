@@ -2,10 +2,8 @@ import express from 'express';
 import {
     getItems,
     createItem,
-    getItem,
     updateItem,
     deleteItem
-
 } from '../controllers/inventoryController.js';
 import { authenticateUser } from '../middleware/authMiddleware.js';
 
@@ -15,43 +13,54 @@ const router = express.Router();
  * @swagger
  * components:
  *   schemas:
- *     InventoryItem:
+ *     InventoryItemInput:
  *       type: object
  *       required:
  *         - itemName
  *         - expirationDate
- *         - quantity
+ *         - location
  *       properties:
- *         _id:
- *           type: string
- *           description: Auto-generated unique identifier
  *         itemName:
  *           type: string
- *           description: Name of the food item
+ *           example: "Organic Milk"
+ *           minLength: 2
+ *           maxLength: 100
  *         expirationDate:
  *           type: string
- *           format: date
- *           description: Expiration date of the item
- *         quantity:
- *           type: number
- *           description: Amount of the item
- *         category:
+ *           format: date-time
+ *           example: "2023-12-31"
+ *         location:
  *           type: string
- *           description: Food category
- *         userId:
+ *           enum: [refrigerator, freezer, pantry, cabinet, other]
+ *           example: "refrigerator"
+ * 
+ *     InventoryItemResponse:
+ *       type: object
+ *       properties:
+ *         id:
  *           type: string
- *           description: ID of the user who owns this item
- *         createdAt:
+ *           example: "507f1f77bcf86cd799439011"
+ *           readOnly: true
+ *         itemName:
+ *           type: string
+ *           example: "Organic Milk"
+ *         expirationDate:
  *           type: string
  *           format: date-time
- *         updatedAt:
+ *           example: "2025-04-30T00:00:00.000Z"
+ *         location:
+ *           type: string
+ *           example: "refrigerator"
+ *         addedDate:
  *           type: string
  *           format: date-time
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
+ *           readOnly: true
+ *           example: "2025-04-30T00:00:00.000Z"
+ *         status:
+ *           type: string
+ *           enum: [in_stock, low_stock, out_of_stock]
+ *           example: "in_stock"
+ *           readOnly: true
  */
 
 /**
@@ -63,7 +72,37 @@ const router = express.Router();
 
 /**
  * @swagger
- * /inventory:
+ * /api/inventory:
+ *   get:
+ *     summary: Get all inventory items (filtered to current user)
+ *     tags: [Inventory]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: location
+ *         schema:
+ *           type: string
+ *           enum: [refrigerator, freezer, pantry, cabinet, other]
+ *         description: Filter by storage location
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [in_stock, low_stock, out_of_stock]
+ *         description: Filter by expiration status
+ *     responses:
+ *       200:
+ *         description: List of inventory items
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/InventoryItemResponse'
+ *       401:
+ *         description: Unauthorized
+ * 
  *   post:
  *     summary: Create a new inventory item
  *     tags: [Inventory]
@@ -74,132 +113,93 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/InventoryItem'
+ *             $ref: '#/components/schemas/InventoryItemInput'
+ *           examples:
+ *             milk:
+ *               value:
+ *                 itemName: "Organic Milk"
+ *                 expirationDate: "2025-04-30"
+ *                 location: "refrigerator"
+ *             eggs:
+ *               value:
+ *                 itemName: "Free-range Eggs"
+ *                 expirationDate: "2025-04-30"
+ *                 location: "refrigerator"
  *     responses:
  *       201:
  *         description: Item created successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/InventoryItem'
+ *               $ref: '#/components/schemas/InventoryItemResponse'
  *       400:
- *         description: Invalid request data
- *       401:
- *         description: Unauthorized
- *
- *   get:
- *     summary: Get all inventory items for authenticated user
- *     tags: [Inventory]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *         description: Page number for pagination
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *         description: Items per page
- *     responses:
- *       200:
- *         description: List of inventory items
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 items:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/InventoryItem'
- *                 pagination:
- *                   type: object
- *                   properties:
- *                     total:
- *                       type: integer
- *                     pages:
- *                       type: integer
- *                     page:
- *                       type: integer
- *                     limit:
- *                       type: integer
+ *         description: Invalid input
  *       401:
  *         description: Unauthorized
  */
 
-router.route('/')
-    .post(authenticateUser, createItem)
-    .get(authenticateUser, getItems);
-
 /**
  * @swagger
- * /inventory/{id}:
- *   parameters:
- *     - in: path
- *       name: id
- *       schema:
- *         type: string
- *       required: true
- *       description: Item ID
- *   
- *   get:
- *     summary: Get an inventory item by ID
- *     tags: [Inventory]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Item found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InventoryItem'
- *       404:
- *         description: Item not found
- *   
+ * /api/inventory/{id}:
  *   put:
  *     summary: Update an inventory item
  *     tags: [Inventory]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         example: "507f1f77bcf86cd799439011"
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/InventoryItem'
+ *             $ref: '#/components/schemas/InventoryItemInput'
  *     responses:
  *       200:
  *         description: Item updated
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/InventoryItem'
+ *               $ref: '#/components/schemas/InventoryItemResponse'
+ *       400:
+ *         description: Invalid input
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: Item not found
- *   
+ * 
  *   delete:
  *     summary: Delete an inventory item
  *     tags: [Inventory]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         example: "507f1f77bcf86cd799439011"
  *     responses:
  *       200:
  *         description: Item deleted
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: Item not found
  */
 
+router.route('/')
+    .get(authenticateUser, getItems)
+    .post(authenticateUser, createItem);
+
 router.route('/:id')
-    .get(authenticateUser, getItem)
     .put(authenticateUser, updateItem)
     .delete(authenticateUser, deleteItem);
-
-
-//router.get('/recipes', authenticateUser, getRecipeSuggestions);
-
 
 export default router;

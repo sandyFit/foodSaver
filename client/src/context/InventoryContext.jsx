@@ -87,7 +87,14 @@ export const InventoryProvider = ({ children }) => {
     const updateInventoryItem = useCallback(async (id, updatedData) => {
         dispatch({ type: SET_LOADING, payload: true });
         try {
+            if (!id) {
+                throw new Error('Missing item ID');
+            }
+
+            // Ensure the ID is being sent correctly
+            console.log('Updating item with ID:', id);  // Debug log
             const response = await apiClient.request(`inventory/${id}`, 'PUT', updatedData);
+
             if (response.success) {
                 dispatch({ type: UPDATE_INVENTORY_ITEM, payload: response.item });
             }

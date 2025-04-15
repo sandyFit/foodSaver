@@ -5,7 +5,7 @@ import LogoutHandler from '../components/ui/LogoutHandler';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
-import Logo from '../components/ui/Logo';
+
 // Icons
 import { GoHome } from "react-icons/go";
 import { PiNotebookLight } from "react-icons/pi";
@@ -13,7 +13,6 @@ import { CiViewList } from "react-icons/ci";
 import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
 import { TbUsers } from "react-icons/tb";
-import { is } from 'date-fns/locale';
 
 const Dashboard = () => {
     const { t } = useTranslation();
@@ -53,8 +52,6 @@ const Dashboard = () => {
         initDashboard();
     }, [navigate, getUserInfo, isInitialized]);
 
-
-    // Use activeUser in your render methods
     const menuItems = React.useMemo(() =>
         activeUser?.role === 'user' ? [
             { to: '/dashboard', icon: <GoHome className='text-[1.3rem]' />, label: t('common.home'), current: location.pathname === '/dashboard' },
@@ -87,7 +84,6 @@ const Dashboard = () => {
         </Link>
     ), []);
 
-    // Remove the second loading check - it's redundant
     if (loading || !isInitialized) {
         return (
             <div className="w-full h-screen flex justify-center items-center bg-stone-200">
@@ -96,7 +92,6 @@ const Dashboard = () => {
         );
     }
 
-    // Use the activeUser variable consistently
     if (!activeUser) {
         console.log('No active user data');
         navigate('/', { state: { showLogin: true } });
