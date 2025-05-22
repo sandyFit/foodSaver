@@ -2,44 +2,81 @@ import InventoryItem from '../models/inventory.js';
 import User from '../models/users.js';
 import Notification from '../models/notifications.js';
 import { isValidObjectId } from '../validators/inventoryValidator.js';
+import inventory from '../models/inventory.js';
 
 const checkExpiringItems = async (userId) => {
-    const threshold = new Date();
-    threshold.setDate(threshold.getDate() + 7);
-
-    const expiringItems = await InventoryItem.find({
-        user: userId,
-        expirationDate: { $lte: threshold }
-    });
-
-    for (const item of expiringItems) {
-        const daysToExpire = Math.ceil(
-            (item.expirationDate - Date.now()) / (1000 * 60 * 60 * 24)
-        );
-
-        await Notification.create({
+    try {
+        const threshold = new Date();
+        threshold.setDate(threshold.getDate() + 7);
+        
+        const expiringItems = await InventoryItem.find({
             user: userId,
-            type: 'expired',
-            message: `notifications.expiring.message|${item.itemName}|${daysToExpire}`,
-            relatedItem: item._id
+            expirationDate: { $lte: threshold }
         });
+
+        // Create notifications in batch to improve performance
+        const notificationPromises = expiringItems.map(async (item) => {
+            const daysToExpire = Math.ceil(
+                (item.expirationDate - Date.now()) / (1000 * 60 * 60 * 24)
+            );
+            // Check if notifications already exist to avoid duplicates
+            const existingNotification = await Notification.findOne({
+                user: userId,
+                type: 'expired',
+                relatedItem: item._id,
+                createdAt: { $gte: new Date(Date.now() - 24 * 60 * 60 * 1000) } // Last 24 hours
+            });
+    
+            if (!existingNotification) {
+                return Notification.create({
+                    user: userId,
+                    type: 'expired',
+                    message: `notifications.expiring.message|${item.itemName}|${daysToExpire}`,
+                    relatedItem: item._id
+                });
+            };
+            return null;
+        });
+        await Promise.allSettled(notificationPromises);
+
+    } catch (error) {
+        console.error('Error checking expiring items:', error);
     }
 };
 
 const checkLowStock = async (userId, threshold = 3) => {
-    const lowStockItems = await InventoryItem.find({
-        user: userId,
-        quantity: { $lte: threshold }
-    });
-
-    for (const item of lowStockItems) {
-        await Notification.create({
+    try {
+        const lowStockItems = await InventoryItem.find({
             user: userId,
-            type: 'lowStock',
-            message: `notifications.lowStock.message|${item.itemName}|${item.quantity}`,
-            relatedItem: item._id
+            quantity: { $lte: threshold }
         });
+
+        // Create notifications in batch
+        const notificationPromises = lowStockItems.map(async (item) => {
+            // Check if notification already exists
+            const existingNotification = await Notification.findOne({
+                user: userId,
+                type: 'lowStock',
+                relatedItem: item._id,
+                createdAt: { $gte: new Date(Date.now() - 24 * 60 * 60 * 1000) } // Last 24 hours
+            });
+
+            if (!existingNotification) {
+                return Notification.create({
+                    user: userId,
+                    type: 'lowStock',
+                    message: `notifications.lowStock.message|${item.itemName}|${item.quantity}`,
+                    relatedItem: item._id
+                });
+            };
+            return null;
+        });
+        await Promise.allSettled(notificationPromises);
+        
+    } catch (error) {
+        console.error('Error checking low stock items:', error);
     }
+
 };
 
 // Helper function to sanitize inventory items
@@ -52,6 +89,11 @@ const sanitizeItem = (item) => {
     };
 };
 
+// Helper function to validate required fields
+const validateRequiredFields = (body, requiredFields) => {
+    const missing = requiredFields.filter(field => !body[field]);
+    return missing.length === 0 ? null : missing;
+}
 
 export const createItem = async (req, res, next) => {
     try {
@@ -64,41 +106,59 @@ export const createItem = async (req, res, next) => {
         }
 
         // Validate required fields
-        const { itemName, expirationDate, location } = req.body;
-        if (!itemName || !expirationDate || !location) {
+        const requiredFields = [itemName, expirationDate, location];
+        const missingFields = validateRequiredFields(req.body, requiredFields);
+
+        if (missingFields) {
             return res.status(400).json({
                 success: false,
-                message: 'validations.required'
+                message: 'validations.required',
+                missingFields
             });
-        }
+        };
 
-        // Create the item
-        const item = await InventoryItem.create({
-            ...req.body,
-            user: req.user.id
-        });
+        // Validate expiration date
+        const expirationDate = new Date(req.body.expirationDate);
+        if (isNaN(expirationDate.getTime())) {
+            return res.status(404).json({
+                success: false,
+                message: 'validations.invalidDate'
+            })
+        };
 
-        // Add item to user's inventory
+        // Check if user exists before creating item
         const user = await User.findById(req.user.id);
         if (!user) {
-            await InventoryItem.findByIdAndDelete(item._id);
-            return res.status(404).json({
+            return res.status(404) - json({
                 success: false,
                 message: 'auth.errors.userNotFound'
             });
-        }
+        };
 
+        // Create the item with validation data
+        const item = await InventoryItem.create({
+            ...req.body,
+            user: req.user.id, 
+            expirationDate,
+            addedDate: new Date()
+        });
+
+        // Add item to user's inventory
         await User.findByIdAndUpdate(req.user.id, {
             $push: { inventory: item._id }
         });
 
-        // Trigger checks
-        await checkExpiringItems(req.user.id);
-        await checkLowStock(req.user.id);
+        // Trigger background checks (don't await to avoid blocking response)
+        setImmediate(() => {
+            checkExpiringItems(req.user.id);
+            checkLowStock(req.user.id);
+        });
+            
 
         res.status(201).json({
             success: true,
-            item: sanitizeItem(item)
+            item: sanitizeItem(item),
+            message: 'inventory.messages.itemCreated'
         });
     } catch (error) {
         console.error('Error creating inventory item:', error);
@@ -108,9 +168,18 @@ export const createItem = async (req, res, next) => {
             const messages = Object.values(error.errors).map(err => err.message);
             return res.status(400).json({
                 success: false,
-                message: messages[0]
+                message: messages[0],
+                validationErrors: messages
             });
-        }
+        };
+
+        // Handle duplicate key errors
+        if (error.code === 1100) {
+            return res.status(409).json({
+                success: false,
+                message: 'inventory.errors.duplicateItem'
+            });
+        };
 
         // Handle other errors
         res.status(500).json({
@@ -126,7 +195,7 @@ export const getItems = async (req, res, next) => {
             .sort('-addedDate')
             .populate('user', 'fullName email');
 
-        res.json({
+        res.status(200).json({
             success: true,
             count: items.length,
             items: items.map(sanitizeItem) 
@@ -150,7 +219,7 @@ export const getItem = async (req, res, next) => {
             });
         }
 
-        res.json({ success: true, item });
+        res.status(200).json({ success: true, item });
     } catch (error) {
         next(error);
     }

@@ -28,5 +28,11 @@
             "suggestedRecipeNotFound": "We couldn't find any recipes that can be made with the ingredients you have at home.",          
             "recipeNotFound": "Recipe not found for the user"
         }
+    },
+    "inventory": {
+        "errors": {
+            "itemNotFound": "Item not found",
+            
+        }
     }
 }

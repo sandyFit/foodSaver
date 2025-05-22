@@ -69,7 +69,7 @@ const ItemsList = () => {
                 setDeletingItemId(itemId);
                 await deleteInventoryItem(itemId);
                 toast.success(t('notifications.itemDeleted'));
-                // No need to call getAllInventoryItems() here since deleteInventoryItem already updates the state
+                
             } catch (error) {
                 toast.error(error.message || t('notifications.deleteError'));
             } finally {
