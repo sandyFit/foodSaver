@@ -1,4 +1,40 @@
 {
+    "inventory": {
+        "messages": {
+            "itemCreated": "Item successfully created",
+            "itemUpdated": "Item successfully updated",
+            "itemDeleted": "Item successfully deleted",
+            "bulkDeleteCompleted": "Selected items deleted successfully"
+        },
+        "errors": {
+            "createFailed": "Failed to create item",
+            "updateFailed": "Failed to update item",
+            "deleteFailed": "Failed to delete item",
+            "bulkDeleteFailed": "Failed to delete selected items",
+            "duplicateItem": "An item with the same name already exists",
+            "fetchFailed": "Failed to fetch inventory data",
+            "itemNotFound": "Item not found",
+            "statsFailed": "Failed to fetch inventory statistics"
+        }
+    },
+    "auth": {
+        "messages": {
+            "notFound": "User not found"
+        }
+    },
+
+    "notifications": {
+        "expiring": {
+            "message": "{{item}} is expiring in {{days}} day{{daysPlural}}"
+        },
+
+        "lowStock": {
+            "message": "Only {{quantity}} {{item}} left in stock"
+        }
+
+
+    },
+
     "recipes": {
         "suggested": {
             "title": "Suggested Recipes",
@@ -28,11 +64,6 @@
             "suggestedRecipeNotFound": "We couldn't find any recipes that can be made with the ingredients you have at home.",          
             "recipeNotFound": "Recipe not found for the user"
         }
-    },
-    "inventory": {
-        "errors": {
-            "itemNotFound": "Item not found",
-            
-        }
     }
+    
 }

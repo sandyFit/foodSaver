@@ -1,4 +1,38 @@
 {
+    "inventory": {
+        "messages": {
+            "itemCreated": "Artículo creado con éxito",
+            "itemUpdated": "Artículo actualizado con éxito",
+            "itemDeleted": "Artículo eliminado con éxito",
+            "bulkDeleteCompleted": "Los artículos seleccionados se eliminaron correctamente"
+        },
+        "errors": {
+            "createFailed": "Error al crear el artículo",
+            "updateFailed": "Error al actualizar el artículo",
+            "deleteFailed": "Error al eliminar el artículo",
+            "bulkDeleteFailed": "Error al eliminar los artículos seleccionados",
+            "duplicateItem": "Ya existe un artículo con el mismo nombre",
+            "fetchFailed": "Error al obtener los datos del inventario",
+            "itemNotFound": "Artículo no encontrado",
+            "statsFailed": "Error al obtener las estadísticas del inventario"
+        }
+    },
+
+    "auth": {
+        "messages": {
+            "notFound": "Usuario no encontrado"
+        }
+    },
+
+    "notifications": {
+        "expiring": {
+            "message": "{{item}} vence en {{days}} días"
+        },
+        "lowStock": {
+            "message": "Solo quedan {{quantity}} {{item}} en stock"
+        }
+    },
+
     "recipes": {
         "suggested": {
             "title": "Recetas Sugeridas",
