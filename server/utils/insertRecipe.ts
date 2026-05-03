@@ -102,6 +102,6 @@ newRecipe.save()
         console.log('Recipe saved successfully!');
         mongoose.connection.close(); // Cerrar la conexión
     })
-    .catch((err) => {
+    .catch((err: any) => {
         console.log('Error saving recipe:', err);
     });

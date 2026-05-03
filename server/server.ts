@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import connectToMongoDB from './config/db.js';
 import swaggerDocs from './docs/swaggerDocs.js';
@@ -10,17 +10,18 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
-import i18nextMiddleware from 'i18next-http-middleware';
+import * as i18nextMiddleware from 'i18next-http-middleware';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { sanitizeResponse } from './middleware/responseSanitizer.js';
 import logger from './utils/logger.js';
 
+
 dotenv.config();
 // console.log("ENV CHECK:", process.env.MONGO_URI);
 const app = express();
 
-// CORS Configuration
+// ✅ Type-safe CORS config
 app.use(cors({
     origin: [
         'http://localhost:5173',
@@ -37,9 +38,10 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 
-// Body parsing configuration
+// ✅ Body parsing configuration
 app.use(express.urlencoded({ extended: true }));
-app.use((req, res, next) => {
+
+app.use((req: Request, res: Response, next: NextFunction) => {
     if (req.method === 'DELETE') {
         // Skip body parsing for DELETE requests
         next();
@@ -77,34 +79,38 @@ await i18next
         }
     });
 
-// Apply middleware
+// ✅ Apply middleware
 app.use(i18nextMiddleware.handle(i18next));
 
 app.use(sanitizeResponse);
 
-// DB Connection
-connectToMongoDB();
+// ✅ DB connection (add await later when you type it)
+await connectToMongoDB();
 
-// Routes with specific prefixes for each resource
+// ✅ Routes with specific prefixes for each resource
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/notifications', notificationRoutes);
 
-// Route logging (for debugging)
+// ✅ Dev-only route logging (typed safely) for debugging
 if (process.env.NODE_ENV === 'development') {
-    app._router.stack.forEach((middleware) => {
-        if (middleware.route) {
-            console.log(`Registered route: ${middleware.route.path}`);
-        }
-    });
+    const router = (app as any)._router;
+    if (router?.stack) {
+        router.stack.forEach((middleware: any) => {
+            if (middleware.route) {
+                logger.debug(`Registered route: ${middleware.route.path}`);
+            }
+        });
+    }
 }
 
-// Swagger Docs
+// ✅ Swagger Docs
 swaggerDocs(app, process.env.PORT || 5555);
 
-// Server setup
-const PORT = process.env.PORT || 5555;
+// ✅ Server setup
+const PORT: number = Number(process.env.PORT) || 5555;
+
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT} in mode: ${process.env.NODE_ENV}`);
+    logger.info(`Server is running on http://localhost:${PORT} in mode: ${process.env.NODE_ENV}`);
 });

@@ -1,6 +1,7 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import dotenv from 'dotenv';
+import { Express } from 'express';
 
 dotenv.config();
 
@@ -56,7 +57,7 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
-export default (app, port) => {
+export default (app: Express, port: number | string): void => {
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
     console.log(`Docs available at http://localhost:${port}/api-docs`);
 };
