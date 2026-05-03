@@ -1,41 +1,97 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Schema, Model } from 'mongoose';
 
-const ingredientSchema = new mongoose.Schema({
+/* -----------------------
+   Ingredient Type
+------------------------ */
+export interface IIngredient {
+    ingredientId?: string;
+    name: string;
+    quantity: string;
+}
+
+/* -----------------------
+   Recipe Type
+------------------------ */
+export interface IRecipe extends Document {
+    recipeId?: string;
+    name: string;
+    description: string;
+    category: string;
+    ingredients: IIngredient[];
+    steps: string[];
+    prep_time: number;
+    cook_time: number;
+    total_time: number;
+    servings: number;
+    tags: string[];
+    image_url?: string;
+    ratings: number;
+    created_at: Date;
+    updated_at: Date;
+}
+
+/* -----------------------
+   Ingredient Schema
+------------------------ */
+const ingredientSchema = new Schema<IIngredient>({
     ingredientId: {
         type: String,
         required: false,
-        default: function () {
-            return this.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        }
+        default: function (this: IIngredient) {
+            return this.name
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)/g, '');
+        },
     },
     name: { type: String, required: true },
-    quantity: { type: String, required: true }
+    quantity: { type: String, required: true },
 });
 
-const recipeSchema = new mongoose.Schema({
+/* -----------------------
+   Recipe Schema
+------------------------ */
+const recipeSchema = new Schema<IRecipe>({
     recipeId: {
         type: String,
         required: false,
-        unique: true,  // Keep ONLY this one (remove the schema.index() below)
-        default: function () {
-            return this.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        }
+        unique: true,
+        default: function (this: IRecipe) {
+            return this.name
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)/g, '');
+        },
     },
+
     name: { type: String, required: true },
     description: { type: String, required: true },
     category: { type: String, required: true },
+
     ingredients: [ingredientSchema],
+
     steps: [{ type: String, required: true }],
+
     prep_time: { type: Number, required: true },
     cook_time: { type: Number, required: true },
     total_time: { type: Number, required: true },
+
     servings: { type: Number, required: true },
-    tags: [String],
+
+    tags: [{ type: String }],
+
     image_url: { type: String },
+
     ratings: { type: Number, default: 0 },
+
     created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now }
+    updated_at: { type: Date, default: Date.now },
 });
 
+/* -----------------------
+   Model Export
+------------------------ */
+const Recipe: Model<IRecipe> =
+    mongoose.models.Recipe || mongoose.model<IRecipe>('Recipe', recipeSchema);
 
-export default mongoose.model('Recipe', recipeSchema);
+export default Recipe;
