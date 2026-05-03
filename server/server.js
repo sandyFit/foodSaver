@@ -14,9 +14,10 @@ import i18nextMiddleware from 'i18next-http-middleware';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { sanitizeResponse } from './middleware/responseSanitizer.js';
-
+import logger from './utils/logger.js';
 
 dotenv.config();
+// console.log("ENV CHECK:", process.env.MONGO_URI);
 const app = express();
 
 // CORS Configuration
@@ -69,10 +70,10 @@ await i18next
         interpolation: {
             escapeValue: false, // React already does escaping
         },
-        debug: process.env.NODE_ENV === 'development',
+        debug: process.env.I18N_DEBUG === 'true',
         saveMissing: true,
         missingKeyHandler: (lng, ns, key) => {
-            console.warn(`Missing translation: ${key}`);
+            //console.warn(`Missing translation: ${key}`);
         }
     });
 
@@ -91,11 +92,13 @@ app.use('/api/inventory', inventoryRoutes);
 app.use('/api/notifications', notificationRoutes);
 
 // Route logging (for debugging)
-app._router.stack.forEach((middleware) => {
-    if (middleware.route) {
-        console.log(`Registered route: ${middleware.route.path}`);
-    }
-});
+if (process.env.NODE_ENV === 'development') {
+    app._router.stack.forEach((middleware) => {
+        if (middleware.route) {
+            console.log(`Registered route: ${middleware.route.path}`);
+        }
+    });
+}
 
 // Swagger Docs
 swaggerDocs(app, process.env.PORT || 5555);
