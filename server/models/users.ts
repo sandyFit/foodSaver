@@ -36,8 +36,8 @@ export interface IUser extends Document {
     unseenNotifications: string[];
     createdAt: Date;
     registrationDate: Date;
-    resetPasswordToken: String,
-    resetPasswordExpire: Date,
+    resetPasswordToken?: String,
+    resetPasswordExpire?: Date,
 
 
     // Methods
