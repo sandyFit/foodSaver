@@ -415,7 +415,7 @@ export const requestPasswordReset = asyncHandler(
             // await sendPasswordResetEmail(user.email, resetURL);
             logger.info({ userId: user._id }, 'Password reset email would be sent');
         } else {
-            // Log token only in dev for debugging
+            // Log token only in devfor debugging
             logger.debug({
                 resetToken,
                 resetURL,

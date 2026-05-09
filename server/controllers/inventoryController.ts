@@ -1,87 +1,111 @@
 import InventoryItem from '../models/inventory.js';
+import {
+    IInventoryItem,
+    InventoryFilter,
+    GetItemsQuery,
+    GetItemParams,
+    UpdateItemParams,
+    UpdateInventoryData,
+} from '../models/inventory.js';
 import User from '../models/users.js';
 import Notification from '../models/notifications.js';
 import { isValidObjectId } from '../validators/inventoryValidator.js';
+import { Request, Response } from 'express';
+import { AuthRequest } from '../middleware/authMiddleware.js';
+import {
+    EXPIRING_DAYS_THRESHOLD,
+    LOW_STOCK_THRESHOLD,
+    MAX_BULK_DELETE
+} from '../constants/constants.js';
 
-const checkExpiringItems = async (userId) => {
+
+const checkExpiringItems = async (userId: string) => {
     try {
         const threshold = new Date();
-        threshold.setDate(threshold.getDate() + 7);
+        threshold.setDate(threshold.getDate() + EXPIRING_DAYS_THRESHOLD);
 
-        const expiringItems = await InventoryItem.find({
+        const expiringItems = await InventoryItem.getExpiringItems(userId);
+
+        if (expiringItems.length === 0) return;
+
+        // Get existing notificacions in one query
+        const itemIds = expiringItems.map(i => i._id);
+        const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+        const existingNotifications = await Notification.find({
             user: userId,
-            expirationDate: { $lte: threshold }
+            type: 'expired',
+            item: { $in: itemIds },
+            createdAt: { $gte: last24h }
         });
 
-        // Create notifications in batch to improve performance
-        const notificationPromises = expiringItems.map(async (item) => {
-            const daysToExpire = Math.ceil(
-                (item.expirationDate - Date.now()) / (1000 * 60 * 60 * 24)
-            );
+        const existingItemIds = new Set(
+            existingNotifications.map(n => n.item.toString())
+        );
 
-            // Check if notification already exists to avoid duplicates
-            const existingNotification = await Notification.findOne({
+        // Solo crear las que no existen
+        const newNotifications = expiringItems
+            .filter(item => !existingItemIds.has(item._id.toString()))
+            .map(item => ({
                 user: userId,
                 type: 'expired',
-                relatedItem: item._id,
-                createdAt: { $gte: new Date(Date.now() - 24 * 60 * 60 * 1000) } // Last 24 hours
-            });
+                message: `notifications.expiring.message|${item.itemName}|${Math.ceil((item.expirationDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))}`,
+                item: item._id
+            }));
 
-            if (!existingNotification) {
-                return Notification.create({
-                    user: userId,
-                    type: 'expired',
-                    message: `notifications.expiring.message|${item.itemName}|${daysToExpire}`,
-                    relatedItem: item._id
-                });
-            }
-            return null;
-        });
-
-        await Promise.allSettled(notificationPromises);
+        if (newNotifications.length > 0) {
+            await Notification.insertMany(newNotifications);
+        }
     } catch (error) {
         console.error('Error checking expiring items:', error);
-        // Don't throw - this is a background check that shouldn't break main operations
     }
 };
 
-const checkLowStock = async (userId, threshold = 3) => {
+const checkLowStock = async (
+    userId: string,
+    threshold = LOW_STOCK_THRESHOLD
+) => {
     try {
         const lowStockItems = await InventoryItem.find({
             user: userId,
             quantity: { $lte: threshold }
         });
 
-        // Create notifications in batch
-        const notificationPromises = lowStockItems.map(async (item) => {
-            // Check if notification already exists to avoid duplicates
-            const existingNotification = await Notification.findOne({
-                user: userId,
-                type: 'lowStock',
-                relatedItem: item._id,
-                createdAt: { $gte: new Date(Date.now() - 24 * 60 * 60 * 1000) } // Last 24 hours
-            });
+        if (lowStockItems.length === 0) return;
 
-            if (!existingNotification) {
-                return Notification.create({
-                    user: userId,
-                    type: 'lowStock',
-                    message: `notifications.lowStock.message|${item.itemName}|${item.quantity}`,
-                    relatedItem: item._id
-                });
-            }
-            return null;
+        const itemIds = lowStockItems.map(i => i._id);
+        const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+        const existingNotifications = await Notification.find({
+            user: userId,
+            type: 'lowStock',
+            item: { $in: itemIds },
+            createdAt: { $gte: last24h }
         });
 
-        await Promise.allSettled(notificationPromises);
+        const existingItemIds = new Set(
+            existingNotifications.map(n => n.item.toString())
+        );
+
+        const newNotifications = lowStockItems
+            .filter(item => !existingItemIds.has(item._id.toString()))
+            .map(item => ({
+                user: userId,
+                type: 'lowStock',
+                message: `notifications.lowStock.message|${item.itemName}|${item.quantity}`,
+                item: item._id
+            }));
+
+        if (newNotifications.length > 0) {
+            await Notification.insertMany(newNotifications);
+        }
     } catch (error) {
         console.error('Error checking low stock items:', error);
-        // Don't throw - this is a background check that shouldn't break main operations
     }
 };
 
 // Helper function to sanitize inventory items
-const sanitizeItem = (item) => {
+const sanitizeItem = (item: IInventoryItem | null) => {
     if (!item) return null;
     const itemObj = item.toObject ? item.toObject() : item;
     const { user, __v, _id, ...rest } = itemObj;
@@ -92,21 +116,16 @@ const sanitizeItem = (item) => {
 };
 
 // Helper function to validate required fields
-const validateRequiredFields = (body, requiredFields) => {
+const validateRequiredFields = (
+    body: Record<string, unknown>,
+    requiredFields: string[]
+) => {
     const missing = requiredFields.filter(field => !body[field]);
     return missing.length === 0 ? null : missing;
 };
 
-export const createItem = async (req, res, next) => {
+export const createItem = async (req: AuthRequest, res: Response) => {
     try {
-        // Validate authentication
-        if (!req.user?.id) {
-            return res.status(401).json({
-                success: false,
-                message: 'auth.errors.unauthorized'
-            });
-        }
-
         // Validate required fields
         const requiredFields = ['itemName', 'expirationDate', 'location'];
         const missingFields = validateRequiredFields(req.body, requiredFields);
@@ -163,12 +182,12 @@ export const createItem = async (req, res, next) => {
             item: sanitizeItem(item),
             message: 'inventory.messages.itemCreated'
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error creating inventory item:', error);
 
         // Handle validation errors
         if (error.name === 'ValidationError') {
-            const messages = Object.values(error.errors).map(err => err.message);
+            const messages = Object.values(error.errors).map((err: any) => err.message);
             return res.status(400).json({
                 success: false,
                 message: messages[0],
@@ -191,20 +210,15 @@ export const createItem = async (req, res, next) => {
     }
 };
 
-export const getItems = async (req, res, next) => {
-    try {
-        // Validate authentication
-        if (!req.user?.id) {
-            return res.status(401).json({
-                success: false,
-                message: 'auth.errors.unauthorized'
-            });
-        }
 
-        // Parse query parameters for filtering and pagination
+export const getItems = async (
+    req: Request<{}, {}, {}, GetItemsQuery>,
+    res: Response
+) => {
+    try {
         const {
-            page = 1,
-            limit = 50,
+            page = '1',
+            limit = '50',
             sortBy = 'addedDate',
             sortOrder = 'desc',
             location,
@@ -212,26 +226,37 @@ export const getItems = async (req, res, next) => {
             lowStock
         } = req.query;
 
-        // Build filter query
-        const filter = { user: req.user.id };
+        const filter: InventoryFilter = {
+            user: req.user.id
+        };
 
         if (location) {
-            filter.location = { $regex: location, $options: 'i' };
+            filter.location = {
+                $regex: location,
+                $options: 'i'
+            };
         }
 
         if (expired === 'true') {
-            filter.expirationDate = { $lt: new Date() };
+            filter.expirationDate = {
+                $lt: new Date()
+            };
         }
 
         if (lowStock === 'true') {
-            filter.quantity = { $lte: 3 };
+            filter.quantity = {
+                $lte: LOW_STOCK_THRESHOLD
+            };
         }
 
         // Calculate pagination
         const skip = (parseInt(page) - 1) * parseInt(limit);
-        const sortOption = {};
-        sortOption[sortBy] = sortOrder === 'desc' ? -1 : 1;
 
+        const sortOption: Record<string, 1 | -1> = {};
+
+        sortOption[sortBy] =
+            sortOrder === 'desc' ? -1 : 1;
+ 
         // Execute query with pagination
         const [items, totalCount] = await Promise.all([
             InventoryItem.find(filter)
@@ -250,6 +275,8 @@ export const getItems = async (req, res, next) => {
             totalPages: Math.ceil(totalCount / parseInt(limit)),
             items: items.map(sanitizeItem)
         });
+
+
     } catch (error) {
         console.error('Error fetching inventory items:', error);
         res.status(500).json({
@@ -259,16 +286,11 @@ export const getItems = async (req, res, next) => {
     }
 };
 
-export const getItem = async (req, res, next) => {
+export const getItem = async (
+    req: AuthRequest<GetItemParams>,
+    res: Response
+) => {
     try {
-        // Validate authentication
-        if (!req.user?.id) {
-            return res.status(401).json({
-                success: false,
-                message: 'auth.errors.unauthorized'
-            });
-        }
-
         // Validate ID parameter
         if (!req.params.id || !isValidObjectId(req.params.id)) {
             return res.status(400).json({
@@ -302,25 +324,21 @@ export const getItem = async (req, res, next) => {
     }
 };
 
-export const updateItem = async (req, res, next) => {
-    try {
-        // Validate authentication
-        if (!req.user?.id) {
-            return res.status(401).json({
-                success: false,
-                message: 'auth.errors.unauthorized'
-            });
-        }
 
-        // Validate ID parameter
-        if (!req.params.id || !isValidObjectId(req.params.id)) {
+export const updateItem = async (
+    req: AuthRequest<UpdateItemParams>,
+    res: Response
+) => {
+    try {
+        const { id } = req.params;
+
+        if (!isValidObjectId(id)) {
             return res.status(400).json({
                 success: false,
                 message: 'validations.invalidId'
             });
         }
 
-        // Validate at least one field is provided for update
         if (!req.body || Object.keys(req.body).length === 0) {
             return res.status(400).json({
                 success: false,
@@ -328,40 +346,53 @@ export const updateItem = async (req, res, next) => {
             });
         }
 
-        // Build update object with only provided fields
-        const updateData = {};
-        const allowedFields = ['itemName', 'expirationDate', 'location', 'quantity', 'description'];
+        const updateData: UpdateInventoryData = {};
 
-        allowedFields.forEach(field => {
+        const allowedFields: (keyof UpdateInventoryData)[] = [
+            'itemName',
+            'expirationDate',
+            'location',
+            'quantity',
+            'description'
+        ];
+
+        for (const field of allowedFields) {
             if (req.body[field] !== undefined) {
+
                 if (field === 'expirationDate') {
                     const date = new Date(req.body[field]);
+
                     if (isNaN(date.getTime())) {
                         return res.status(400).json({
                             success: false,
                             message: 'validations.invalidDate'
                         });
                     }
-                    updateData[field] = date;
+
+                    updateData.expirationDate = date;
+
                 } else if (field === 'quantity') {
                     const quantity = parseInt(req.body[field]);
+
                     if (isNaN(quantity) || quantity < 0) {
                         return res.status(400).json({
                             success: false,
                             message: 'validations.invalidQuantity'
                         });
                     }
-                    updateData[field] = quantity;
+
+                    updateData.quantity = quantity;
+
                 } else {
                     updateData[field] = req.body[field];
                 }
             }
-        });
+        };
 
         updateData.updatedDate = new Date();
 
         const item = await InventoryItem.findOneAndUpdate(
-            { _id: req.params.id, user: req.user.id },
+            { _id: id, user: req.user.id },
             updateData,
             { new: true, runValidators: true }
         );
@@ -384,14 +415,14 @@ export const updateItem = async (req, res, next) => {
             item: sanitizeItem(item),
             message: 'inventory.messages.itemUpdated'
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Update error:', error);
 
         if (error.name === 'ValidationError') {
             return res.status(400).json({
                 success: false,
-                message: Object.values(error.errors).map(err => err.message).join(', '),
-                validationErrors: Object.values(error.errors).map(err => err.message)
+                message: Object.values(error.errors).map((err: any) => err.message).join(', '),
+                validationErrors: Object.values(error.errors).map((err: any) => err.message)
             });
         }
 
@@ -409,16 +440,11 @@ export const updateItem = async (req, res, next) => {
     }
 };
 
-export const deleteItem = async (req, res, next) => {
+export const deleteItem = async (
+    req: AuthRequest<UpdateItemParams>,
+    res: Response
+) => {
     try {
-        // Validate authentication
-        if (!req.user?.id) {
-            return res.status(401).json({
-                success: false,
-                message: 'auth.errors.unauthorized'
-            });
-        }
-
         // Validate ID parameter
         if (!req.params.id || !isValidObjectId(req.params.id)) {
             return res.status(400).json({
@@ -446,7 +472,7 @@ export const deleteItem = async (req, res, next) => {
             }),
             Notification.deleteMany({
                 user: req.user.id,
-                relatedItem: item._id
+                item: item._id
             })
         ]);
 
@@ -464,15 +490,8 @@ export const deleteItem = async (req, res, next) => {
 };
 
 // Bulk operations
-export const bulkDelete = async (req, res, next) => {
+export const bulkDelete = async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.user?.id) {
-            return res.status(401).json({
-                success: false,
-                message: 'auth.errors.unauthorized'
-            });
-        }
-
         const { itemIds } = req.body;
         if (!Array.isArray(itemIds) || itemIds.length === 0) {
             return res.status(400).json({
@@ -491,6 +510,13 @@ export const bulkDelete = async (req, res, next) => {
             });
         }
 
+        if (itemIds.length > MAX_BULK_DELETE) {
+            return res.status(400).json({
+                success: false,
+                message: `inventory.errors.maxBulkDelete|${MAX_BULK_DELETE}`
+            });
+        }
+
         const result = await InventoryItem.deleteMany({
             _id: { $in: itemIds },
             user: req.user.id
@@ -503,7 +529,7 @@ export const bulkDelete = async (req, res, next) => {
             }),
             Notification.deleteMany({
                 user: req.user.id,
-                relatedItem: { $in: itemIds }
+                item: { $in: itemIds }
             })
         ]);
 
@@ -522,7 +548,7 @@ export const bulkDelete = async (req, res, next) => {
 };
 
 // Get inventory statistics
-export const getInventoryStats = async (req, res, next) => {
+export const getInventoryStats = async (req: AuthRequest, res: Response) => {
     try {
         if (!req.user?.id) {
             return res.status(401).json({
@@ -533,7 +559,7 @@ export const getInventoryStats = async (req, res, next) => {
 
         const now = new Date();
         const weekFromNow = new Date();
-        weekFromNow.setDate(weekFromNow.getDate() + 7);
+        weekFromNow.setDate(weekFromNow.getDate() + EXPIRING_DAYS_THRESHOLD);
 
         const [
             totalItems,
