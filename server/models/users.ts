@@ -19,6 +19,7 @@ export interface IAvatar {
    User Interface (Document)
 ----------------------------- */
 export interface IUser extends Document {
+    id: string;
     fullName: string;
     email: string;
     password: string;
@@ -119,15 +120,23 @@ const userSchema = new Schema<IUser>(
 /* -----------------------------
    Middleware — Encrypt password before saving
 ----------------------------- */
-userSchema.pre<IUser>('save', async function (next) {
-    if (!this.isModified('password')) return next();
-    this.password = await bcrypt.hash(this.password, 10);
-    next();
-});
+userSchema.pre<IUser>('save', async function () {
+    if (!this.isModified('password')) return;
 
+    this.password = await bcrypt.hash(this.password, 10);
+});
 /* -----------------------------
    Methods
 ----------------------------- */
+// Agregar virtual id
+userSchema.virtual('id').get(function (this: IUser) {
+    return this._id.toString();
+});
+
+// Configurar para incluir virtuals en JSON
+userSchema.set('toJSON', { virtuals: true });
+userSchema.set('toObject', { virtuals: true });
+
 // Compare passwords
 userSchema.methods.comparePass = async function (
     this: IUser,
