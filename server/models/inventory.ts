@@ -168,16 +168,16 @@ inventoryItemSchema.methods.checkExpiration = function (
 inventoryItemSchema.statics.getExpiringItems = async function (
     userId: string,
     daysThreshold = EXPIRING_DAYS_THRESHOLD
-): Promise<IInventoryItem[]>  {
+): Promise<IInventoryItem[]> {
+    const now = new Date();
     const threshold = new Date();
     threshold.setDate(threshold.getDate() + daysThreshold);
 
     return this.find({
         user: userId,
-        expirationDate: { $lte: threshold }
+        expirationDate: { $gte: now, $lte: threshold }
     });
 };
-
 /* ------------------------
    Model
 ------------------------ */

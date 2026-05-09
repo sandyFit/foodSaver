@@ -10,7 +10,7 @@ import {
 import User from '../models/users.js';
 import Notification from '../models/notifications.js';
 import { isValidObjectId } from '../validators/inventoryValidator.js';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AuthRequest } from '../middleware/authMiddleware.js';
 import {
     EXPIRING_DAYS_THRESHOLD,
@@ -21,20 +21,15 @@ import {
 
 const checkExpiringItems = async (userId: string) => {
     try {
-        const threshold = new Date();
-        threshold.setDate(threshold.getDate() + EXPIRING_DAYS_THRESHOLD);
-
         const expiringItems = await InventoryItem.getExpiringItems(userId);
-
         if (expiringItems.length === 0) return;
 
-        // Get existing notificacions in one query
         const itemIds = expiringItems.map(i => i._id);
         const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
         const existingNotifications = await Notification.find({
             user: userId,
-            type: 'expired',
+            type: 'expiringSoon',
             item: { $in: itemIds },
             createdAt: { $gte: last24h }
         });
@@ -43,12 +38,11 @@ const checkExpiringItems = async (userId: string) => {
             existingNotifications.map(n => n.item.toString())
         );
 
-        // Solo crear las que no existen
         const newNotifications = expiringItems
             .filter(item => !existingItemIds.has(item._id.toString()))
             .map(item => ({
                 user: userId,
-                type: 'expired',
+                type: 'expiringSoon',
                 message: `notifications.expiring.message|${item.itemName}|${Math.ceil((item.expirationDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))}`,
                 item: item._id
             }));
@@ -212,7 +206,7 @@ export const createItem = async (req: AuthRequest, res: Response) => {
 
 
 export const getItems = async (
-    req: Request<{}, {}, {}, GetItemsQuery>,
+    req: AuthRequest,
     res: Response
 ) => {
     try {
@@ -224,7 +218,7 @@ export const getItems = async (
             location,
             expired,
             lowStock
-        } = req.query;
+        } = req.query as GetItemsQuery;
 
         const filter: InventoryFilter = {
             user: req.user.id
@@ -550,13 +544,6 @@ export const bulkDelete = async (req: AuthRequest, res: Response) => {
 // Get inventory statistics
 export const getInventoryStats = async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.user?.id) {
-            return res.status(401).json({
-                success: false,
-                message: 'auth.errors.unauthorized'
-            });
-        }
-
         const now = new Date();
         const weekFromNow = new Date();
         weekFromNow.setDate(weekFromNow.getDate() + EXPIRING_DAYS_THRESHOLD);
@@ -579,7 +566,7 @@ export const getInventoryStats = async (req: AuthRequest, res: Response) => {
             }),
             InventoryItem.countDocuments({
                 user: req.user.id,
-                quantity: { $lte: 3 }
+                quantity: { $lte: LOW_STOCK_THRESHOLD }
             }),
             InventoryItem.aggregate([
                 { $match: { user: req.user.id } },

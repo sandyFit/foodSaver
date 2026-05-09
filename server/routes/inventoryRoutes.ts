@@ -1,6 +1,7 @@
 import express from 'express';
 import {
     getItems,
+    getItem,
     createItem,
     updateItem,
     deleteItem
@@ -199,6 +200,7 @@ router.route('/')
     .post(authenticateUser, createItem);
 
 router.route('/:id')
+    .get(authenticateUser, getItem)
     .put(authenticateUser, updateItem)
     .delete(authenticateUser, deleteItem);
 

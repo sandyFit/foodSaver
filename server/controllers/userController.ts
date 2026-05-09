@@ -329,15 +329,6 @@ export const deleteUser = asyncHandler(
 
 export const deleteUserAdmin = asyncHandler(
     async (req: Request, res: Response): Promise<void> => {
-
-        if (req.user.role !== 'admin') {
-            res.status(403).json({
-                success: false,
-                message: 'Unauthorized access',
-            });
-            return;
-        }
-
         const user = await User.findByIdAndDelete(req.params.id);
 
         if (!user) {
