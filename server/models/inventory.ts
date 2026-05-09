@@ -1,4 +1,5 @@
 import mongoose, { Document, Model, Schema, Types } from 'mongoose';
+import { EXPIRING_DAYS_THRESHOLD } from '../constants/constants.js';
 
 /* ------------------------
    Types
@@ -23,9 +24,11 @@ export type InventoryAction =
 ------------------------ */
 
 export interface IInventoryItem extends Document {
+    _id: Types.ObjectId;
     user: Types.ObjectId;
     itemName: string;
     expirationDate: Date;
+    quantity: number;
     location: Location;
     addedDate: Date;
     version: number;
@@ -34,6 +37,52 @@ export interface IInventoryItem extends Document {
 
     checkExpiration(): number | null;
 }
+
+export interface IInventoryItemModel extends Model<IInventoryItem> {
+    getExpiringItems(userId: string): Promise<IInventoryItem[]>;
+}
+
+export interface InventoryFilter {
+    user: string;
+    location?: {
+        $regex: string;
+        $options: string;
+    };
+    expirationDate?: {
+        $lt: Date;
+    };
+    quantity?: {
+        $lte: number;
+    };
+}
+
+export interface GetItemsQuery {
+    page?: string;
+    limit?: string;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+    location?: string;
+    expired?: string;
+    lowStock?: string;
+}
+
+export interface GetItemParams {
+    id: string;
+}
+
+export interface UpdateItemParams {
+    id: string;
+}
+
+export interface UpdateInventoryData {
+    itemName?: string;
+    expirationDate?: Date;
+    location?: string;
+    quantity?: number;
+    description?: string;
+    updatedDate?: Date;
+}
+
 
 /* ------------------------
    Schema
@@ -56,6 +105,12 @@ const inventoryItemSchema = new Schema<IInventoryItem>(
         expirationDate: {
             type: Date,
             required: [true, 'models.inventory.validation.expirationDateRequired'],
+        },
+
+        quantity: {
+            type: Number,
+            default: 1,
+            min: [0, 'models.inventory.validation.quantityMin']
         },
 
         location: {
@@ -101,21 +156,37 @@ const inventoryItemSchema = new Schema<IInventoryItem>(
 
 inventoryItemSchema.methods.checkExpiration = function (
     this: IInventoryItem
-): number | null {
+): number {
     const diff =
         this.expirationDate.getTime() - Date.now();
 
     const daysToExpire = Math.ceil(diff / (1000 * 60 * 60 * 24));
 
-    return daysToExpire <= 7 ? daysToExpire : null;
+    return daysToExpire;
+};
+
+inventoryItemSchema.statics.getExpiringItems = async function (
+    userId: string,
+    daysThreshold = EXPIRING_DAYS_THRESHOLD
+): Promise<IInventoryItem[]>  {
+    const threshold = new Date();
+    threshold.setDate(threshold.getDate() + daysThreshold);
+
+    return this.find({
+        user: userId,
+        expirationDate: { $lte: threshold }
+    });
 };
 
 /* ------------------------
    Model
 ------------------------ */
 
-const InventoryItem: Model<IInventoryItem> =
-    mongoose.models.InventoryItem ||
-    mongoose.model<IInventoryItem>('InventoryItem', inventoryItemSchema);
+const InventoryItem =
+    (mongoose.models.InventoryItem as IInventoryItemModel) ||
+    mongoose.model<IInventoryItem, IInventoryItemModel>(
+        'InventoryItem',
+        inventoryItemSchema
+    );
 
 export default InventoryItem;
