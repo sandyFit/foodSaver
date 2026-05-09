@@ -5,11 +5,11 @@ import mongoose, { Document, Model, Schema, Types } from 'mongoose';
 ------------------------ */
 export interface INotification extends Document {
     user: mongoose.Types.ObjectId;
-    type: 'expired' | 'lowStock' | 'system';
+    type: 'expired' | 'expiringSoon' | 'lowStock' | 'system';  // add expiringSoon
     message: string;
     item: mongoose.Types.ObjectId;
     read: boolean;
-    
+
     markAsRead(): Promise<INotification>;
 }
 
@@ -24,7 +24,7 @@ const notificationSchema = new Schema<INotification>({
     },
     type: {
         type: String,
-        enum: ['expired', 'lowStock', 'system'],
+        enum: ['expired', 'expiringSoon', 'lowStock', 'system'],  
         required: true
     },
     message: {
