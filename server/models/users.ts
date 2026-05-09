@@ -1,9 +1,8 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 import validator from 'validator';
-import bcrypt, { compare } from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import { boolean } from 'joi';
 import logger from '../utils/logger.js';
 
 /* -----------------------------
@@ -15,12 +14,6 @@ export interface IAvatar {
     url: string;
 }
 
-export interface IInventoryItem {
-    _id?: mongoose.Types.ObjectId;
-    itemName: string;
-    expirationDate: Date;
-    quantity: number;
-}
 
 /* -----------------------------
    User Interface (Document)
@@ -30,28 +23,23 @@ export interface IUser extends Document {
     email: string;
     password: string;
     avatar: IAvatar;
-    role: "user" | "admin";
-    inventory: IInventoryItem[];
+    role: 'user' | 'admin';
+
+    inventory: mongoose.Types.ObjectId[];
     notifications: mongoose.Types.ObjectId[];
     unseenNotifications: string[];
+
     createdAt: Date;
     registrationDate: Date;
-    resetPasswordToken?: String,
-    resetPasswordExpire?: Date,
 
+    resetPasswordToken?: string;
+    resetPasswordExpire?: Date;
+    passwordChangedAt: Date;
 
-    // Methods
     comparePass(passData: string): Promise<boolean>;
-    addInventoryItem(item: IInventoryItem): Promise<IUser>;
-    updateInventoryItem(itemId: string, updates: Partial<IInventoryItem>): Promise<IUser>;
-    removeInventoryItem(itemId: string): Promise<IUser>;
     getJwtToken(): string;
     getResetPasswordToken(): string;
-    notifyExpiringMeals(): Promise<IUser>;
-    notifyLowInventory(): Promise<IUser>;
 }
-
-
 
 /* -----------------------------
    Schema
@@ -108,7 +96,7 @@ const userSchema = new Schema<IUser>(
 
         unseenNotifications: {
             type: [String],
-            dafault: []
+            default: []
         },
 
         createdAt: {
@@ -122,6 +110,7 @@ const userSchema = new Schema<IUser>(
         },
         resetPasswordToken: String,
         resetPasswordExpire: Date,
+        passwordChangedAt: Date,
     },
 
     { timestamps: true }
@@ -147,28 +136,8 @@ userSchema.methods.comparePass = async function (
     return await bcrypt.compare(passData, this.password);
 };
 
-logger.info(`JWT_EXPIRE_TIME: ${process.env.JWT_EXPIRE_TIME}`);
+logger.debug(`JWT_EXPIRE_TIME: ${process.env.JWT_EXPIRE_TIME}`);
 
-// In User.js
-userSchema.methods.addInventoryItem = function (item: IInventoryItem) {
-    this.inventory.push(item);
-    return this.save();
-};
-
-userSchema.methods.updateInventoryItem = function (
-    itemId: string,
-    updates: Partial<IInventoryItem>
-) {
-    const item = this.inventory.id(itemId as any);
-    if (!item) throw new Error('Item not found');
-    item.set(updates);
-    return this.save();
-};
-
-userSchema.methods.removeInventoryItem = function (itemId: string) {
-    this.inventory.pull(itemId);
-    return this.save();
-};
 
 // Return a JWT token
 userSchema.methods.getJwtToken = function (this: IUser) {
@@ -189,42 +158,6 @@ userSchema.methods.getResetPasswordToken = function (this: IUser) {
     this.resetPasswordExpire = new Date(Date.now() + 30 * 60 * 1000); // Token lasts 30 minutes
     return resetToken;
 };
-
-userSchema.methods.notifyExpiringMeals = function (this: IUser) {
-    const expiringMeals = this.inventory.filter((item: IInventoryItem) => {
-        const daysToExpire = Math.ceil(
-            (item.expirationDate.getTime() - Date.now()) /
-            (1000 * 60 * 60 * 24)
-        );
-        return daysToExpire > 0 && daysToExpire <= 8;
-    });
-
-    expiringMeals.forEach((meal: IInventoryItem) => {
-        const days = Math.ceil(
-            (meal.expirationDate.getTime() - Date.now()) /
-            (1000 * 60 * 60 * 24)
-        );
-        this.unseenNotifications.push(
-            `The item "${meal.itemName}" is expiring in ${days} day(s).`
-        );
-    });
-
-    return this.save();
-};
-
-userSchema.methods.notifyLowInventory = function (this: IUser) {
-    const lowStockItems = this.inventory.filter((item: IInventoryItem) => item.quantity <= 2);
-
-    lowStockItems.forEach((item: IInventoryItem) => {
-        this.unseenNotifications.push(
-            `The item "${item.itemName}" is running low on stock (only ${item.quantity} left).`
-        );
-    });
-
-    return this.save();
-};
-
-
 
 /* -----------------------------
    Model Export
