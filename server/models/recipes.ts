@@ -26,9 +26,9 @@ export interface IRecipe extends Document {
     tags: string[];
     image_url?: string;
     ratings: number;
-    created_at: Date;
-    updated_at: Date;
 }
+
+
 
 /* -----------------------
    Ingredient Schema
@@ -51,47 +51,53 @@ const ingredientSchema = new Schema<IIngredient>({
 /* -----------------------
    Recipe Schema
 ------------------------ */
-const recipeSchema = new Schema<IRecipe>({
-    recipeId: {
-        type: String,
-        required: false,
-        unique: true,
-        default: function (this: IRecipe) {
-            return this.name
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/(^-|-$)/g, '');
+const recipeSchema = new Schema<IRecipe>(
+    {
+        recipeId: {
+            type: String,
+            required: false,
+            unique: true,
+            default: function (this: IRecipe) {
+                return this.name
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/(^-|-$)/g, '');
+            },
         },
+
+        name: { type: String, required: true },
+        description: { type: String, required: true },
+        category: { type: String, required: true },
+
+        ingredients: [ingredientSchema],
+
+        steps: [{ type: String, required: true }],
+
+        prep_time: { type: Number, required: true },
+        cook_time: { type: Number, required: true },
+        total_time: { type: Number, required: true },
+
+        servings: { type: Number, required: true },
+
+        tags: [{ type: String }],
+
+        image_url: { type: String },
+
+        ratings: { type: Number, default: 0 },
     },
-
-    name: { type: String, required: true },
-    description: { type: String, required: true },
-    category: { type: String, required: true },
-
-    ingredients: [ingredientSchema],
-
-    steps: [{ type: String, required: true }],
-
-    prep_time: { type: Number, required: true },
-    cook_time: { type: Number, required: true },
-    total_time: { type: Number, required: true },
-
-    servings: { type: Number, required: true },
-
-    tags: [{ type: String }],
-
-    image_url: { type: String },
-
-    ratings: { type: Number, default: 0 },
-
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now },
-});
+    {
+        timestamps: {
+            createdAt: 'created_at',
+            updatedAt: 'updated_at',
+        },
+    }
+);
 
 /* -----------------------
    Model Export
 ------------------------ */
-const Recipe: Model<IRecipe> =
-    mongoose.models.Recipe || mongoose.model<IRecipe>('Recipe', recipeSchema);
+const Recipe =
+    (mongoose.models.Recipe as Model<IRecipe>) ||
+    mongoose.model<IRecipe>('Recipe', recipeSchema);
 
 export default Recipe;

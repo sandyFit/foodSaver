@@ -1,22 +1,41 @@
 import InventoryItem from '../models/inventory.js';
 import Recipe from '../models/recipes.js';
+import { IIngredient } from '../models/recipes.js';
+
 import mongoose from 'mongoose'; 
 import { AuthRequest } from '../middleware/authMiddleware.js';
 import { Response } from "express";
 import { EXPIRING_DAYS_THRESHOLD } from '../constants/constants.js';
 import logger from '../utils/logger.js';
 
+
+interface MatchingRecipe {
+    _id: mongoose.Types.ObjectId;
+    recipeId?: string;
+    name: string;
+    description: string;
+    category: string;
+    ingredients: IIngredient[];
+    steps: string[];
+    prep_time: number;
+    cook_time: number;
+    total_time: number;
+    servings: number;
+    tags: string[];
+    image_url?: string;
+    ratings: number;
+
+    created_at?: Date;
+    updated_at?: Date;
+
+    score: number;
+    matchedIngredients: string[];
+}
+
 export const suggestRecipe = async (req: AuthRequest, res: Response) => {
     const t = req.t;
     try {
         const userId = req.user.id;
-
-        if (!userId || typeof userId !== 'string') {
-            return res.status(400).json({
-                error: t('recipes.errors.userIdRequired'),
-                details: t('recipes.messages.userIdRequired'),
-            });
-        }
 
         const today = new Date();
         const threshold = new Date();
@@ -40,8 +59,7 @@ export const suggestRecipe = async (req: AuthRequest, res: Response) => {
         // Get all recipes
         const allRecipes = await Recipe.find({});
 
-        // IMPROVED MATCHING ALGORITHM
-        const matchingResults = [];
+        const matchingResults: MatchingRecipe[]  = [];
 
         // Prepare ingredient base forms by removing descriptive words
         const preparedIngredients = ingredients.map(item => {
@@ -285,12 +303,6 @@ export const getExpiringMeals = async (req: AuthRequest, res: Response) => {
         // Extract userId from query parameters
         const userId = req.user.id;
 
-        if (!userId || typeof userId !== 'string') {
-            return res.status(400).json({
-                error: t('recipes.errors.userIdRequired'),
-                details: t('recipes.messages.userIdRequired'),
-            });
-        }
 
         const today = new Date();
         const threshold = new Date();
