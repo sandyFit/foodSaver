@@ -45,7 +45,17 @@ const checkExpiringItems = async (userId: string) => {
             .map(item => ({
                 user: userId,
                 type: 'expiringSoon',
-                message: `notifications.expiring.message|${item.itemName}|${Math.ceil((item.expirationDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))}`,
+
+                translationKey: 'notifications.expiring.message',
+
+                translationParams: {
+                    itemName: item.itemName,
+                    days: Math.ceil(
+                        (item.expirationDate.getTime() - Date.now()) /
+                        (1000 * 60 * 60 * 24)
+                    )
+                },
+
                 item: item._id
             }));
 

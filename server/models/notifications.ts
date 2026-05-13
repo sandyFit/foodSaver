@@ -9,6 +9,12 @@ export interface INotification {
     message: string;
     item?: Types.ObjectId;
     read: boolean;
+    translationKey: string;
+
+    translationParams?: {
+        itemName?: string;
+        days?: number;
+    };
 
     markAsRead(): Promise<INotification>;
 }
@@ -57,7 +63,16 @@ const notificationSchema = new Schema<INotification>({
     read: {
         type: Boolean,
         default: false
-    }
+    },
+    translationKey: {
+        type: String,
+        required: true,
+    },
+
+    translationParams: {
+        itemName: { type: String },
+        days: { type: Number },
+    },
 }, { timestamps: true });
 
 /* ------------------------
