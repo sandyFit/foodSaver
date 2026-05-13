@@ -121,15 +121,6 @@ export const suggestRecipe = async (req: AuthRequest, res: Response) => {
                         break;
                     }
 
-                    // Special cases handling
-                    if ((inventoryItem.name.includes('chicken') &&
-                        recipeIngredient.name.includes('chicken')) ||
-                        (inventoryItem.name.includes('coconut') &&
-                            recipeIngredient.name.includes('coconut'))) {
-                        score += 2;
-                        matchedIngredients.push(inventoryItem.original);
-                        break;
-                    }
                 }
             }
 
