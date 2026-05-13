@@ -14,11 +14,26 @@ export interface AuthRequest<P = ParamsDictionary>
 
 /**
  * Middleware: authenticateUser
- * Verifies the JWT from cookies or headers and attaches the user to the request.
+ *
+ * Verifies JWT authentication from:
+ * - secure cookie token (preferred)
+ * - Authorization: Bearer <token> header
+ *
+ * Attaches the authenticated user document to req.user.
+ * Returns 401 if authentication fails.
  */
 export const authenticateUser = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
+        const cookieToken = req.cookies?.token;
+
+        const authHeader = req.headers.authorization;
+
+        const bearerToken =
+            authHeader?.startsWith('Bearer ')
+                ? authHeader.split(' ')[1]
+                : null;
+
+        const token = cookieToken ?? bearerToken;
 
         if (!token) {
             return res.status(401).json({ message: 'Must login to continue' });
