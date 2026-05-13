@@ -1,13 +1,17 @@
 import InventoryItem from '../models/inventory.js';
 import Recipe from '../models/recipes.js';
-import mongoose from 'mongoose'; // Import mongoose
+import mongoose from 'mongoose'; 
+import { AuthRequest } from '../middleware/authMiddleware.js';
+import { Response } from "express";
+import { EXPIRING_DAYS_THRESHOLD } from '../constants/constants.js';
+import logger from '../utils/logger.js';
 
-export const suggestRecipe = async (req, res) => {
+export const suggestRecipe = async (req: AuthRequest, res: Response) => {
     const t = req.t;
     try {
-        const { userId } = req.query;
+        const userId = req.query.userId;
 
-        if (!userId) {
+        if (!userId || typeof userId !== 'string') {
             return res.status(400).json({
                 error: t('recipes.errors.userIdRequired'),
                 details: t('recipes.messages.userIdRequired'),
@@ -16,7 +20,7 @@ export const suggestRecipe = async (req, res) => {
 
         const today = new Date();
         const threshold = new Date();
-        threshold.setDate(today.getDate() + 7);
+        threshold.setDate(today.getDate() + EXPIRING_DAYS_THRESHOLD);
 
         // Get expiring ingredients
         const objectIdUserId = new mongoose.Types.ObjectId(userId);
@@ -132,7 +136,7 @@ export const suggestRecipe = async (req, res) => {
                     name: item.itemName,
                     quantity: item.quantity,
                     expirationDate: item.expirationDate,
-                    category: item.category,
+                    location: item.location,
                 })),
                 recipes: matchedRecipes.map(recipe => ({
                     id: recipe._id,
@@ -152,7 +156,7 @@ export const suggestRecipe = async (req, res) => {
                     name: item.itemName,
                     quantity: item.quantity,
                     expirationDate: item.expirationDate,
-                    category: item.category,
+                    location: item.location,
                 })),
                 message: t("recipes.messages.suggestedRecipeNotFound"),
                 debug: {
@@ -162,8 +166,8 @@ export const suggestRecipe = async (req, res) => {
                 }
             });
         }
-    } catch (error) {
-        console.error('Recipe suggestion error:', error);
+    } catch (error: any) {
+        logger.error('Recipe suggestion error:', error);
         res.status(400).json({
             error: t('recipes.errors.suggestedFailed'),
             details: error.message
@@ -171,7 +175,7 @@ export const suggestRecipe = async (req, res) => {
     }
 };
 
-export const getAllRecipes = async (req, res) => {
+export const getAllRecipes = async (req: AuthRequest, res: Response) => {
     const t = req.t;
     try {
         const recipes = await Recipe.find();
@@ -184,8 +188,8 @@ export const getAllRecipes = async (req, res) => {
         }
 
         res.status(200).json(recipes);
-    } catch (error) {
-        console.error('Get all recipes error:', error);
+    } catch (error: any) {
+        logger.error('Get all recipes error:', error);
         res.status(400).json({
             error: t('recipes.errors.fetchFailed'),
             details: error.message
@@ -193,11 +197,12 @@ export const getAllRecipes = async (req, res) => {
     }
 };
 
-export const getRecipeById = async (req, res) => {
-    const { id } = req.params;
+export const getRecipeById = async (req: AuthRequest, res: Response) => {
+    const t = req.t;
+    const id = req.params.id;
 
     // First check if ID exists
-    if (!id) {
+    if (!id || typeof id !== 'string') {
         return res.status(400).json({
             error: t('recipes.errors.missingId'),
             details: t('recipes.messages.userIdRequired'),
@@ -220,8 +225,8 @@ export const getRecipeById = async (req, res) => {
             });
         }
         res.status(200).json(recipe);
-    } catch (error) {
-        console.error('Get recipe by ID error:', error);
+    } catch (error: any) {
+        logger.error('Get recipe by ID error:', error);
         res.status(500).json({
             error: t('recipes.errors.fetchRecipeFailed'),
             details: error.message
@@ -229,14 +234,20 @@ export const getRecipeById = async (req, res) => {
     }
 };
 
-export const getSuggestedRecipes = async (req, res) => {
-    const { id } = req.params;
+export const getSuggestedRecipes = async (req: AuthRequest, res: Response) => {
+    const id = req.params.id;
     const t = req.t;
 
+    if (!id || typeof id !== 'string') {
+        return res.status(400).json({
+            error: t('recipes.errors.missingId'),
+            details: t('recipes.messages.userIdRequired'),
+        });
+    }
     try {
         let objectIdId;
         try {
-            objectIdId = mongoose.Types.ObjectId(id);
+            objectIdId = new mongoose.Types.ObjectId(id);
         } catch (error) {
             return res.status(400).json({
                 error: t('recipes.errors.invalidId'),
@@ -259,8 +270,8 @@ export const getSuggestedRecipes = async (req, res) => {
         }).limit(3);
 
         res.status(200).json(suggestedRecipes);
-    } catch (error) {
-        console.error('Get suggested recipes error:', error);
+    } catch (error: any) {
+        logger.error('Get suggested recipes error:', error);
         res.status(400).json({
             error: t('recipes.errors.suggestedFailed'),
             details: error.message
@@ -268,13 +279,13 @@ export const getSuggestedRecipes = async (req, res) => {
     }
 };
 
-export const getExpiringMeals = async (req, res) => {
+export const getExpiringMeals = async (req: AuthRequest, res: Response) => {
     const t = req.t;
     try {
         // Extract userId from query parameters
-        const { userId } = req.query;
+        const userId = req.query.userId;
 
-        if (!userId) {
+        if (!userId || typeof userId !== 'string') {
             return res.status(400).json({
                 error: t('recipes.errors.userIdRequired'),
                 details: t('recipes.messages.userIdRequired'),
@@ -283,11 +294,13 @@ export const getExpiringMeals = async (req, res) => {
 
         const today = new Date();
         const threshold = new Date();
-        threshold.setDate(today.getDate() + 7); // 7 days to expiration
+        threshold.setDate(today.getDate() + EXPIRING_DAYS_THRESHOLD); 
 
         // Find soon-to-expire ingredients for this specific user
         //  Ensure userId is a valid ObjectId
-        const objectIdUserId = mongoose.Types.ObjectId.isValid(userId) ? new mongoose.Types.ObjectId(userId) : userId; //changed order
+        const objectIdUserId = mongoose.Types.ObjectId.isValid(userId) ?
+            new mongoose.Types.ObjectId(userId) : userId; //changed order
+        
         const expiringItems = await InventoryItem.find({
             user: objectIdUserId, // Use objectIdUserId
             expirationDate: { $lte: threshold }
@@ -309,8 +322,8 @@ export const getExpiringMeals = async (req, res) => {
             expiringItems,
             recipes
         });
-    } catch (error) {
-        console.error('Get expiring meals error:', error);
+    } catch (error: any) {
+        logger.error('Get expiring meals error:', error);
         res.status(400).json({
             error: t('recipes.errors.noExpitringItems'),
             details: error.message

@@ -3,11 +3,13 @@ import { Request, ParamsDictionary } from 'express-serve-static-core';
 import { IUser } from '../models/users.js';
 import User from '../models/users.js';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import { TFunction } from 'i18next';
 
 // Extend the Express Request to recognize the user property with the full IUser type
 export interface AuthRequest<P = ParamsDictionary>
     extends Request<P> {
     user: IUser;
+    t: TFunction;
 }
 
 /**
