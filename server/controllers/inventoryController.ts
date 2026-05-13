@@ -35,7 +35,9 @@ const checkExpiringItems = async (userId: string) => {
         });
 
         const existingItemIds = new Set(
-            existingNotifications.map(n => n.item.toString())
+            existingNotifications.flatMap(n =>
+                n.item ? [n.item.toString()] : []
+            )
         );
 
         const newNotifications = expiringItems
@@ -78,7 +80,9 @@ const checkLowStock = async (
         });
 
         const existingItemIds = new Set(
-            existingNotifications.map(n => n.item.toString())
+            existingNotifications.flatMap(n =>
+                n.item ? [n.item.toString()] : []
+            )
         );
 
         const newNotifications = lowStockItems
