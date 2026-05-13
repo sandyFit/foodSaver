@@ -56,9 +56,7 @@ export const suggestRecipe = async (req: AuthRequest, res: Response) => {
             });
         }
 
-        // Get all recipes
-        const allRecipes = await Recipe.find({});
-
+        
         const matchingResults: MatchingRecipe[]  = [];
 
         // Prepare ingredient base forms by removing descriptive words
@@ -74,6 +72,27 @@ export const suggestRecipe = async (req: AuthRequest, res: Response) => {
                 words: baseIngredient.split(' ')
             };
         });
+
+        // Build a unique list of searchable ingredient terms
+        // using both the original normalized name and its simplified base form.
+        // Example:
+        // "fresh chicken breast" -> ["fresh chicken breast", "chicken breast"]
+        const ingredientTerms = [
+            ...new Set(
+                preparedIngredients.flatMap(item => [
+                    item.name,
+                    item.baseForm
+                ])
+            )
+        ];
+
+        // Fetch only recipes that contain at least one matching ingredient.
+        // This avoids loading the entire recipes collection into memory
+        // and significantly improves scalability/performance.
+        const allRecipes = await Recipe.find({
+            'ingredients.name': { $in: ingredientTerms }
+        });
+
 
         // Process each recipe
         for (const recipe of allRecipes) {

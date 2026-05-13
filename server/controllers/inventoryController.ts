@@ -179,7 +179,10 @@ export const createItem = async (req: AuthRequest, res: Response) => {
             $push: { inventory: item._id }
         });
 
-        // Trigger background checks (don't await to avoid blocking response)
+  
+        // Run notification checks asynchronously to avoid blocking the API response.
+        // For larger-scale workloads, this should eventually move to a 
+        // debounced queue or scheduled background job.
         setImmediate(() => {
             checkExpiringItems(req.user.id);
             checkLowStock(req.user.id);
