@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import User from '../models/users.js';
 import InventoryItem from '../models/inventory.js';
 import Notification from '../models/notifications.js';
+import { AuthRequest } from '../middleware/authMiddleware.js';
 
 import { asyncHandler } from '../middleware/asyncHandler.js';
 
@@ -22,7 +23,7 @@ const sendSecurityEmail = async (email: string, type: string, data: any) => {
  */
 
 export const registerUser = asyncHandler(
-    async (req: Request, res: Response): Promise<void> => {
+    async (req: AuthRequest, res: Response): Promise<void> => {
 
         const { fullName, email, password } = req.body;
 
@@ -76,7 +77,7 @@ export const registerUser = asyncHandler(
  */
 
 export const loginUser = asyncHandler(
-    async (req: Request, res: Response): Promise<void> => {
+    async (req: AuthRequest, res: Response): Promise<void> => {
 
         const { email, password } = req.body;
 
@@ -142,7 +143,7 @@ export const loginUser = asyncHandler(
  */
 
 export const getUserProfile = asyncHandler(
-    async (req: Request, res: Response): Promise<void> => {
+    async (req: AuthRequest, res: Response): Promise<void> => {
 
         const user = await User.findById(req.user.id)
             .select('-password');
@@ -169,7 +170,7 @@ export const getUserProfile = asyncHandler(
  */
 
 export const updateProfile = asyncHandler(
-    async (req: Request, res: Response): Promise<void> => {
+    async (req: AuthRequest, res: Response): Promise<void> => {
 
         const allowedUpdates = ['fullName', 'email', 'avatar'];
         const updates: any = {};
@@ -220,7 +221,7 @@ export const updateProfile = asyncHandler(
  */
 
 export const getAllUsers = asyncHandler(
-    async (req: Request, res: Response): Promise<void> => {
+    async (req: AuthRequest, res: Response): Promise<void> => {
 
         // Agregar paginación
         const page = parseInt(req.query.page as string) || 1;
@@ -256,7 +257,7 @@ export const getAllUsers = asyncHandler(
  */
 
 export const getUserInfo = asyncHandler(
-    async (req: Request, res: Response): Promise<void> => {
+    async (req: AuthRequest, res: Response): Promise<void> => {
 
         const { id } = req.params;
 
@@ -293,7 +294,7 @@ export const getUserInfo = asyncHandler(
  */
 
 export const deleteUser = asyncHandler(
-    async (req: Request, res: Response): Promise<void> => {
+    async (req: AuthRequest, res: Response): Promise<void> => {
 
         const user = await User.findByIdAndDelete(req.user.id);
 
@@ -328,7 +329,7 @@ export const deleteUser = asyncHandler(
  */
 
 export const deleteUserAdmin = asyncHandler(
-    async (req: Request, res: Response): Promise<void> => {
+    async (req: AuthRequest, res: Response): Promise<void> => {
         const user = await User.findByIdAndDelete(req.params.id);
 
         if (!user) {
@@ -358,7 +359,7 @@ export const deleteUserAdmin = asyncHandler(
  * =========================================================
  */
 export const requestPasswordReset = asyncHandler(
-    async (req: Request, res: Response): Promise<void> => {
+    async (req: AuthRequest, res: Response): Promise<void> => {
 
         const { email } = req.body;
 
@@ -433,7 +434,7 @@ export const requestPasswordReset = asyncHandler(
  * =========================================================
  */
 export const resetPassword = asyncHandler(
-    async (req: Request<{ token: string }>, res: Response): Promise<void> => {
+    async (req: AuthRequest<{ token: string }>, res: Response): Promise<void> => {
 
         // 1. Validate input
         const { password, confirmPassword } = req.body;
@@ -559,7 +560,7 @@ export const resetPassword = asyncHandler(
  */
 
 export const changePassword = asyncHandler(
-    async (req: Request, res: Response): Promise<void> => {
+    async (req: AuthRequest, res: Response): Promise<void> => {
 
         const { currentPassword, newPassword, confirmNewPassword } = req.body;
 
