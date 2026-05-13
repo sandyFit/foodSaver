@@ -55,10 +55,17 @@ export const authenticateUser = async (req: AuthRequest, res: Response, next: Ne
 
 /**
  * Middleware: authorize
- * Restricts access based on the user's role.
- * Use this AFTER authenticateUser.
+ *
+ * Restricts access based on authenticated user roles.
+ * Must be used AFTER authenticateUser.
+ *
+ * Accepts an array of valid IUser role values
+ * (e.g. ['admin'], ['admin', 'user']).
+ *
+ * Returns 403 if the authenticated user's role
+ * is not included in the allowed roles list.
  */
-export const authorize = (allowedRoles: string[]) => {
+export const authorize = (allowedRoles: IUser['role'][]) => {
     return (req: AuthRequest, res: Response, next: NextFunction) => {
         if (!req.user) {
             return res.status(401).json({ success: false, message: 'Not authorized' });

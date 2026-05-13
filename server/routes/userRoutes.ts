@@ -139,7 +139,7 @@ router.put('/profile/:id', authenticateUser, updateProfile);
  *         description: Forbidden
  */
 
-router.get('/', authenticateUser, authorize('admin'), getAllUsers);
+router.get('/', authenticateUser, authorize(['admin']), getAllUsers);
 /**
  * @swagger
  * /users/{id}:
@@ -209,7 +209,7 @@ router.delete('/:id', authenticateUser, deleteUser);
  *       404:
  *         description: User not found
  */
-router.delete('/:id', authenticateUser, authorize('admin'), deleteUserAdmin);
+router.delete('/:id', authenticateUser, authorize(['admin']), deleteUserAdmin);
 
 /**
  * @swagger
