@@ -17,7 +17,7 @@ import {
     LOW_STOCK_THRESHOLD,
     MAX_BULK_DELETE
 } from '../constants/constants.js';
-
+import logger from '../utils/logger.js';
 
 const checkExpiringItems = async (userId: string) => {
     try {
@@ -52,8 +52,8 @@ const checkExpiringItems = async (userId: string) => {
         if (newNotifications.length > 0) {
             await Notification.insertMany(newNotifications);
         }
-    } catch (error) {
-        console.error('Error checking expiring items:', error);
+    } catch (error: any) {
+        logger.error('Error checking expiring items:', error);
     }
 };
 
@@ -97,8 +97,8 @@ const checkLowStock = async (
         if (newNotifications.length > 0) {
             await Notification.insertMany(newNotifications);
         }
-    } catch (error) {
-        console.error('Error checking low stock items:', error);
+    } catch (error: any) {
+        logger.error('Error checking low stock items:', error);
     }
 };
 
@@ -181,7 +181,7 @@ export const createItem = async (req: AuthRequest, res: Response) => {
             message: 'inventory.messages.itemCreated'
         });
     } catch (error: any) {
-        console.error('Error creating inventory item:', error);
+        logger.error('Error creating inventory item:', error);
 
         // Handle validation errors
         if (error.name === 'ValidationError') {
@@ -275,8 +275,8 @@ export const getItems = async (
         });
 
 
-    } catch (error) {
-        console.error('Error fetching inventory items:', error);
+    } catch (error: any) {
+        logger.error('Error fetching inventory items:', error);
         res.status(500).json({
             success: false,
             message: 'inventory.errors.fetchFailed'
@@ -313,8 +313,8 @@ export const getItem = async (
             success: true,
             item: sanitizeItem(item)
         });
-    } catch (error) {
-        console.error('Error fetching inventory item:', error);
+    } catch (error: any) {
+        logger.error('Error fetching inventory item:', error);
         res.status(500).json({
             success: false,
             message: 'inventory.errors.fetchFailed'
@@ -414,7 +414,7 @@ export const updateItem = async (
             message: 'inventory.messages.itemUpdated'
         });
     } catch (error: any) {
-        console.error('Update error:', error);
+        logger.error('Update error:', error);
 
         if (error.name === 'ValidationError') {
             return res.status(400).json({
@@ -478,8 +478,8 @@ export const deleteItem = async (
             success: true,
             message: 'inventory.messages.itemDeleted'
         });
-    } catch (error) {
-        console.error('Delete error:', error);
+    } catch (error: any) {
+        logger.error('Delete error:', error);
         res.status(500).json({
             success: false,
             message: 'inventory.errors.deleteFailed'
@@ -536,8 +536,8 @@ export const bulkDelete = async (req: AuthRequest, res: Response) => {
             deletedCount: result.deletedCount,
             message: 'inventory.messages.bulkDeleteCompleted'
         });
-    } catch (error) {
-        console.error('Bulk delete error:', error);
+    } catch (error: any) {
+        logger.error('Bulk delete error:', error);
         res.status(500).json({
             success: false,
             message: 'inventory.errors.bulkDeleteFailed'
@@ -589,8 +589,8 @@ export const getInventoryStats = async (req: AuthRequest, res: Response) => {
                 locationBreakdown: locationStats
             }
         });
-    } catch (error) {
-        console.error('Stats error:', error);
+    } catch (error: any) {
+        logger.error('Stats error:', error);
         res.status(500).json({
             success: false,
             message: 'inventory.errors.statsFailed'

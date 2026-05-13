@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 import Recipe from '../models/recipes.js';
+import logger from './logger.js';
 
 // Simplified connection (remove deprecated options)
 mongoose.connect('mongodb://localhost:27017/foodSaver')
-    .then(() => console.log('Connected to database'))
-    .catch(err => console.error('Connection error:', err));
+    .then(() => logger.info('Connected to database'))
+    .catch(err => logger.error('Connection error:', err));
 
 const newRecipe = new Recipe({
     recipeId: 'colorful-stir-fried-vegetables',
@@ -99,9 +100,9 @@ const newRecipe = new Recipe({
 // Save recipe to the database
 newRecipe.save()
     .then(() => {
-        console.log('Recipe saved successfully!');
-        mongoose.connection.close(); // Cerrar la conexión
+        logger.info('Recipe saved successfully!');
+        mongoose.connection.close(); 
     })
     .catch((err: any) => {
-        console.log('Error saving recipe:', err);
+        logger.error('Error saving recipe:', err);
     });
