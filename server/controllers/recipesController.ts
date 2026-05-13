@@ -9,7 +9,7 @@ import logger from '../utils/logger.js';
 export const suggestRecipe = async (req: AuthRequest, res: Response) => {
     const t = req.t;
     try {
-        const userId = req.query.userId;
+        const userId = req.user.id;
 
         if (!userId || typeof userId !== 'string') {
             return res.status(400).json({
@@ -213,7 +213,7 @@ export const getRecipeById = async (req: AuthRequest, res: Response) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).json({
             error: t('recipes.errors.invalidId'),
-            details: t(`recipes.mesages.userIdInvalid`)
+            details: t(`recipes.messages.userIdInvalid`)
         });
     }
 
@@ -283,7 +283,7 @@ export const getExpiringMeals = async (req: AuthRequest, res: Response) => {
     const t = req.t;
     try {
         // Extract userId from query parameters
-        const userId = req.query.userId;
+        const userId = req.user.id;
 
         if (!userId || typeof userId !== 'string') {
             return res.status(400).json({
