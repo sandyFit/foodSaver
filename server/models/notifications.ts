@@ -1,17 +1,36 @@
-import mongoose, { Document, Model, Schema, Types } from 'mongoose';
+import mongoose, { HydratedDocument, Model, Schema, Types } from 'mongoose';
 
 /* ------------------------
    Interface (Document)
 ------------------------ */
-export interface INotification extends Document {
-    user: mongoose.Types.ObjectId;
-    type: 'expired' | 'expiringSoon' | 'lowStock' | 'system';  // add expiringSoon
+export interface INotification {
+    user: Types.ObjectId;
+    type: 'expired' | 'expiringSoon' | 'lowStock' | 'system';
     message: string;
-    item: mongoose.Types.ObjectId;
+    item?: Types.ObjectId;
     read: boolean;
 
     markAsRead(): Promise<INotification>;
 }
+
+export interface GetNotificationsResponse {
+    success: boolean;
+    count: number;
+    notifications: INotification[];
+}
+
+export interface MarkAsReadResponse {
+    success: boolean;
+    notification?: INotification;
+    message?: string;
+}
+
+export interface MessageResponse {
+    success: boolean;
+    message: string;
+}
+
+type NotificationDocument = HydratedDocument<INotification>;
 
 /* ------------------------
    Schema
@@ -44,7 +63,9 @@ const notificationSchema = new Schema<INotification>({
 /* ------------------------
    Methods
 ------------------------ */
-notificationSchema.methods.markAsRead = function () {
+notificationSchema.methods.markAsRead = async function (
+    this: NotificationDocument
+) {
     this.read = true;
     return this.save();
 };

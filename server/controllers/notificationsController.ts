@@ -1,10 +1,20 @@
 import Notifications from '../models/notifications.js';
+import { Response, NextFunction } from 'express';
+import { AuthRequest } from '../middleware/authMiddleware.js';
+import {
+    GetNotificationsResponse,
+    MarkAsReadResponse,
+    MessageResponse
+} from '../models/notifications.js';
 
-export const getNotifications = async (req, res, next) => {
+export const getNotifications = async (
+    req: AuthRequest,
+    res: Response<GetNotificationsResponse>,
+    next: NextFunction) => {
     try {
         const notifications = await Notifications.find({ user: req.user.id })
             .sort('-createdAt')
-            .populate('item', 'itemName category')  // Changed from 'relatedItem' to 'item'
+            .populate('item', 'itemName category')  
             .populate('user', 'fullName email');
 
         res.json({
@@ -17,7 +27,10 @@ export const getNotifications = async (req, res, next) => {
     }
 };
 
-export const markAsRead = async (req, res, next) => {
+export const markAsRead = async (
+    req: AuthRequest,
+    res: Response<MarkAsReadResponse>,
+    next: NextFunction) => {
     try {
         const notification = await Notifications.findOneAndUpdate(
             { _id: req.params.id, user: req.user.id },
@@ -41,7 +54,10 @@ export const markAsRead = async (req, res, next) => {
     }
 };
 
-export const deleteNotification = async (req, res, next) => {
+export const deleteNotification = async (
+    req: AuthRequest,
+    res: Response<MessageResponse>,
+    next: NextFunction) => {
     try {
         const notification = await Notifications.findOneAndDelete({
             _id: req.params.id,
@@ -49,10 +65,17 @@ export const deleteNotification = async (req, res, next) => {
         });
 
         if (!notification) {
-            return res.status(404).json({ success: false, message: 'Notification not found' });
+            return res.status(404).json(
+                {
+                    success: false,
+                    message: 'Notification not found'
+                });
         }
 
-        res.json({ success: true, message: 'Notification removed' });
+        res.json({
+            success: true,
+            message: 'Notification removed'
+        });
     } catch (error) {
         next(error);
     }
