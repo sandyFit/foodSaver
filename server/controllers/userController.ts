@@ -17,13 +17,13 @@ const sendSecurityEmail = async (email: string, type: string, data: any) => {
 };
 
 /**
- * =========================================================
- * Register User
- * =========================================================
+ * Public Route
+ * Registers a new user account.
+ *
+ * Does not require authentication.
  */
-
 export const registerUser = asyncHandler(
-    async (req: AuthRequest, res: Response): Promise<void> => {
+    async (req: Request, res: Response): Promise<void> => {
 
         const { fullName, email, password } = req.body;
 
@@ -71,13 +71,13 @@ export const registerUser = asyncHandler(
 );
 
 /**
- * =========================================================
- * Login User
- * =========================================================
+ *  Public Route
+ *  Authenticates a user and returns a JWT token.
+ * 
+ *  Accessible without authenticateUser middleware.
  */
-
 export const loginUser = asyncHandler(
-    async (req: AuthRequest, res: Response): Promise<void> => {
+    async (req: Request, res: Response): Promise<void> => {
 
         const { email, password } = req.body;
 
@@ -137,11 +137,11 @@ export const loginUser = asyncHandler(
 );
 
 /**
- * =========================================================
- * Get User Profile
- * =========================================================
+ * Protected Route
+ * Retrieves the currently authenticated user's profile.
+ *
+ * Requires authenticateUser middleware.
  */
-
 export const getUserProfile = asyncHandler(
     async (req: AuthRequest, res: Response): Promise<void> => {
 
@@ -164,11 +164,11 @@ export const getUserProfile = asyncHandler(
 );
 
 /**
- * =========================================================
- * Update Profile
- * =========================================================
+ * Protected Route
+ * Updates the currently authenticated user's profile.
+ *
+ * Requires authenticateUser middleware.
  */
-
 export const updateProfile = asyncHandler(
     async (req: AuthRequest, res: Response): Promise<void> => {
 
@@ -215,11 +215,11 @@ export const updateProfile = asyncHandler(
 );
 
 /**
- * =========================================================
- * Get All Users (Admin only)
- * =========================================================
+ * Protected Admin Route
+ * Returns a list of all users in the system.
+ *
+ * Requires authenticated admin privileges.
  */
-
 export const getAllUsers = asyncHandler(
     async (req: AuthRequest, res: Response): Promise<void> => {
 
@@ -251,11 +251,11 @@ export const getAllUsers = asyncHandler(
 );
 
 /**
- * =========================================================
- * Get User Info
- * =========================================================
+ * Protected Admin Route
+ * Retrieves detailed information for a specific user.
+ *
+ * Requires authenticated admin privileges.
  */
-
 export const getUserInfo = asyncHandler(
     async (req: AuthRequest, res: Response): Promise<void> => {
 
@@ -288,11 +288,13 @@ export const getUserInfo = asyncHandler(
 );
 
 /**
- * =========================================================
- * Delete Current User
- * =========================================================
+ * Protected Route
+ * Permanently deletes the authenticated user's account.
+ *
+ * Requires authenticateUser middleware.
+ * Cascades deletion of user-related data (inventory, notifications).
+ * Clears authentication cookie upon success.
  */
-
 export const deleteUser = asyncHandler(
     async (req: AuthRequest, res: Response): Promise<void> => {
 
@@ -312,7 +314,7 @@ export const deleteUser = asyncHandler(
             Notification.deleteMany({ user: user._id })
         ]);
 
-        // Limpiar cookie si existe
+        // Clean cookie
         res.clearCookie('token');
 
         res.status(200).json({
@@ -323,11 +325,14 @@ export const deleteUser = asyncHandler(
 );
 
 /**
- * =========================================================
- * Delete User Admin
- * =========================================================
+ * Protected Admin Route
+ * Permanently deletes an admin account by ID.
+ *
+ * Requires authenticated admin privileges.
+ *
+ * Deletes the admin record only. Admins do not have associated inventory,
+ * so no related data cleanup is required.
  */
-
 export const deleteUserAdmin = asyncHandler(
     async (req: AuthRequest, res: Response): Promise<void> => {
         const user = await User.findByIdAndDelete(req.params.id);
@@ -354,9 +359,13 @@ export const deleteUserAdmin = asyncHandler(
 
 
 /**
- * =========================================================
- * Request Password Reset
- * =========================================================
+ * Public Route
+ * Initiates the password reset process for a user account.
+ *
+ * Generates a password reset token and sends a reset link to the user's email.
+ * The token is time-limited and must be used before expiration.
+ *
+ * Does not require authentication.
  */
 export const requestPasswordReset = asyncHandler(
     async (req: AuthRequest, res: Response): Promise<void> => {
@@ -429,9 +438,13 @@ export const requestPasswordReset = asyncHandler(
 );
 
 /**
- * =========================================================
- * Reset Password
- * =========================================================
+ * Public Route
+ * Completes the password reset process.
+ *
+ * Validates the password reset token and updates the user's password
+ * if the token is valid and not expired.
+ *
+ * Does not require authentication.
  */
 export const resetPassword = asyncHandler(
     async (req: AuthRequest<{ token: string }>, res: Response): Promise<void> => {
@@ -554,11 +567,12 @@ export const resetPassword = asyncHandler(
 );
 
 /**
- * =========================================================
- * Change Password (Authenticated)
- * =========================================================
+ * Protected Route
+ * Updates the password for the currently authenticated user.
+ *
+ * Requires authenticateUser middleware.
+ * Verifies the current password before allowing the change.
  */
-
 export const changePassword = asyncHandler(
     async (req: AuthRequest, res: Response): Promise<void> => {
 

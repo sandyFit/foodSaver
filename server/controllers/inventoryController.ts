@@ -45,7 +45,7 @@ const checkExpiringItems = async (userId: string) => {
             .map(item => ({
                 user: userId,
                 type: 'expiringSoon',
-
+                message: `${item.itemName} is expiring soon`, // fallback human-readable
                 translationKey: 'notifications.expiring.message',
 
                 translationParams: {
@@ -99,8 +99,13 @@ const checkLowStock = async (
             .filter(item => !existingItemIds.has(item._id.toString()))
             .map(item => ({
                 user: userId,
-                type: 'lowStock',
-                message: `notifications.lowStock.message|${item.itemName}|${item.quantity}`,
+                type: 'expiringSoon',
+                message: `${item.itemName} is expiring soon`, // fallback human-readable
+                translationKey: 'notifications.expiring.message',
+                translationParams: {
+                    itemName: item.itemName,
+                    days: Math.ceil((item.expirationDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+                },
                 item: item._id
             }));
 
