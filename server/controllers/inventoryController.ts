@@ -19,6 +19,12 @@ import {
 } from '../constants/constants.js';
 import logger from '../utils/logger.js';
 
+/**
+ * Creates expiration notifications for items nearing expiration.
+ *
+ * Prevents duplicate notifications within a 24-hour window
+ * for the same inventory item and user.
+ */
 const checkExpiringItems = async (userId: string) => {
     try {
         const expiringItems = await InventoryItem.getExpiringItems(userId);
@@ -67,6 +73,12 @@ const checkExpiringItems = async (userId: string) => {
     }
 };
 
+/**
+ * Creates low-stock notifications for items below the configured threshold.
+ *
+ * Prevents duplicate notifications within a 24-hour window
+ * for the same inventory item and user.
+ */
 const checkLowStock = async (
     userId: string,
     threshold = LOW_STOCK_THRESHOLD
@@ -117,7 +129,10 @@ const checkLowStock = async (
     }
 };
 
-// Helper function to sanitize inventory items
+/**
+ * Removes internal MongoDB fields and normalizes `_id` into `id`
+ * before sending inventory items to the client.
+ */
 const sanitizeItem = (item: IInventoryItem | null) => {
     if (!item) return null;
     const itemObj = item.toObject ? item.toObject() : item;
@@ -128,7 +143,11 @@ const sanitizeItem = (item: IInventoryItem | null) => {
     };
 };
 
-// Helper function to validate required fields
+/**
+ * Validates required request body fields.
+ *
+ * Returns missing field names when validation fails.
+ */
 const validateRequiredFields = (
     body: Record<string, unknown>,
     requiredFields: string[]
@@ -137,7 +156,16 @@ const validateRequiredFields = (
     return missing.length === 0 ? null : missing;
 };
 
-export const createItem = async (req: AuthRequest, res: Response) => {
+/**
+ * Creates a new inventory item for the authenticated user.
+ *
+ * Also triggers asynchronous expiration and low-stock checks
+ * after successful creation.
+ */
+export const createItem = async (
+    req: AuthRequest,
+    res: Response
+) => {
     try {
         // Validate required fields
         const requiredFields = ['itemName', 'expirationDate', 'location'];
@@ -227,6 +255,12 @@ export const createItem = async (req: AuthRequest, res: Response) => {
 };
 
 
+/**
+ * Retrieves paginated inventory items for the authenticated user.
+ *
+ * Supports filtering by location, expiration status,
+ * and low-stock state.
+ */
 export const getItems = async (
     req: AuthRequest,
     res: Response
@@ -302,6 +336,9 @@ export const getItems = async (
     }
 };
 
+/**
+ * Retrieves a single inventory item belonging to the authenticated user.
+ */
 export const getItem = async (
     req: AuthRequest<GetItemParams>,
     res: Response
@@ -341,6 +378,11 @@ export const getItem = async (
 };
 
 
+/**
+ * Updates an inventory item owned by the authenticated user.
+ *
+ * Re-runs expiration and low-stock checks after updates.
+ */
 export const updateItem = async (
     req: AuthRequest<UpdateItemParams>,
     res: Response
@@ -456,6 +498,9 @@ export const updateItem = async (
     }
 };
 
+/**
+ * Deletes an inventory item and removes related notifications.
+ */
 export const deleteItem = async (
     req: AuthRequest<UpdateItemParams>,
     res: Response
@@ -505,8 +550,15 @@ export const deleteItem = async (
     }
 };
 
-// Bulk operations
-export const bulkDelete = async (req: AuthRequest, res: Response) => {
+/**
+ * Deletes multiple inventory items in a single operation.
+ *
+ * Also removes related notifications and inventory references.
+ */
+export const bulkDelete = async (
+    req: AuthRequest,
+    res: Response
+) => {
     try {
         const { itemIds } = req.body;
         if (!Array.isArray(itemIds) || itemIds.length === 0) {
@@ -563,8 +615,14 @@ export const bulkDelete = async (req: AuthRequest, res: Response) => {
     }
 };
 
-// Get inventory statistics
-export const getInventoryStats = async (req: AuthRequest, res: Response) => {
+/**
+ * Retrieves inventory statistics for the authenticated user,
+ * including expiration, low-stock, and location breakdowns.
+ */
+export const getInventoryStats = async (
+    req: AuthRequest,
+    res: Response
+) => {
     try {
         const now = new Date();
         const weekFromNow = new Date();
