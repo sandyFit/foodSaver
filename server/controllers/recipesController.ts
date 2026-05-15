@@ -9,6 +9,9 @@ import { EXPIRING_DAYS_THRESHOLD } from '../constants/constants.js';
 import logger from '../utils/logger.js';
 
 
+/**
+ * Recipe recommendation result with ingredient match scoring metadata.
+ */
 interface MatchingRecipe {
     _id: mongoose.Types.ObjectId;
     recipeId?: string;
@@ -32,7 +35,15 @@ interface MatchingRecipe {
     matchedIngredients: string[];
 }
 
-export const suggestRecipe = async (req: AuthRequest, res: Response) => {
+/**
+ * Suggests recipes based on ingredients that are close to expiration.
+ *
+ * Recipes are ranked using ingredient similarity scoring.
+ */
+export const suggestRecipe = async (
+    req: AuthRequest,
+    res: Response
+) => {
     const t = req.t;
     try {
         const userId = req.user.id;
@@ -203,7 +214,13 @@ export const suggestRecipe = async (req: AuthRequest, res: Response) => {
     }
 };
 
-export const getAllRecipes = async (req: AuthRequest, res: Response) => {
+/**
+ * Retrieves all available recipes.
+ */
+export const getAllRecipes = async (
+    req: AuthRequest,
+    res: Response
+) => {
     const t = req.t;
     try {
         const recipes = await Recipe.find();
@@ -225,7 +242,13 @@ export const getAllRecipes = async (req: AuthRequest, res: Response) => {
     }
 };
 
-export const getRecipeById = async (req: AuthRequest, res: Response) => {
+/**
+ * Retrieves a single recipe by its identifier.
+ */
+export const getRecipeById = async (
+    req: AuthRequest,
+    res: Response
+) => {
     const t = req.t;
     const id = req.params.id;
 
@@ -262,7 +285,13 @@ export const getRecipeById = async (req: AuthRequest, res: Response) => {
     }
 };
 
-export const getSuggestedRecipes = async (req: AuthRequest, res: Response) => {
+/**
+ * Retrieves recipes with similar ingredients to the selected recipe.
+ */
+export const getSuggestedRecipes = async (
+    req: AuthRequest,
+    res: Response
+) => {
     const id = req.params.id;
     const t = req.t;
 
@@ -307,7 +336,13 @@ export const getSuggestedRecipes = async (req: AuthRequest, res: Response) => {
     }
 };
 
-export const getExpiringMeals = async (req: AuthRequest, res: Response) => {
+/**
+ * Retrieves expiring inventory items and recipes that can use them.
+ */
+export const getExpiringMeals = async (
+    req: AuthRequest,
+    res: Response
+) => {
     const t = req.t;
     try {
         // Extract userId from query parameters

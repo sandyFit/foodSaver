@@ -9,8 +9,16 @@ import { asyncHandler } from '../middleware/asyncHandler.js';
 
 import logger from '../utils/logger.js';
 
-// Email service
-const sendSecurityEmail = async (email: string, type: string, data: any) => {
+/**
+ * Sends security-related account emails.
+ *
+ * Placeholder service for password reset and account security notifications.
+ */
+const sendSecurityEmail = async (
+    email: string,
+    type: string,
+    data: any
+) => {
     // Implement with nodemailer, SendGrid, etc.
     logger.info(`[EMAIL] Sending ${type} email to ${email}`);
     // Not implemented yet
