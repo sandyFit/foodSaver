@@ -158,7 +158,7 @@ The backend exposes a REST API responsible for business logic, authentication, i
 
 ## Getting started
 
-Full setup instructions are in [`docs/SETUP.md`](docs/SETUP.md). Quick start:
+Full setup instructions are in [`docs/SETUP.md`](server/docs/SETUP.md). Quick start:
 
 ```bash
 # Clone the repository
@@ -217,7 +217,7 @@ The test suite is built around three core abstractions that make 77 test cases m
 
 **`authHelper.ts`** — Handles register + login flows as reusable setup, so individual tests focus on assertions rather than authentication boilerplate. Supports multi-user scenarios for ownership isolation tests.
 
-**`dataFactory.ts`** — Faker-based generators for all domain entities, with pre-built boundary value helpers for the 7-day notification window. All date comparisons use UTC calendar days to avoid timezone-dependent flakiness (see [DEF-007](docs/DEFECT-LOG.md)).
+**`dataFactory.ts`** — Faker-based generators for all domain entities, with pre-built boundary value helpers for the 7-day notification window. All date comparisons use UTC calendar days to avoid timezone-dependent flakiness (see [DEF-007](server/docs/DEFECT-LOG.md)).
 
 ### Test coverage summary
 
@@ -232,7 +232,7 @@ The test suite is built around three core abstractions that make 77 test cases m
 | Performance | — | — | — | 2 |
 | **Total** | **58** | **10** | **7** | **77** |
 
-Full details including per-test status, linked requirements, and BLS rules in [`docs/TEST-COVERAGE.md`](docs/TEST-COVERAGE.md).
+Full details including per-test status, linked requirements, and BLS rules in [`docs/TEST-COVERAGE.md`](server/docs/TEST-COVERAGE.md).
 
 ### Test pyramid
 
@@ -256,16 +256,16 @@ All documentation is versioned alongside the code in `/docs`.
 
 | Document | Purpose |
 |---|---|
-| [`SRS.md`](docs/SRS.md) | System Requirements Specification — 35 requirements across 4 domains, each with acceptance criteria and linked test cases |
-| [`BLS.md`](docs/BLS.md) | Business Logic Specification — explicit rules, boundary conditions, and edge cases derived from requirements archaeology |
-| [`ARCH.md`](docs/ARCH.md) | Architecture document — component diagram, ERD, auth flow, notification flow, recipe flow, and testing boundary map |
-| [`TEST-PLAN.md`](docs/TEST-PLAN.md) | Test strategy, scope, environment, sprint plan, entry/exit criteria, and risk register |
-| [`TEST-COVERAGE.md`](docs/TEST-COVERAGE.md) | Full test coverage matrix — every TC mapped to a REQ, BLS rule, type, priority, status, and linked defect |
-| [`DEFECT-LOG.md`](docs/DEFECT-LOG.md) | 10 defects found during testing — each with steps to reproduce, root cause, fix status, and regression risk |
-| [`SETUP.md`](docs/SETUP.md) | Local development and test environment setup guide |
-| [`swaggerDocs.ts`](docs/swaggerDocs.ts) | OpenAPI specification — live API reference |
+| [`SRS.md`](server/docs/SRS.md) | System Requirements Specification — 35 requirements across 4 domains, each with acceptance criteria and linked test cases |
+| [`BLS.md`](server/docs/BLS.md) | Business Logic Specification — explicit rules, boundary conditions, and edge cases derived from requirements archaeology |
+| [`ARCH.md`](server/docs/ARCH.md) | Architecture document — component diagram, ERD, auth flow, notification flow, recipe flow, and testing boundary map |
+| [`TEST-PLAN.md`](server/docs/TEST-PLAN.md) | Test strategy, scope, environment, sprint plan, entry/exit criteria, and risk register |
+| [`TEST-COVERAGE.md`](server/docs/TEST-COVERAGE.md) | Full test coverage matrix — every TC mapped to a REQ, BLS rule, type, priority, status, and linked defect |
+| [`DEFECT-LOG.md`](server/docs/DEFECT-LOG.md) | 10 defects found during testing — each with steps to reproduce, root cause, fix status, and regression risk |
+| [`SETUP.md`](server/docs/SETUP.md) | Local development and test environment setup guide |
+| [`swaggerDocs.ts`](server/docs/swaggerDocs.ts) | OpenAPI specification — live API reference |
 
 ---
 
 
-*Test cases are traced to requirements in [`docs/SRS.md`](docs/SRS.md). Business rules are documented in [`docs/BLS.md`](docs/BLS.md).*
+*Test cases are traced to requirements in [`docs/SRS.md`](server/docs/SRS.md). Business rules are documented in [`docs/BLS.md`](server/docs/BLS.md).*
