@@ -1,8 +1,8 @@
 # FoodSaver
 
+A full-stack food management web application built to reduce household food waste. Users track pantry products, receive expiry notifications, and get recipe recommendations based on what they have available.
 
-**FoodSaver** is a smart, multi-user food inventory app designed to help reduce food waste. Users can manage their personal pantry, get alerts when items are nearing expiration, and discover tasty recipe ideas to make the most of what they have — all while making sustainable and budget-friendly choices.
-
+This repository doubles as a **QA engineering portfolio project** — demonstrating test framework design, requirement traceability, and CI/CD integration.
 ---
 
 ![FoodSaver Landing Page](client/public/gifs/landing.gif)  
@@ -16,149 +16,256 @@
 ---
 
 
-## Key Features (So far)
+## Table of contents
 
-* **Personalized Inventories** – Each user gets their own pantry space to track items.
-
-* **Authentication System** – Full user auth flow including sign up, login, and token protection.
-
-* **Inventory CRUD** – Users can add, edit, delete, and view food items in their inventory.
-
-* **Expiration Alerts** – Users receive notifications on the home dashboard for close-to-expire items in their inventory.
-
-* **Recipe Suggestions** – Based on available ingredients, users receive smart recipe suggestions to help use items before they expire.
-
----
-
-## Roadmap
-
-Here’s what’s planned next for future versions of FoodSaver:
-
-### Short-Term Goals (v1.1.x)
-- **Google Sign-In** – Simplify access with one-click login.
-- **Basic Admin Panel** – Start managing users and monitoring data.
-- **Search Function** – Implement autocomplete and keyword search to quickly find items within the inventory.
-
-### Mid-Term Improvements (v1.2+)
-- **Inventory Tags & Categories** – Make it easier to sort and filter food items.
-- **Changelog / History** – Keep track of updates like item moves or edits.
-- **Soft Deletion** – Allow recovery of deleted items (e.g., undo delete).
-- **Improved Version Control** – Automate version incrementing for meaningful changes.
-- **Enhanced Notification System** – Introduce a centralized notification model with read/dismiss tracking. Expiration checks run in the background, and alerts can be surfaced throughout the app—not just on the dashboard—for better visibility and user engagement.
-
-### Long-Term Vision (v2.0)
-
-#### AI Features
-- **AI-Powered Insights** – Analyze food usage and suggest waste-reducing habits.
-- **Personalized Menu Planning** – Receive tailored meal suggestions based on preferences and inventory.
-
-#### Collaboration & Accessibility
-- **Shared Pantries** – Let households or roommates collaborate on one pantry.
-- **Localized Translations** – Expand beyond Spanish and English.
-
-#### Smarter Inputs
-- **Item Image Support** – Snap a pic instead of typing item details.
-- **Voice or Barcode Entry** – Add food with a quick scan or voice command.
+- [Application overview](#application-overview)
+- [Tech stack](#tech-stack)
+- [Repository structure](#repository-structure)
+- [Getting started](#getting-started)
+- [Testing framework](#testing-framework)
+- [Documentation](#documentation)
 
 
 ---
 
-## Project Structure
+# Application Overview
 
-### Frontend
+FoodSaver solves a real problem: food goes to waste because people forget what they have and when it expires. The application provides:
 
-* **Dashboard:**
-    * Role-based access control for Admins and Users.
-    * Manage users, food inventory, and recipes in one central location.
-* **Landing Page:**
-    * Visually appealing design with clear calls to action.
-    * Highlights FoodSaver's features and benefits.
-
-### Backend
-
-* **REST API:**  Provides endpoints for managing food items, users, and recipe suggestions.
-* **CRUD Operations:**  Supports creating, reading, updating, and deleting data.
-* **AI Integration:**  Utilizes AI algorithms to generate personalized recipe recommendations.
+| Feature                            | Description                                                                           |
+| ---------------------------------- | ------------------------------------------------------------------------------------- |
+| **Pantry Tracking**                | Manage food inventory with quantity, unit, and expiration date tracking               |
+| **Expiry Notifications**           | Identify products expiring within the next 7 calendar days                            |
+| **Recipe Recommendations**         | Generate recipe suggestions based on pantry ingredients                               |
+| **Authentication & Authorization** | JWT-based authentication using secure httpOnly cookies with role-based access control |
 
 ---
 
-## Tech Stack
+# Project Structure
 
-### Frontend
+## Frontend
 
-* React.js
-* HTML5, TailwindCSS
-* Context API for managing global state
+The frontend provides a responsive user interface for managing inventory, recipes, and account access.
 
-### Backend
+### Dashboard
 
-* Node.js with Express
-* Swagger for API documentation
-* MongoDB for database management
+* Role-based access control for Admin and User accounts
+* Food inventory management
+* Recipe browsing and recommendations
+* User management for administrators
+
+### Landing Page
+
+* Product overview and feature highlights
+* Clear onboarding and authentication flows
+* Responsive marketing-oriented UI
 
 ---
 
-## Getting Started
+## Backend
 
-### Prerequisites
+The backend exposes a REST API responsible for business logic, authentication, inventory management, and recipe recommendation workflows.
 
-* Node.js and npm (or yarn) installed
-* MongoDB instance running (local or cloud-based)
+### Core Responsibilities
 
-### API Installation
+* RESTful API endpoints
+* CRUD operations for users, products, and recipes
+* JWT authentication with httpOnly cookies
+* Expiration notification logic
+* Recipe recommendation integration
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/sandyFit/foodSaver.git](https://github.com/sandyFit/foodSaver.git)
-   ```
-2. **Navigate to the server directory:**
-   ```bash
-   cd foodsaver/server
-   ```
-3. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-4. **Create a `.env` file in the `server` directory:**
-   ```bash
-   MONGO_URI=<your_mongodb_connection_string>
-   PORT=<your_desired_port>
-   NODE_ENV=development
-   JWT_SECRET=<your_secret_key>
-   JWT_EXPIRE_TIME=1d
-   COOKIE_EXPIRES_TIME=1
-   ```
-5. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
-6. **Access the API documentation:**
-   * Open your browser and go to `http://localhost:<your_desired_port>/api-docs`
+---
+
+## Tech stack
+
+### Application
+
+| Layer | Technology |
+|---|---|
+| Frontend | React 18, Vite |
+| Backend | Node.js, Express, TypeScript |
+| Database | MongoDB, Mongoose ODM |
+| Auth | JWT, bcrypt, httpOnly cookies |
+| API documentation | Swagger / OpenAPI (`docs/swaggerDocs.ts`) |
+
+### Testing framework
+
+| Concern | Tool |
+|---|---|
+| Test runner | Jest 29 + ts-jest |
+| HTTP client | Supertest |
+| Test database | mongodb-memory-server |
+| Contract testing | Pact JS |
+| Component mocking | MSW (Mock Service Worker) |
+| Data generation | @faker-js/faker |
+| CI/CD | GitHub Actions |
+
+---
+
+## Repository structure
+
+```
+/
+├── client/                        # React 18 frontend
+├── server/                        # Express + TypeScript API
+│   └── src/
+│       ├── routes/
+│       ├── controllers/
+│       ├── services/
+│       └── models/
+│
+├── tests/
+│   ├── api/                       # Jest + Supertest API test suite
+│   │   ├── auth/                  # TC-AUTH-001 to TC-AUTH-016
+│   │   ├── pantry/                # TC-PAN-001  to TC-PAN-018
+│   │   ├── notifications/         # TC-NOT-001  to TC-NOT-009
+│   │   ├── recipes/               # TC-REC-001  to TC-REC-008
+│   │   ├── contracts/             # Pact consumer contracts
+│   │   ├── component/             # Service-layer isolation tests
+│   │   ├── helpers/
+│   │   │   ├── apiClient.ts       # Cookie-aware Supertest wrapper
+│   │   │   ├── authHelper.ts      # Register + login flows
+│   │   │   └── dataFactory.ts     # Faker-based test data generators
+│   │   ├── setup/
+│   │   │   ├── globalSetup.ts     # mongodb-memory-server start
+│   │   │   ├── globalTeardown.ts  # mongodb-memory-server stop
+│   │   │   └── jest.setup.ts      # Mongoose connect + teardown
+│   │   ├── jest.config.ts
+│   │   ├── tsconfig.json
+│   │   └── package.json
+│   │
+│   └── e2e/                       # Playwright E2E suite (Phase 2)
+│       ├── pages/                 # Page Object Models
+│       ├── fixtures/
+│       └── specs/
+│
+├── docs/
+│   ├── SRS.md                     # System Requirements Specification
+│   ├── BLS.md                     # Business Logic Specification
+│   ├── ARCH.md                    # Architecture + data model diagrams
+│   ├── TEST-PLAN.md               # Test strategy, scope, sprint plan
+│   ├── TEST-COVERAGE.md           # Full test coverage matrix (77 TCs)
+│   ├── DEFECT-LOG.md              # Defects found during testing
+│   ├── SETUP.md                   # Local development setup guide
+│   └── swaggerDocs.ts             # OpenAPI specification
+│
+└── .github/
+    └── workflows/
+        └── api-tests.yml          # CI pipeline with coverage gates
+```
+
+---
+
+## Getting started
+
+Full setup instructions are in [`docs/SETUP.md`](docs/SETUP.md). Quick start:
+
+```bash
+# Clone the repository
+git clone https://github.com/sandyFit/foodSaver
+cd foodsaver
+
+# Install server dependencies
+cd server && npm install
+
+# Install client dependencies
+cd ../client && npm install
+
+# Set up environment variables
+cp server/.env.example server/.env
+# Edit server/.env with your MongoDB URI and JWT secret
+
+# Start the development server
+cd ../server && npm run dev
+
+# Start the frontend
+cd ../client && npm run dev
+```
+
+### Running the test suite
+
+```bash
+cd tests/api
+
+# Install test dependencies
+npm install
+
+# Run all tests
+npm test
+
+# Run a specific domain
+npm run test:auth
+npm run test:pantry
+npm run test:notifications
+npm run test:recipes
+
+# Run with coverage report
+npm run test:coverage
+```
+
+> No external MongoDB instance required — the test suite uses `mongodb-memory-server` which manages its own in-memory database automatically.
+
+---
+
+## Testing framework
+
+### Architecture
+
+The test suite is built around three core abstractions that make 77 test cases maintainable at scale:
+
+**`apiClient.ts`** — A typed Supertest wrapper using `SuperAgentTest` to persist httpOnly cookies across requests. Every test file gets its own client instance with an isolated cookie jar.
+
+**`authHelper.ts`** — Handles register + login flows as reusable setup, so individual tests focus on assertions rather than authentication boilerplate. Supports multi-user scenarios for ownership isolation tests.
+
+**`dataFactory.ts`** — Faker-based generators for all domain entities, with pre-built boundary value helpers for the 7-day notification window. All date comparisons use UTC calendar days to avoid timezone-dependent flakiness (see [DEF-007](docs/DEFECT-LOG.md)).
+
+### Test coverage summary
+
+| Domain | API | Contract | Component | Total |
+|---|---|---|---|---|
+| Authentication | 16 | 2 | — | 18 |
+| Pantry | 18 | 4 | — | 22 |
+| Notifications | 9 | 2 | 4 | 15 |
+| Recipes | 8 | 2 | 3 | 13 |
+| Security | 4 | — | — | 4 |
+| Reliability | 3 | — | — | 3 |
+| Performance | — | — | — | 2 |
+| **Total** | **58** | **10** | **7** | **77** |
+
+Full details including per-test status, linked requirements, and BLS rules in [`docs/TEST-COVERAGE.md`](docs/TEST-COVERAGE.md).
+
+### Test pyramid
+
+```
+         /\
+        /E2E\          ← Phase 2 (Playwright) — planned
+       /------\
+      /Contract\       ← 10 tests — response shape agreements (Pact JS)
+     /----------\
+    / Component  \     ← 7 tests  — service logic in isolation (MSW)
+   /--------------\
+  /   API tests    \   ← 58 tests — full stack via HTTP (Supertest)
+ /------------------\
+```
+
+---
+
+## Documentation
+
+All documentation is versioned alongside the code in `/docs`.
+
+| Document | Purpose |
+|---|---|
+| [`SRS.md`](docs/SRS.md) | System Requirements Specification — 35 requirements across 4 domains, each with acceptance criteria and linked test cases |
+| [`BLS.md`](docs/BLS.md) | Business Logic Specification — explicit rules, boundary conditions, and edge cases derived from requirements archaeology |
+| [`ARCH.md`](docs/ARCH.md) | Architecture document — component diagram, ERD, auth flow, notification flow, recipe flow, and testing boundary map |
+| [`TEST-PLAN.md`](docs/TEST-PLAN.md) | Test strategy, scope, environment, sprint plan, entry/exit criteria, and risk register |
+| [`TEST-COVERAGE.md`](docs/TEST-COVERAGE.md) | Full test coverage matrix — every TC mapped to a REQ, BLS rule, type, priority, status, and linked defect |
+| [`DEFECT-LOG.md`](docs/DEFECT-LOG.md) | 10 defects found during testing — each with steps to reproduce, root cause, fix status, and regression risk |
+| [`SETUP.md`](docs/SETUP.md) | Local development and test environment setup guide |
+| [`swaggerDocs.ts`](docs/swaggerDocs.ts) | OpenAPI specification — live API reference |
+
+---
 
 
-## Frontend Installation
-
-1. **Navigate to the client directory:**
-   ```bash
-   cd foodsaver/client
-   ```
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-3. **Start the development client:**
-   ```bash
-   npm run dev
-   ```
-
-## Troubleshooting
-
-* **Problem:**  "Cannot connect to database" error.
-    * **Solution:** Ensure your MongoDB instance is running and that the `MONGO_URI` in your `.env` file is correct.
-* **Problem:**  Frontend cannot connect to the backend.
-    * **Solution:**  Verify that both the frontend and backend servers are running and that the correct port is being used in the frontend's API calls.
-
-## Contact
-
-For questions, feedback, or support, please contact us at [support@foodsaver.com](mailto:trishramos29@gmail.com).
-
+*Test cases are traced to requirements in [`docs/SRS.md`](docs/SRS.md). Business rules are documented in [`docs/BLS.md`](docs/BLS.md).*
