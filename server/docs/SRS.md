@@ -3,7 +3,7 @@
 **Version:** 1.0.0
 **Status:** Draft
 **Last updated:** 2026-05-14
-**Author:** [Your name]
+**Author:** Trish
 
 ---
 
