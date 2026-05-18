@@ -1,8 +1,15 @@
 # FoodSaver
 
-A full-stack food management web application built to reduce household food waste. Users track pantry products, receive expiry notifications, and get recipe recommendations based on what they have available.
+FoodSaver is a full-stack web application designed to help reduce household food waste. Users can track pantry inventory, receive expiry notifications, and discover recipe recommendations based on available ingredients.
 
-This repository doubles as a **QA engineering portfolio project** — demonstrating test framework design, requirement traceability, and CI/CD integration.
+This repository also serves as a QA engineering portfolio project, showcasing:
+
+- test strategy and framework design
+- requirement traceability
+- API, contract, and component testing
+- CI/CD integration
+- automated quality workflows
+
 ---
 
 ![FoodSaver Landing Page](client/public/gifs/landing.gif)  
